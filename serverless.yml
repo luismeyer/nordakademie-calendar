@@ -1,0 +1,25 @@
+service: calendar-formatter
+app: calendar-formatter
+org: luismeyer
+
+custom:
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: dev
+  region: eu-central-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:PutObjectAcl
+      Resource: "arn:aws:s3:::${self:custom.bucket}/*"
+
+functions:
+  api:
+    handler: handler.formatter
+    events:
+      - schedule: cron(0 */6 * * ? *)
+    environment:
+      BUCKET: ${self:custom.bucket}
