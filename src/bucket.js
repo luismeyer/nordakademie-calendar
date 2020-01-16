@@ -1,16 +1,20 @@
-const AWS = require('aws-sdk');
+const AWS = require("aws-sdk");
 const s3 = new AWS.S3();
 
-const FILENAME = "NAK.ics"
+const FILENAME = "NAK.ics";
+const BUCKET_NAME = process.env.BUCKET;
 
-module.exports.uploadToS3 = (data) => {
+module.exports.uploadToS3 = (
+  data,
+  filename = FILENAME,
+  bucket = BUCKET_NAME
+) => {
   const uploadParams = {
-    Bucket: process.env.BUCKET,
-    Key: FILENAME,
+    Bucket: bucket,
+    Key: filename,
     Body: data,
-    ACL: 'public-read'
+    ACL: "public-read"
   };
 
-  console.info('Starting S3 upload')
-  return s3.putObject(uploadParams).promise()
-}
+  return s3.putObject(uploadParams).promise();
+};

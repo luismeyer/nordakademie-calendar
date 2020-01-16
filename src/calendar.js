@@ -1,28 +1,30 @@
 const generator = require("ical-generator");
 
-module.exports.format = (calendar) => {
-  console.info("Start Calendar formatting");
+module.exports.formatSummary = (summary) => {
+  const firstComma = summary.indexOf(",") + 1;
+  const secondComma = summary.indexOf(",", firstComma + 1);
+  return summary
+    .substr(firstComma, secondComma - firstComma)
+    .replace(/([A-Z] [A-Z]\d{3} )|[A-Z] /, "");
+}
 
+module.exports.format = (calendar) => {
   const cal = generator();
   const events = Object.values(calendar);
 
   events.forEach(({
     summary,
+    location,
     ...rest
   }) => {
     if (!summary) return;
-    const firstComma = summary.indexOf(",") + 1;
-    const secondComma = summary.indexOf(",", firstComma + 1);
-    const newSummary = summary
-      .substr(firstComma, secondComma - firstComma)
-      .replace(/([A-Z] [A-Z]\d{3} )|[A-Z] /, "");
 
     cal.createEvent({
       ...rest,
-      summary: newSummary
+      location: `${location}, Nordakademie Elmshorn, 25337`,
+      summary: this.formatSummary(summary)
     });
   });
 
-  console.info("Finish Calendar formatting");
   return cal;
 }

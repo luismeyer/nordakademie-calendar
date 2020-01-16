@@ -1,0 +1,37 @@
+{
+  "name": "calendar-formatter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "dependencies": {
+    "aws-sdk": "^2.599.0",
+    "date-fns": "^2.8.1",
+    "ical-generator": "^1.9.2",
+    "node-fetch": "^2.6.0",
+    "node-ical": "^0.10.0"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0",
+    "serverless": "^1.61.1"
+  },
+  "scripts": {
+    "start": "serverless invoke local -f api",
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "deploy": "serverless deploy",
+    "setup": "node src/scripts/setup.js",
+    "secrets": "gpg --symmetric --cipher-algo AES256 ./secrets/secrets.json",
+    "decrypt": "gpg --quiet --batch --yes --decrypt --passphrase=\"$LARGE_SECRET_PASSPHRASE\" --output $HOME/secrets/secrets.json $HOME/secrets/secrets.json.gpg"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luismeyer/CalendarFormatter.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/luismeyer/CalendarFormatter/issues"
+  },
+  "homepage": "https://github.com/luismeyer/CalendarFormatter#readme"
+}

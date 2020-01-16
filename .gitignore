@@ -4,5 +4,7 @@ jspm_packages
 
 # Serverless directories
 .serverless
+secrets.json
 
 NAK.ics
+.DS_Store
