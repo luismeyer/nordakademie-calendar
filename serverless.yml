@@ -1,8 +1,9 @@
 service: calendar-formatter
 app: calendar-formatter
-org: luismeyer
 
 custom:
+  token: ${file(./secrets/secrets.json):token}
+  bucket: ${file(./secrets/secrets.json):bucket}
 
 provider:
   name: aws
@@ -16,6 +17,15 @@ provider:
         - s3:PutObjectAcl
       Resource: "arn:aws:s3:::${self:custom.bucket}/*"
 
+package:
+  exclude:
+    - ./**
+  include:
+    - handler.js
+    - src/**
+    - node_modules/**
+    - semesters.json
+
 functions:
   api:
     handler: handler.formatter
@@ -23,3 +33,13 @@ functions:
       - schedule: cron(0 */6 * * ? *)
     environment:
       BUCKET: ${self:custom.bucket}
+      BOT_TOKEN: ${self:custom.token}
+  bot:
+    handler: handler.bot
+    events:
+      - http:
+          path: bot
+          method: ANY
+          cors: true
+    environment:
+      BOT_TOKEN: ${self:custom.token}
