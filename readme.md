@@ -5,7 +5,8 @@ Calendar Formatter is an AWS Lambda that downloads the current Nordakademie time
 ## Installation
 
 Install [serverless](https://serverless.com) to manage the AWS deployments
-and the package manager npm to install all dependencies.
+and the package manager npm to install all dependencies.  
+Also rename the secrets.example.json file to secrets.json and put in the real credentials.
 
 ```bash
 npm install
@@ -19,15 +20,10 @@ The handler.js file is the entry point of the AWS Lambda. To invoke the function
 npm start
 ```
 
-or
-
-```bash
-serverless invoke local -f api
-```
-
 ## Deployment
 
-If you configured serverless correctly run:
+All Code will be automatically deployed if a github release is created.  
+If you want to deploy from your local machine and if you configured serverless correctly run:
 
 ```bash
 npm run deploy
