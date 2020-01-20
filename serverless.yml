@@ -4,6 +4,7 @@ app: calendar-formatter
 custom:
   token: ${file(./secrets/secrets.json):token}
   bucket: ${file(./secrets/secrets.json):bucket}
+  chatId: ${file(./secrets/secrets.json):chatId}
 
 provider:
   name: aws
@@ -34,6 +35,7 @@ functions:
     environment:
       BUCKET: ${self:custom.bucket}
       BOT_TOKEN: ${self:custom.token}
+      CHAT_ID: ${self.custom.chatId}
   bot:
     handler: handler.bot
     events:
