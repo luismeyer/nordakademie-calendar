@@ -1,6 +1,6 @@
-# Calendar Formatter
+# NAK-Calendar
 
-Calendar Formatter is an AWS Lambda that downloads the current Nordakademie timetable and formates the calendar entries every 6 hours.
+NAK-Calendar is an AWS Lambda that downloads the current Nordakademie timetable and formates the calendar entries every 6 hours.
 
 ## Installation
 
