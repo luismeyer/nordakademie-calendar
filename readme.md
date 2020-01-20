@@ -2,15 +2,24 @@
 
 NAK-Calendar is an AWS Lambda that downloads the current Nordakademie timetable and formates the calendar entries every 6 hours.
 
-## Installation
+## Installation and Setup
 
 Install [serverless](https://serverless.com) to manage the AWS deployments
 and the package manager npm to install all dependencies.  
-Also rename the secrets.example.json file to secrets.json and put in the real credentials.
 
 ```bash
 npm install
 ```
+
+Rename the secrets.example.json file to secrets.json and put in the real credentials.
+
+If you want to use the bot notification functionality you have to run the setup script with your AWS Lambda Url set in the secrets file.
+
+
+```bash
+npm run setup
+```
+
 
 ## Usage
 
