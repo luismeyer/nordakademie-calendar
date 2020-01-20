@@ -2,12 +2,13 @@ const AWS = require("aws-sdk");
 const s3 = new AWS.S3();
 
 const FILENAME = "NAK.ics";
-const BUCKET_NAME = process.env.BUCKET;
+const { BUCKET } = process.env;
+if (!BUCKET) throw new Error("Missing Environment Variable: BUCKET");
 
 module.exports.uploadToS3 = (
   data,
   filename = FILENAME,
-  bucket = BUCKET_NAME
+  bucket = BUCKET
 ) => {
   const uploadParams = {
     Bucket: bucket,
