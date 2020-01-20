@@ -5,7 +5,6 @@ const bucket = require('./src/bucket');
 const bot = require('./src/bot');
 
 const { CHAT_ID } = process.env;
-if (!CHAT_ID) throw new Error("Missing Environment Variable: CHAT_ID");
 
 module.exports.formatter = async (event, context, callback) => {
   console.info("1/4: Calculating current semester");
@@ -19,8 +18,10 @@ module.exports.formatter = async (event, context, callback) => {
   console.info("3/4: Formatting timetable");
   const ics = calendar.format(nakCal);
 
-  console.info("Sending Notification");
-  await bot.sendMessage(CHAT_ID, "Kalendar wird aktualisiert! lol 🥳");
+  if (CHAT_ID) {
+    console.info("Sending Notification");
+    await bot.sendMessage(CHAT_ID, "Kalendar wird aktualisiert! lol 🥳");
+  }
 
   console.info("4/4: Uploading file to S3");
   await bucket.uploadToS3(ics.toString())

@@ -1,7 +1,6 @@
 const nodeFetch = require("node-fetch");
 
 const { BOT_TOKEN } = process.env;
-if (!BOT_TOKEN) throw new Error("Missing Environment Variable: BOT_TOKEN");
 
 module.exports.requestUrl = token => method => `https://api.telegram.org/bot${token}/${method}`;
 
