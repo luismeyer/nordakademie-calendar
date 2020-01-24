@@ -7,6 +7,7 @@
     "aws-sdk": "^2.599.0",
     "date-fns": "^2.8.1",
     "ical-generator": "^1.9.2",
+    "jsdom": "^16.0.1",
     "node-fetch": "^2.6.0",
     "node-ical": "^0.10.0"
   },
@@ -20,8 +21,7 @@
     "coverage": "jest --coverage",
     "deploy": "serverless deploy",
     "setup": "node src/scripts/setup.js",
-    "secrets": "gpg --symmetric --cipher-algo AES256 ./secrets/secrets.json",
-    "decrypt": "gpg --quiet --batch --yes --decrypt --passphrase=\"$LARGE_SECRET_PASSPHRASE\" --output $HOME/secrets/secrets.json $HOME/secrets/secrets.json.gpg"
+    "secrets": "gpg --symmetric --cipher-algo AES256 ./secrets/secrets.json"
   },
   "repository": {
     "type": "git",

@@ -28,11 +28,28 @@ test("fetches calendar", async () => {
   const currentSemester = nak.currentSemester();
   if (!currentSemester) return;
 
-  const nakCal = await nak.fetchCalendar(currentSemester.semester)
-  expect(typeof nakCal).toBe("object")
+  const nakCal = await nak.fetchCalendar(currentSemester.semester);
+  expect(typeof nakCal).toBe("object");
 })
 
 test("catches missing semester fetch", async () => {
-  const nakCal = await nak.fetchCalendar(-1)
-  expect(typeof nakCal).toBe("object")
+  const nakCal = await nak.fetchCalendar(-1);
+  expect(nakCal).toBe(undefined);
+})
+
+test("fetches mensa html string", async () => {
+  const html = await nak.fetchMensaTimetable();
+  expect(typeof html).toBe("string");
+  expect(html.includes("Speiseplan")).toBe(true);
+})
+
+test("formats mensa html string", async () => {
+  const html = await nak.fetchMensaTimetable();
+  const mensa = await nak.formatMensaTimetable(html);
+
+  expect(Array.isArray(mensa)).toBe(true);
+  expect(typeof mensa[0].main.description).toBeDefined();
+
+  const now = new Date();
+  expect(mensa[0].date).toBeDefined();
 })
