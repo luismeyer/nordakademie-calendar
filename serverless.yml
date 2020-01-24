@@ -17,6 +17,10 @@ provider:
         - s3:PutObject
         - s3:PutObjectAcl
       Resource: "arn:aws:s3:::${self:custom.bucket}/*"
+    - Effect: "Allow"
+      Action:
+        - lambda:InvokeFunction
+      Resource: "*"
 
 package:
   exclude:
@@ -35,7 +39,7 @@ functions:
     environment:
       BUCKET: ${self:custom.bucket}
       BOT_TOKEN: ${self:custom.token}
-      CHAT_ID: ${self.custom.chatId}
+      CHAT_ID: ${self:custom.chatId}
   bot:
     handler: handler.bot
     events:
