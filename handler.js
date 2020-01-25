@@ -13,7 +13,7 @@ const {
 const printProgess = max => (current, message) =>
   console.info(`${current}/${max}: ${message}`);
 
-module.exports.formatter = async () => {
+module.exports.formatter = async (event, context, callback) => {
   const print = printProgess(6);
 
   print(1, "Calculating current semester");
@@ -33,7 +33,7 @@ module.exports.formatter = async () => {
 
   if (mensaTimetable) {
     print(5, "Creating mensa events");
-    calendar.createMensaEvents(formattedCalendar, mensaTimeTable);
+    calendar.createMensaEvents(formattedCalendar, mensaTimetable);
   } else {
     print(5, "Skipping mensa event creation")
   }
@@ -49,7 +49,7 @@ module.exports.formatter = async () => {
     .then(res => callback(null, res), callback);
 };
 
-module.exports.bot = async (event, context, callback) => {
+module.exports.bot = async event => {
   const body = JSON.parse(event.body);
   const {
     text,
