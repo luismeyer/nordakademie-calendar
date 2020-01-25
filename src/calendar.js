@@ -34,8 +34,8 @@ module.exports.format = (calendar) => {
   return cal;
 };
 
-module.exports.createMensaEvents = (calendar, mensaTimeTable) => {
-  mensaTimeTable.forEach(({
+module.exports.createMensaEvents = (calendar, mensaTimetable) => {
+  mensaTimetable.forEach(({
     main,
     second,
     date
@@ -46,7 +46,7 @@ module.exports.createMensaEvents = (calendar, mensaTimeTable) => {
       summary: main.description,
       start: day,
       end: addDays(day, 1),
-      description: `🥩${main.description} (${main.price}) \n\n🥦${second.description} (${second.price})`,
+      description: `🥩 ${main.description} (${main.price}) \n\n🥦 ${second.description} (${second.price})`,
       location: 'Mensa',
     })
   })
