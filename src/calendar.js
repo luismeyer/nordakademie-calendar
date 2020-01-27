@@ -1,8 +1,7 @@
 const generator = require("ical-generator");
 const {
-  format,
-  parseISO,
-  addDays
+  subDays,
+  parseISO
 } = require("date-fns");
 
 module.exports.formatSummary = summary => {
@@ -44,8 +43,8 @@ module.exports.createMensaEvents = (calendar, mensaTimetable) => {
 
     calendar.createEvent({
       summary: main.description,
-      start: day,
-      end: addDays(day, 1),
+      start: subDays(day, 1),
+      end: day,
       description: `🥩 ${main.description} (${main.price}) \n\n🥦 ${second.description} (${second.price})`,
       location: 'Mensa',
     })
