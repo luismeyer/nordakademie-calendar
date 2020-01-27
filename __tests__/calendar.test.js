@@ -1,3 +1,7 @@
+const generator = require("ical-generator");
+const {
+  parseISO
+} = require("date-fns");
 const calendar = require("../src/calendar");
 
 test("splits string at first and second comma", () => {
@@ -23,8 +27,7 @@ test("skips missing summarys", () => {
 test("formats calendar object", () => {
   const mockEvent = {
     event: {
-      summary:
-        "A18b,V A112 Algorithmen&Datenstrukturen,Dipl.-Wirtschaftsinf. (FH) R�der,A103,13:00 - 16:15 Uhr (4:00 UE),"
+      summary: "A18b,V A112 Algorithmen&Datenstrukturen,Dipl.-Wirtschaftsinf. (FH) R�der,A103,13:00 - 16:15 Uhr (4:00 UE),"
     }
   };
 
@@ -33,4 +36,23 @@ test("formats calendar object", () => {
   expect(formattedCalendar._data.events[0]._data.summary).toBe(
     "Algorithmen&Datenstrukturen"
   );
+});
+
+test("creates calendar events", () => {
+  const cal = generator();
+  const mockMensa = [{
+    main: {
+      description: "Description 1",
+      price: "400"
+    },
+    second: {
+      description: "Description 2",
+      price: "100"
+    },
+    date: "2020-01-27"
+  }]
+
+  calendar.createMensaEvents(cal, mockMensa);
+  expect(cal.events()[0]).toBeDefined();
+  expect(cal.events()[0].summary()).toBe("Description 1");
 });

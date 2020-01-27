@@ -37,6 +37,12 @@ test("catches missing semester fetch", async () => {
   expect(nakCal).toBe(undefined);
 })
 
+test("catches missing mensa html", () => {
+  const formattedTimetable = nak.formatMensaTimetable("");
+  expect(typeof formattedTimetable).toBe("object");
+  expect(formattedTimetable.length).toBe(0);
+})
+
 test("fetches mensa html string", async () => {
   const html = await nak.fetchMensaTimetable();
   expect(typeof html).toBe("string");

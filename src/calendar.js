@@ -49,6 +49,4 @@ module.exports.createMensaEvents = (calendar, mensaTimetable) => {
       location: 'Mensa',
     })
   })
-
-  return calendar;
 }
