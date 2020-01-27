@@ -57,7 +57,7 @@ module.exports.formatMensaTimetable = (mensaHtml) => {
     const [day, month] = date.match(/\d{1,2}/g);
 
     return {
-      date: `${new Date().getFullYear()}-${month}-${day}T00:00:00.000Z`,
+      date: `${new Date().getFullYear()}-${month}-${day}T23:00:00.000Z`,
       main: {
         description: formatDescription(
           mainDish.querySelector(".speiseplan-kurzbeschreibung").textContent
