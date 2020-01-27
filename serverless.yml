@@ -3,6 +3,9 @@ app: calendar-formatter
 
 custom:
   bucket: ${file(./secrets/secrets.json):bucket}
+  s3:
+    port: 8000
+    directory: /tmp
 
 provider:
   name: aws
@@ -23,6 +26,10 @@ provider:
     BUCKET: ${self:custom.bucket}
     BOT_TOKEN: ${file(./secrets/secrets.json):token}
     CHAT_ID: ${file(./secrets/secrets.json):chatId}
+
+plugins:
+  - serverless-s3-local
+  - serverless-offline
 
 package:
   exclude:
@@ -45,3 +52,10 @@ functions:
           path: bot
           method: ANY
           cors: true
+
+resources:
+  Resources:
+    S3CalendarBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.bucket}
