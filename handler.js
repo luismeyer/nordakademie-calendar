@@ -7,43 +7,56 @@ const lambda = require("./src/lambda");
 
 const {
   CHAT_ID,
-  IS_LOCAL
 } = process.env;
 
-const printProgess = max => (current, message) =>
-  console.info(`${current}/${max}: ${message}`);
+let progress = 1;
+const printProgess = max => message => {
+  console.info(`${progress}/${max}: ${message}`);
+  progress += 1;
+};
 
 module.exports.formatter = async (event, context, callback) => {
-  const print = printProgess(6);
+  progress = 0;
+  const print = printProgess(8);
 
-  print(1, "Calculating current semester");
+  print("Calculating current semester");
   const currentSemester = nak.currentSemester();
   if (!currentSemester) return;
 
-  print(2, "Fetching nordakademie timetable");
+  print("Fetching timetable");
   const nakCal = await nak.fetchCalendar(currentSemester.semester)
   if (!nakCal) return;
 
-  print(3, "Formatting timetable");
+  print("Formatting timetable");
   const formattedCalendar = calendar.format(nakCal);
 
-  print(4, "Fetching mensa timetable");
+  print("Fetching old timetable and compares calendars");
+  const oldTimetable = await bucket.fetchCalendarFile();
+  const calendarDiff = await calendar.checkEventDifference(oldTimetable, formattedCalendar);
+
+  if (calendarDiff.length) {
+    bot.sendMessage(`kalendar veränderung hier: ${calendarDiff.join()}`);
+  }
+
+  print("Fetching mensa timetable");
   const mensaHtml = await nak.fetchMensaTimetable();
   const mensaTimetable = nak.formatMensaTimetable(mensaHtml)
 
   if (mensaTimetable) {
-    print(5, "Creating mensa events");
+    print("Creating mensa events");
     calendar.createMensaEvents(formattedCalendar, mensaTimetable);
   } else {
-    print(5, "Skipping mensa event creation")
+    print("Skipping mensa event creation")
   }
 
-  if (CHAT_ID && !IS_LOCAL) {
-    console.info("Sending Notification");
+  if (CHAT_ID) {
+    print("Sending notification");
     await bot.sendMessage(CHAT_ID, "hab fertig! lol 🥳");
+  } else {
+    print("Skipping notification");
   }
 
-  print(6, "Uploading file to S3");
+  print("Uploading file to S3");
   await bucket
     .uploadToS3(formattedCalendar.toString())
     .then(res => callback(null, res), callback);

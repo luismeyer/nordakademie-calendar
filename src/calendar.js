@@ -1,7 +1,9 @@
 const generator = require("ical-generator");
 const {
   subDays,
-  parseISO
+  parseISO,
+  isEqual,
+  format
 } = require("date-fns");
 
 module.exports.formatSummary = summary => {
@@ -12,7 +14,7 @@ module.exports.formatSummary = summary => {
     .replace(/([A-Z] [A-Z]\d{3} )|[A-Z] /, "");
 };
 
-module.exports.format = (calendar) => {
+module.exports.format = (calendar, oldEvents) => {
   const cal = generator();
   const events = Object.values(calendar);
 
@@ -49,4 +51,27 @@ module.exports.createMensaEvents = (calendar, mensaTimetable) => {
       location: 'Mensa',
     })
   })
+}
+
+module.exports.checkEventDifference = (oldCal, newCal) => {
+  if (!oldCal) return [];
+
+  const oldEvents = Object.values(oldCal);
+  const newEvents = newCal.events();
+
+  return newEvents
+    .filter((newEvent, index) => {
+      const oldEvent = oldEvents[index];
+      const {
+        start: oldStart,
+        end: oldEnd
+      } = oldEvent;
+      const {
+        start: newStart,
+        end: newEnd
+      } = newEvent.toJSON();
+
+      return !isEqual(new Date(oldStart), new Date(newStart)) || !isEqual(new Date(oldEnd), new Date(newEnd));
+    })
+    .map(event => format(new Date(event.start(), "dd.MM.yyyy")));
 }
