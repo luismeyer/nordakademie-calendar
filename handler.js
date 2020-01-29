@@ -9,14 +9,14 @@ const {
   CHAT_ID,
 } = process.env;
 
-let progress = 1;
+let progress;
 const printProgess = max => message => {
   console.info(`${progress}/${max}: ${message}`);
   progress += 1;
 };
 
 module.exports.formatter = async (event, context, callback) => {
-  progress = 0;
+  progress = 1;
   const print = printProgess(8);
 
   print("Calculating current semester");
