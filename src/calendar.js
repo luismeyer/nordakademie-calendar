@@ -73,5 +73,5 @@ module.exports.checkEventDifference = (oldCal, newCal) => {
 
       return !isEqual(new Date(oldStart), new Date(newStart)) || !isEqual(new Date(oldEnd), new Date(newEnd));
     })
-    .map(event => format(new Date(event.start(), "dd.MM.yyyy")));
+    .map(event => format(new Date(event.start()), "dd.MM.yyyy"));
 }
