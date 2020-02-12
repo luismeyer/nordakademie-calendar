@@ -35,17 +35,17 @@ module.exports.timetableFormatter = async (event, context, callback) => {
     bot.sendMessage(`kalendar veränderung hier: ${calendarDiff.join()}`);
   }
 
-  logger.print("Sending notification");
-  await bot.sendMessage(CHAT_ID, "hab fertig! lol 🥳");
-
   logger.print("Uploading file to S3");
   await bucket
     .uploadToS3(formattedCalendar.toString(), filename)
     .then(res => callback(null, res), callback);
+
+  logger.print("Sending notification");
+  await bot.sendMessage(CHAT_ID, "stundenplan fertig! lol 🥳");
 };
 
 module.exports.mensaFormatter = async (event, context, callback) => {
-  const logger = new Logger(2);
+  const logger = new Logger(3);
 
   logger.print("Fetching mensa timetable");
   const mensaHtml = await nak.fetchMensaTimetable();
@@ -59,6 +59,9 @@ module.exports.mensaFormatter = async (event, context, callback) => {
   await bucket
     .uploadToS3(mensaCalendar.toString(), "Mensa.ics")
     .then(res => callback(null, res), callback);
+
+  logger.print("Sending notification");
+  await bot.sendMessage(CHAT_ID, "mensa fertig! lol 🥳");
 }
 
 module.exports.bot = async event => {
