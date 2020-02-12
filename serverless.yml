@@ -37,10 +37,14 @@ package:
     - semesters.json
 
 functions:
-  api:
-    handler: handler.formatter
+  timetableApi:
+    handler: handler.timetableFormatter
     events:
       - schedule: cron(0 */6 * * ? *)
+  mensaApi:
+    handler: handler.mensaFormatter
+    events:
+      - schedule: cron(0 0 * * ? *)
   bot:
     handler: handler.bot
     events:

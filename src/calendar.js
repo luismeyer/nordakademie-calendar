@@ -6,6 +6,8 @@ const {
   format
 } = require("date-fns");
 
+module.exports.generate = () => generator();
+
 module.exports.formatSummary = summary => {
   const firstComma = summary.indexOf(",") + 1;
   const secondComma = summary.indexOf(",", firstComma + 1);
@@ -14,8 +16,8 @@ module.exports.formatSummary = summary => {
     .replace(/([A-Z] [A-Z]\d{3} )|[A-Z] /, "");
 };
 
-module.exports.format = (calendar, oldEvents) => {
-  const cal = generator();
+module.exports.format = calendar => {
+  const cal = this.generate()
   const events = Object.values(calendar);
 
   events.forEach(({
@@ -51,6 +53,8 @@ module.exports.createMensaEvents = (calendar, mensaTimetable) => {
       location: 'Mensa',
     })
   })
+
+  return calendar;
 }
 
 module.exports.checkEventDifference = (oldCal, newCal) => {

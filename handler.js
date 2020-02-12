@@ -4,63 +4,62 @@ const calendar = require("./src/calendar");
 const bucket = require("./src/bucket");
 const bot = require("./src/bot");
 const lambda = require("./src/lambda");
+const {
+  Logger
+} = require("./src/utils");
 
 const {
   CHAT_ID,
 } = process.env;
 
-let progress;
-const printProgess = max => message => {
-  console.info(`${progress}/${max}: ${message}`);
-  progress += 1;
-};
+module.exports.timetableFormatter = async (event, context, callback) => {
+  const logger = new Logger(6);
+  const filename = "NAK.ics";
 
-module.exports.formatter = async (event, context, callback) => {
-  progress = 1;
-  const print = printProgess(8);
-
-  print("Calculating current semester");
+  logger.print("Calculating current semester");
   const currentSemester = nak.currentSemester();
   if (!currentSemester) return;
 
-  print("Fetching timetable");
+  logger.print("Fetching timetable");
   const nakCal = await nak.fetchCalendar(currentSemester.semester)
   if (!nakCal) return;
 
-  print("Formatting timetable");
+  logger.print("Formatting timetable");
   const formattedCalendar = calendar.format(nakCal);
 
-  print("Fetching old timetable and compares calendars");
-  const oldTimetable = await bucket.fetchCalendarFile();
+  logger.print("Fetching old timetable and compares calendars");
+  const oldTimetable = await bucket.fetchCalendarFile(filename);
   const calendarDiff = await calendar.checkEventDifference(oldTimetable, formattedCalendar);
 
   if (calendarDiff.length) {
     bot.sendMessage(`kalendar veränderung hier: ${calendarDiff.join()}`);
   }
 
-  print("Fetching mensa timetable");
-  const mensaHtml = await nak.fetchMensaTimetable();
-  const mensaTimetable = nak.formatMensaTimetable(mensaHtml)
+  logger.print("Sending notification");
+  await bot.sendMessage(CHAT_ID, "hab fertig! lol 🥳");
 
-  if (mensaTimetable) {
-    print("Creating mensa events");
-    calendar.createMensaEvents(formattedCalendar, mensaTimetable);
-  } else {
-    print("Skipping mensa event creation")
-  }
-
-  if (CHAT_ID) {
-    print("Sending notification");
-    await bot.sendMessage(CHAT_ID, "hab fertig! lol 🥳");
-  } else {
-    print("Skipping notification");
-  }
-
-  print("Uploading file to S3");
+  logger.print("Uploading file to S3");
   await bucket
-    .uploadToS3(formattedCalendar.toString())
+    .uploadToS3(formattedCalendar.toString(), filename)
     .then(res => callback(null, res), callback);
 };
+
+module.exports.mensaFormatter = async (event, context, callback) => {
+  const logger = new Logger(2);
+
+  logger.print("Fetching mensa timetable");
+  const mensaHtml = await nak.fetchMensaTimetable();
+  const mensaTimetable = nak.formatMensaTimetable(mensaHtml)
+  if (!mensaTimetable) return;
+
+  logger.print("Creating mensa events");
+  const mensaCalendar = calendar.createMensaEvents(calendar.generate(), mensaTimetable);
+
+  logger.print("Uploading file to S3");
+  await bucket
+    .uploadToS3(mensaCalendar.toString(), "Mensa.ics")
+    .then(res => callback(null, res), callback);
+}
 
 module.exports.bot = async event => {
   const body = JSON.parse(event.body);
@@ -70,9 +69,13 @@ module.exports.bot = async event => {
   } = body.message;
 
   switch (text.toLowerCase()) {
-    case "/sync":
-      await bot.sendMessage(chat.id, "ich starte 💪");
-      await lambda.callApi();
+    case "/sync-timetable":
+      await bot.sendMessage(chat.id, "starte kalendar-api 📆");
+      await lambda.callTimetableApi();
+      break;
+    case "/sync-mensa":
+      await bot.sendMessage(chat.id, "starte mensa-api 🍔");
+      await lambda.callMensaApi();
       break;
     case "/help":
       await bot.sendMessage(chat.id, "Nö 😋");
@@ -84,7 +87,6 @@ module.exports.bot = async event => {
       await bot.sendMessage(chat.id, "Will nicht mit dir reden 🤐 ");
       break;
   }
-
 
   return {
     statusCode: 200,
