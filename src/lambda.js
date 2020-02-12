@@ -4,8 +4,14 @@ const lambda = new aws.Lambda({
   region: "eu-central-1",
 });
 
-module.exports.callApi = (chatId, code) =>
+module.exports.callTimetableApi = () =>
   lambda.invoke({
-    FunctionName: "calendar-formatter-dev-api",
+    FunctionName: "calendar-formatter-dev-timetableApi",
+    InvocationType: "Event",
+  }).promise();
+
+module.exports.callMensaApi = () =>
+  lambda.invoke({
+    FunctionName: "calendar-formatter-dev-mensaApi",
     InvocationType: "Event",
   }).promise();

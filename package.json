@@ -18,7 +18,8 @@
     "serverless-s3-local": "^0.5.4"
   },
   "scripts": {
-    "start": "serverless invoke local -f api",
+    "invoke:timetable": "serverless invoke local -f timetableApi",
+    "invoke:mensa": "serverless invoke local -f mensaApi",
     "dev": "serverless offline",
     "test": "jest",
     "coverage": "jest --coverage",

@@ -18,6 +18,8 @@ const telegramFetch = (method, params) =>
   ) : this.fetch(telegramUrl(method), params)
 
 module.exports.sendMessage = (chat, message) => {
+  if (!chat || !BOT_TOKEN) return;
+
   return telegramFetch("sendMessage", {
     method: "post",
     headers: {

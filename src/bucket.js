@@ -1,7 +1,6 @@
 const AWS = require("aws-sdk");
 const ical = require("node-ical");
 
-const FILENAME = "NAK.ics";
 const {
   BUCKET,
   IS_LOCAL
@@ -16,16 +15,22 @@ const localS3Params = {
 };
 const s3 = new AWS.S3(IS_LOCAL && localS3Params);
 
-module.exports.uploadToS3 = (data, filename = FILENAME, bucket = BUCKET) =>
-  s3.putObject({
+module.exports.uploadToS3 = (data, filename, bucket = BUCKET) =>
+  s3
+  .putObject({
     Bucket: bucket,
     Key: filename,
     Body: data,
     ACL: "public-read"
-  }).promise();
+  })
+  .promise();
 
-module.exports.fetchCalendarFile = async (filename = FILENAME, bucket = BUCKET) => {
-  const headData = await s3.headObject({
+module.exports.fetchCalendarFile = async (
+  filename,
+  bucket = BUCKET
+) => {
+  const headData = await s3
+    .headObject({
       Bucket: bucket,
       Key: filename
     })
@@ -35,11 +40,13 @@ module.exports.fetchCalendarFile = async (filename = FILENAME, bucket = BUCKET) 
     });
 
   if (headData) {
-    const ics = await s3.getObject({
-      Bucket: bucket,
-      Key: filename
-    }).promise();
+    const ics = await s3
+      .getObject({
+        Bucket: bucket,
+        Key: filename
+      })
+      .promise();
 
     return ical.async.parseICS(ics.Body.toString());
   }
-}
+};
