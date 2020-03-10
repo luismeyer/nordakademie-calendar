@@ -1,12 +1,5 @@
 const generator = require("ical-generator");
-const {
-  subDays,
-  parseISO,
-  isEqual,
-  format
-} = require("date-fns");
-
-module.exports.generate = () => generator();
+const { subDays, parseISO, isEqual, format } = require("date-fns");
 
 module.exports.formatSummary = summary => {
   const firstComma = summary.indexOf(",") + 1;
@@ -17,32 +10,26 @@ module.exports.formatSummary = summary => {
 };
 
 module.exports.format = calendar => {
-  const cal = this.generate()
+  const calendarGenerator = generator();
   const events = Object.values(calendar);
 
-  events.forEach(({
-    summary,
-    location,
-    ...rest
-  }) => {
+  events.forEach(({ summary, location, ...rest }) => {
     if (!summary) return;
 
-    cal.createEvent({
+    calendarGenerator.createEvent({
       ...rest,
       location: `${location}, Nordakademie Elmshorn, 25337`,
       summary: this.formatSummary(summary)
     });
   });
 
-  return cal;
+  return calendarGenerator;
 };
 
-module.exports.createMensaEvents = (calendar, mensaTimetable) => {
-  mensaTimetable.forEach(({
-    main,
-    second,
-    date
-  }) => {
+module.exports.createMensaEvents = mensaTimetable => {
+  const calendar = generator();
+
+  mensaTimetable.forEach(({ main, second, date }) => {
     const day = parseISO(date);
 
     calendar.createEvent({
@@ -50,12 +37,12 @@ module.exports.createMensaEvents = (calendar, mensaTimetable) => {
       start: subDays(day, 1),
       end: day,
       description: `🥩 ${main.description} (${main.price}) \n\n🥦 ${second.description} (${second.price})`,
-      location: 'Mensa',
-    })
-  })
+      location: "Mensa"
+    });
+  });
 
   return calendar;
-}
+};
 
 module.exports.checkEventDifference = (oldCal, newCal) => {
   if (!oldCal) return [];
@@ -66,16 +53,13 @@ module.exports.checkEventDifference = (oldCal, newCal) => {
   return newEvents
     .filter((newEvent, index) => {
       const oldEvent = oldEvents[index];
-      const {
-        start: oldStart,
-        end: oldEnd
-      } = oldEvent;
-      const {
-        start: newStart,
-        end: newEnd
-      } = newEvent.toJSON();
+      const { start: oldStart, end: oldEnd } = oldEvent;
+      const { start: newStart, end: newEnd } = newEvent.toJSON();
 
-      return !isEqual(new Date(oldStart), new Date(newStart)) || !isEqual(new Date(oldEnd), new Date(newEnd));
+      return (
+        !isEqual(new Date(oldStart), new Date(newStart)) ||
+        !isEqual(new Date(oldEnd), new Date(newEnd))
+      );
     })
     .map(event => format(new Date(event.start()), "dd.MM.yyyy"));
-}
+};

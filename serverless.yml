@@ -34,7 +34,6 @@ package:
     - handler.js
     - src/**
     - node_modules/**
-    - semesters.json
 
 functions:
   timetableApi:

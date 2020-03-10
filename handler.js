@@ -4,35 +4,33 @@ const calendar = require("./src/calendar");
 const bucket = require("./src/bucket");
 const bot = require("./src/bot");
 const lambda = require("./src/lambda");
-const {
-  Logger
-} = require("./src/utils");
+const { Logger } = require("./src/utils");
 
-const {
-  CHAT_ID,
-} = process.env;
+const { CHAT_ID } = process.env;
 
 module.exports.timetableFormatter = async (event, context, callback) => {
   const logger = new Logger(6);
   const filename = "NAK.ics";
 
-  logger.print("Calculating current semester");
-  const currentSemester = nak.currentSemester();
-  if (!currentSemester) return;
-
   logger.print("Fetching timetable");
-  const nakCal = await nak.fetchCalendar(currentSemester.semester)
-  if (!nakCal) return;
+  const nakCal = await nak.fetchCalendar();
+  if (!nakCal) {
+    bot.sendMessage(`kein aktuellen kalendar gefunden`);
+    return;
+  }
 
   logger.print("Formatting timetable");
   const formattedCalendar = calendar.format(nakCal);
 
   logger.print("Fetching old timetable and compares calendars");
   const oldTimetable = await bucket.fetchCalendarFile(filename);
-  const calendarDiff = await calendar.checkEventDifference(oldTimetable, formattedCalendar);
+  const calendarDiff = await calendar.checkEventDifference(
+    oldTimetable,
+    formattedCalendar
+  );
 
   if (calendarDiff.length) {
-    bot.sendMessage(`kalendar veränderung hier: ${calendarDiff.join()}`);
+    bot.sendMessage(`veränderung hier: ${calendarDiff.join()}`);
   }
 
   logger.print("Uploading file to S3");
@@ -49,11 +47,19 @@ module.exports.mensaFormatter = async (event, context, callback) => {
 
   logger.print("Fetching mensa timetable");
   const mensaHtml = await nak.fetchMensaTimetable();
-  const mensaTimetable = nak.formatMensaTimetable(mensaHtml)
-  if (!mensaTimetable) return;
+  if (!mensaHtml) {
+    await bot.sendMessage(CHAT_ID, "mensa seite nicht verfügbar");
+    return;
+  }
+
+  const mensaTimetable = nak.formatMensaTimetable(mensaHtml);
+  if (!mensaTimetable || !mensaTimetable.length) {
+    await bot.sendMessage(CHAT_ID, "kein Mensaplan gefunden");
+    return;
+  }
 
   logger.print("Creating mensa events");
-  const mensaCalendar = calendar.createMensaEvents(calendar.generate(), mensaTimetable);
+  const mensaCalendar = calendar.createMensaEvents(mensaTimetable);
 
   logger.print("Uploading file to S3");
   await bucket
@@ -62,14 +68,11 @@ module.exports.mensaFormatter = async (event, context, callback) => {
 
   logger.print("Sending notification");
   await bot.sendMessage(CHAT_ID, "mensa fertig! lol 🥳");
-}
+};
 
 module.exports.bot = async event => {
   const body = JSON.parse(event.body);
-  const {
-    text,
-    chat
-  } = body.message;
+  const { text, chat } = body.message;
 
   switch (text.toLowerCase()) {
     case "/synctimetable":
