@@ -11,7 +11,7 @@ module.exports.formatSummary = (summary) => {
     .replace(/([A-Z] [A-Z]\d{3} )|[A-Z] /, "");
 };
 
-const formatMeeting = (meeting) =>
+module.exports.formatMeeting = (meeting) =>
   `Url: ${meeting.url} \nPassword: ${meeting.password}`;
 
 const meetingInformation = (moduleId, date) => {
@@ -19,7 +19,7 @@ const meetingInformation = (moduleId, date) => {
 
   const meeting = Meetings[moduleId];
   if (!meeting) return;
-  return formatMeeting(meeting.url ? meeting : meeting[date.getDay()]);
+  return this.formatMeeting(meeting.url ? meeting : meeting[date.getDay()]);
 };
 
 module.exports.format = (calendar) => {
