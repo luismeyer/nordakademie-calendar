@@ -9,7 +9,7 @@ const { Logger } = require("./src/utils");
 const { CHAT_ID } = process.env;
 
 module.exports.timetableFormatter = async (event, context, callback) => {
-  const logger = new Logger(6);
+  const logger = new Logger(5);
   const filename = "NAK.ics";
 
   logger.print("Fetching timetable");
@@ -36,7 +36,7 @@ module.exports.timetableFormatter = async (event, context, callback) => {
   logger.print("Uploading file to S3");
   await bucket
     .uploadToS3(formattedCalendar.toString(), filename)
-    .then(res => callback(null, res), callback);
+    .then((res) => callback(null, res), callback);
 
   logger.print("Sending notification");
   await bot.sendMessage(CHAT_ID, "stundenplan fertig! lol 🥳");
@@ -64,13 +64,13 @@ module.exports.mensaFormatter = async (event, context, callback) => {
   logger.print("Uploading file to S3");
   await bucket
     .uploadToS3(mensaCalendar.toString(), "Mensa.ics")
-    .then(res => callback(null, res), callback);
+    .then((res) => callback(null, res), callback);
 
   logger.print("Sending notification");
   await bot.sendMessage(CHAT_ID, "mensa fertig! lol 🥳");
 };
 
-module.exports.bot = async event => {
+module.exports.bot = async (event) => {
   const body = JSON.parse(event.body);
   const { text, chat } = body.message;
 
@@ -98,11 +98,11 @@ module.exports.bot = async event => {
     statusCode: 200,
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Credentials": true
+      "Access-Control-Allow-Credentials": true,
     },
     body: JSON.stringify({
       message: "Alles Cool",
-      json: event.body
-    })
+      json: event.body,
+    }),
   };
 };

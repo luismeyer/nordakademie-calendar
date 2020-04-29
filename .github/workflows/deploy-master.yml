@@ -31,6 +31,11 @@ jobs:
       - name: Run tests
         run: npm test
 
+      - name: Run app stetup
+        run: npm run setup
+        env:
+          PASSPHRASE: ${{ secrets.PASSPHRASE }}
+
       - name: Serverless create domain
         uses: serverless/github-action@master
         with:
@@ -46,8 +51,3 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      - name: Run app stetup
-        run: npm run setup
-        env:
-          PASSPHRASE: ${{ secrets.PASSPHRASE }}

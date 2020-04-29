@@ -5,8 +5,12 @@ const path = require("path");
 
 const Meetings = (() => {
   const meetingsPath = path.resolve(__dirname, "../resources/meetings.json");
-  if (!fs.existsSync(meetingsPath)) return;
+  if (!fs.existsSync(meetingsPath)) {
+    console.info("No Meeting file found");
+    return;
+  }
 
+  console.info("Parsing meetings...");
   return JSON.parse(fs.readFileSync(meetingsPath));
 })();
 
