@@ -26,7 +26,8 @@
     "coverage": "jest --coverage",
     "deploy": "serverless deploy",
     "setup": "node src/scripts/setup.js",
-    "secrets": "gpg --symmetric --cipher-algo AES256 ./secrets/secrets.json"
+    "secrets": "gpg --symmetric --cipher-algo AES256 ./secrets/secrets.json",
+    "meetings": "gpg --symmetric --cipher-algo AES256 ./resources/meetings.json"
   },
   "repository": {
     "type": "git",

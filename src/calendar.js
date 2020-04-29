@@ -1,6 +1,8 @@
 const generator = require("ical-generator");
 const { subDays, parseISO, isEqual, format } = require("date-fns");
 
+const Meetings = require("../resources/meetings.json");
+
 module.exports.formatSummary = (summary) => {
   const firstComma = summary.indexOf(",") + 1;
   const secondComma = summary.indexOf(",", firstComma + 1);
@@ -9,19 +11,31 @@ module.exports.formatSummary = (summary) => {
     .replace(/([A-Z] [A-Z]\d{3} )|[A-Z] /, "");
 };
 
+const formatMeeting = (meeting) =>
+  `Url: ${meeting.url} \nPassword: ${meeting.password}`;
+
+const meetingInformation = (moduleId, date) => {
+  if (!moduleId) return;
+
+  const meeting = Meetings[moduleId];
+  if (!meeting) return;
+  return formatMeeting(meeting.url ? meeting : meeting[date.getDay()]);
+};
+
 module.exports.format = (calendar) => {
   const calendarGenerator = generator();
   const events = Object.values(calendar);
 
-  events.forEach(({ summary, location, ...rest }) => {
-    const moduleId = summary;
-    console.log(moduleId);
-
+  events.forEach(({ summary, location, description, ...rest }) => {
     if (!summary) return;
+
+    const [moduleId] = summary.match(/\w\d{3}/);
+    const meeting = meetingInformation(moduleId, new Date(rest.start));
 
     calendarGenerator.createEvent({
       ...rest,
       location: `${location}, Nordakademie Elmshorn, 25337`,
+      description: `${meeting ? `${meeting}\n` : ""}${description}`,
       summary: this.formatSummary(summary),
     });
   });
