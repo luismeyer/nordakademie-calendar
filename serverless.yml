@@ -6,6 +6,10 @@ custom:
   s3:
     port: 8000
     directory: /tmp
+  customDomain:
+    domainName: nak.luimey.de
+    createRoute53Record: true
+    stage: ${self:provider.stage}
 
 provider:
   name: aws
@@ -22,10 +26,6 @@ provider:
     BUCKET: ${self:custom.bucket}
     BOT_TOKEN: ${file(./secrets/secrets.json):token}
     CHAT_ID: ${file(./secrets/secrets.json):chatId}
-  customDomain:
-    domainName: nak.luimey.de
-    createRoute53Record: true
-    stage: ${self:provider.stage}
 
 plugins:
   - serverless-s3-local
