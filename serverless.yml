@@ -7,7 +7,7 @@ custom:
     port: 8000
     directory: /tmp
   customDomain:
-    domainName: nak.luimey.de
+    domainName: ${file(./secrets/secrets.json):domain}
     createRoute53Record: true
     stage: ${self:provider.stage}
 

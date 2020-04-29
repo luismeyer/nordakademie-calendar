@@ -9,7 +9,7 @@ const secrets = require("../../secrets/secrets.json");
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      url: secrets.webhookUrl,
+      url: `https://${secrets.domain}/bot`,
     }),
   });
   console.info(res);

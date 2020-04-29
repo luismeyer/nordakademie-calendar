@@ -2,9 +2,9 @@ name: Deploy master
 
 on:
   push:
-    branches:    
+    branches:
       - master
-      
+
 jobs:
   deploy:
     name: deploy
@@ -47,5 +47,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: Run telegram stetup
+      - name: Run app stetup
         run: npm run setup
+        env:
+          PASSPHRASE: ${{ secrets.PASSPHRASE }}

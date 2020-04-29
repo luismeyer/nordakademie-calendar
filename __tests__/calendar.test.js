@@ -13,8 +13,8 @@ test("removes module id", () => {
 test("skips missing summarys", () => {
   const mockEvent = {
     event: {
-      summary: undefined
-    }
+      summary: undefined,
+    },
   };
 
   expect(calendar.format(mockEvent)).toBeDefined();
@@ -24,8 +24,8 @@ test("formats calendar object", () => {
   const mockEvent = {
     event: {
       summary:
-        "A18b,V A112 Algorithmen&Datenstrukturen,Dipl.-Wirtschaftsinf. (FH) R�der,A103,13:00 - 16:15 Uhr (4:00 UE),"
-    }
+        "A18b,V A112 Algorithmen&Datenstrukturen,Dipl.-Wirtschaftsinf. (FH) R�der,A103,13:00 - 16:15 Uhr (4:00 UE),",
+    },
   };
 
   const formattedCalendar = calendar.format(mockEvent);
@@ -40,17 +40,23 @@ test("creates calendar events", () => {
     {
       main: {
         description: "Description 1",
-        price: "400"
+        price: "400",
       },
       second: {
         description: "Description 2",
-        price: "100"
+        price: "100",
       },
-      date: "2020-01-27"
-    }
+      date: "2020-01-27",
+    },
   ];
 
   const cal = calendar.createMensaEvents(mockMensa);
   expect(cal.events()[0]).toBeDefined();
   expect(cal.events()[0].summary()).toBe("Description 1");
+});
+
+test("formats meetings", () => {
+  const formatted = calendar.formatMeeting({ url: "test", password: "test" });
+  expect(formatted.includes("Url: test")).toBe(true);
+  expect(formatted.includes("Pasword: test")).toBe(true);
 });
