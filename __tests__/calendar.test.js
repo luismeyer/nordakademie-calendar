@@ -58,5 +58,5 @@ test("creates calendar events", () => {
 test("formats meetings", () => {
   const formatted = calendar.formatMeeting({ url: "test", password: "test" });
   expect(formatted.includes("Url: test")).toBe(true);
-  expect(formatted.includes("Pasword: test")).toBe(true);
+  expect(formatted.includes("Password: test")).toBe(true);
 });

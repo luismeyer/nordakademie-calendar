@@ -1,7 +1,14 @@
 const generator = require("ical-generator");
 const { subDays, parseISO, isEqual, format } = require("date-fns");
+const fs = require("fs");
+const path = require("path");
 
-const Meetings = require("../resources/meetings.json");
+const Meetings = (() => {
+  const meetingsPath = path.resolve(__dirname, "../resources/meetings.json");
+  if (!fs.existsSync(meetingsPath)) return;
+
+  return JSON.parse(fs.readFileSync(meetingsPath));
+})();
 
 module.exports.formatSummary = (summary) => {
   const firstComma = summary.indexOf(",") + 1;
@@ -15,7 +22,7 @@ module.exports.formatMeeting = (meeting) =>
   `Url: ${meeting.url} \nPassword: ${meeting.password}`;
 
 const meetingInformation = (moduleId, date) => {
-  if (!moduleId) return;
+  if (!moduleId || !Meetings) return;
 
   const meeting = Meetings[moduleId];
   if (!meeting) return;
