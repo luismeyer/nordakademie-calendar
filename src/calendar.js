@@ -1,7 +1,7 @@
 const generator = require("ical-generator");
 const { subDays, parseISO, isEqual, format } = require("date-fns");
 
-module.exports.formatSummary = summary => {
+module.exports.formatSummary = (summary) => {
   const firstComma = summary.indexOf(",") + 1;
   const secondComma = summary.indexOf(",", firstComma + 1);
   return summary
@@ -9,24 +9,27 @@ module.exports.formatSummary = summary => {
     .replace(/([A-Z] [A-Z]\d{3} )|[A-Z] /, "");
 };
 
-module.exports.format = calendar => {
+module.exports.format = (calendar) => {
   const calendarGenerator = generator();
   const events = Object.values(calendar);
 
   events.forEach(({ summary, location, ...rest }) => {
+    const moduleId = summary;
+    console.log(moduleId);
+
     if (!summary) return;
 
     calendarGenerator.createEvent({
       ...rest,
       location: `${location}, Nordakademie Elmshorn, 25337`,
-      summary: this.formatSummary(summary)
+      summary: this.formatSummary(summary),
     });
   });
 
   return calendarGenerator;
 };
 
-module.exports.createMensaEvents = mensaTimetable => {
+module.exports.createMensaEvents = (mensaTimetable) => {
   const calendar = generator();
 
   mensaTimetable.forEach(({ main, second, date }) => {
@@ -37,7 +40,7 @@ module.exports.createMensaEvents = mensaTimetable => {
       start: subDays(day, 1),
       end: day,
       description: `🥩 ${main.description} (${main.price}) \n\n🥦 ${second.description} (${second.price})`,
-      location: "Mensa"
+      location: "Mensa",
     });
   });
 
@@ -61,5 +64,5 @@ module.exports.checkEventDifference = (oldCal, newCal) => {
         !isEqual(new Date(oldEnd), new Date(newEnd))
       );
     })
-    .map(event => format(new Date(event.start()), "dd.MM.yyyy"));
+    .map((event) => format(new Date(event.start()), "dd.MM.yyyy"));
 };

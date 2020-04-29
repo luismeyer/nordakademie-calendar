@@ -1,9 +1,9 @@
 const bot = require("../bot");
 const secrets = require("../../secrets/secrets.json");
 
-(async () => {
+const fetchSetWebhook = () => {
   const url = bot.requestUrl(secrets.token)("setWebhook");
-  const res = await bot.fetch(url, {
+  return bot.fetch(url, {
     method: "post",
     headers: {
       "Content-Type": "application/json",
@@ -12,6 +12,10 @@ const secrets = require("../../secrets/secrets.json");
       url: secrets.webhookUrl,
     }),
   });
+};
+
+(async () => {
+  const res = await fetchSetWebhook();
 
   console.info(res);
 })();
