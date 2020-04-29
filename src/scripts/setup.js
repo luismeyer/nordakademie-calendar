@@ -35,5 +35,5 @@ const decryptMeetings = () => {
   console.info(res);
 
   await decryptMeetings();
-  console.info("Finished decrypted Meetings");
+  console.info("Finished decrypting Meetings");
 })();

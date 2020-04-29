@@ -39,6 +39,7 @@ package:
     - handler.js
     - src/**
     - node_modules/**
+    - resources/**
 
 functions:
   timetableApi:
