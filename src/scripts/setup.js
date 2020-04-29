@@ -6,11 +6,12 @@ const secrets = require("../../secrets/secrets.json");
   const res = await bot.fetch(url, {
     method: "post",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      url: secrets.webhookUrl
-    })
-  })
+      url: secrets.webhookUrl,
+    }),
+  });
+
   console.info(res);
 })();
