@@ -1,0 +1,23 @@
+{
+  "body": {
+    "update_id": 225049001,
+    "message": {
+      "message_id": 35,
+      "from": {
+        "id": 876296520,
+        "is_bot": false,
+        "first_name": "Luis",
+        "last_name": "Meyer",
+        "language_code": "de"
+      },
+      "chat": {
+        "id": 876296520,
+        "first_name": "Luis",
+        "last_name": "Meyer",
+        "type": "private"
+      },
+      "date": 1582994684,
+      "text": "/synctimetable"
+    }
+  }
+}

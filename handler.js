@@ -4,7 +4,7 @@ const calendar = require("./src/calendar");
 const bucket = require("./src/bucket");
 const bot = require("./src/bot");
 const lambda = require("./src/lambda");
-const { Logger } = require("./src/utils");
+const { Logger, isLocal } = require("./src/utils");
 
 const { CHAT_ID } = process.env;
 
@@ -71,13 +71,14 @@ module.exports.mensaFormatter = async (event, context, callback) => {
 };
 
 module.exports.bot = async (event) => {
-  const body = JSON.parse(event.body);
+  const body = isLocal() ? event.body : JSON.parse(event.body);
   const { text, chat } = body.message;
 
   switch (text.toLowerCase()) {
     case "/synctimetable":
       await bot.sendMessage(chat.id, "starte kalendar-api 📆");
       await lambda.callTimetableApi();
+      console.log("finfihsew");
       break;
     case "/syncmensa":
       await bot.sendMessage(chat.id, "starte mensa-api 🍔");
