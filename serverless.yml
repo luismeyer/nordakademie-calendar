@@ -18,9 +18,9 @@ provider:
     CHAT_ID: ${file(./secrets/secrets.json):chatId}
 
 layers:
-  lib64-canvas:
+  lib64:
     path: layers/lib64-canvas-layer
-  node-canvas:
+  node:
     path: layers/node-canvas-layer
 
 custom:
@@ -59,6 +59,9 @@ functions:
           path: bot
           method: ANY
           cors: true
+    layers:
+      - { Ref: Lib64LambdaLayer }
+      - { Ref: NodeLambdaLayer }
 
 resources:
   Resources:
