@@ -19,9 +19,9 @@ provider:
 
 layers:
   lib64-canvas:
-    path: layers/lib64-canvas-layer.zip
+    path: layers/lib64-canvas-layer
   node-canvas:
-    path: layers/node-canvas-layer.zip
+    path: layers/node-canvas-layer
 
 custom:
   bucket: ${file(./secrets/secrets.json):bucket}
