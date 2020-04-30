@@ -8,7 +8,7 @@ module.exports = {
   entry: slsw.lib.entries,
   target: "node",
   externals: [nodeExternals()],
-  mode: "dev",
+  mode: "development",
   output: {
     libraryTarget: "commonjs",
     path: path.join(__dirname, ".webpack"),

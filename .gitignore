@@ -10,3 +10,4 @@ NAK.ics
 .DS_Store
 coverage
 meetings.json
+.webpack
