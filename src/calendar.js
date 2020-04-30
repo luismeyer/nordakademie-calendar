@@ -3,7 +3,7 @@ const { subDays, parseISO, isEqual, format } = require("date-fns");
 const fs = require("fs");
 const path = require("path");
 
-const Meetings = (() => {
+const meetings = () => {
   const meetingsPath = path.resolve(__dirname, "../resources/meetings.json");
   if (!fs.existsSync(meetingsPath)) {
     console.info("No Meeting file found");
@@ -12,7 +12,7 @@ const Meetings = (() => {
 
   console.info("Parsing meetings...");
   return JSON.parse(fs.readFileSync(meetingsPath));
-})();
+};
 
 module.exports.formatSummary = (summary) => {
   const firstComma = summary.indexOf(",") + 1;
@@ -25,10 +25,10 @@ module.exports.formatSummary = (summary) => {
 module.exports.formatMeeting = (meeting) =>
   `Url: ${meeting.url} \nPassword: ${meeting.password}`;
 
-const meetingInformation = (moduleId, date) => {
-  if (!moduleId || !Meetings) return;
+const meetingInformation = (moduleId, date, meetings) => {
+  if (!moduleId || !meetings) return;
 
-  const meeting = Meetings[moduleId];
+  const meeting = meetings[moduleId];
   if (!meeting) return;
   return this.formatMeeting(meeting.url ? meeting : meeting[date.getDay()]);
 };
@@ -41,7 +41,11 @@ module.exports.format = (calendar) => {
     if (!summary) return;
 
     const [moduleId] = summary.match(/\w\d{3}/);
-    const meeting = meetingInformation(moduleId, new Date(rest.start));
+    const meeting = meetingInformation(
+      moduleId,
+      new Date(rest.start),
+      meetings()
+    );
 
     calendarGenerator.createEvent({
       ...rest,

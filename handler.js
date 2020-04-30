@@ -73,6 +73,7 @@ module.exports.mensaFormatter = async (event, context, callback) => {
 module.exports.bot = async (event) => {
   const body = isLocal() ? event.body : JSON.parse(event.body);
   const { text, chat } = body.message;
+  console.log("Received Message: ", text);
 
   switch (text.toLowerCase()) {
     case "/synctimetable":
