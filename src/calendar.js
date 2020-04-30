@@ -36,6 +36,7 @@ const meetingInformation = (moduleId, date, meetings) => {
 module.exports.format = (calendar) => {
   const calendarGenerator = generator();
   const events = Object.values(calendar);
+  const meetings = meetings();
 
   events.forEach(({ summary, location, description, ...rest }) => {
     if (!summary) return;
@@ -44,7 +45,7 @@ module.exports.format = (calendar) => {
     const meeting = meetingInformation(
       moduleId,
       new Date(rest.start),
-      meetings()
+      meetings
     );
 
     calendarGenerator.createEvent({

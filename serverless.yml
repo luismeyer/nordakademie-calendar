@@ -1,6 +1,28 @@
 service: calendar-formatter
 app: calendar-formatter
 
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: eu-central-1
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - s3:*
+        - lambda:InvokeFunction
+      Resource: "*"
+  environment:
+    BUCKET: ${self:custom.bucket}
+    BOT_TOKEN: ${file(./secrets/secrets.json):token}
+    CHAT_ID: ${file(./secrets/secrets.json):chatId}
+
+layers:
+  lib64-canvas:
+    path: layers/lib64-canvas-layer.zip
+  node-canvas:
+    path: layers/node-canvas-layer.zip
+
 custom:
   bucket: ${file(./secrets/secrets.json):bucket}
   s3:
@@ -14,22 +36,6 @@ custom:
     webpackConfig: "./webpack.config.js"
     includeModules: true
     packager: "npm"
-
-provider:
-  name: aws
-  runtime: nodejs10.x
-  stage: dev
-  region: eu-central-1
-  iamRoleStatements:
-    - Effect: "Allow"
-      Action:
-        - s3:*
-        - lambda:InvokeFunction
-      Resource: "*"
-  environment:
-    BUCKET: ${self:custom.bucket}
-    BOT_TOKEN: ${file(./secrets/secrets.json):token}
-    CHAT_ID: ${file(./secrets/secrets.json):chatId}
 
 plugins:
   - serverless-s3-local
