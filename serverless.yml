@@ -10,6 +10,10 @@ custom:
     domainName: ${file(./secrets/secrets.json):domain}
     createRoute53Record: true
     stage: ${self:provider.stage}
+  webpack:
+    webpackConfig: "./webpack.config.js"
+    includeModules: true
+    packager: "npm"
 
 provider:
   name: aws
@@ -31,15 +35,13 @@ plugins:
   - serverless-s3-local
   - serverless-offline
   - serverless-domain-manager
+  - serverless-webpack
 
 package:
   exclude:
     - ./**
   include:
-    - handler.js
-    - src/**
-    - node_modules/**
-    - resources/**
+    - .webpack
 
 functions:
   timetableApi:
