@@ -48,10 +48,16 @@ functions:
     handler: handler.timetableFormatter
     events:
       - schedule: cron(0 */6 * * ? *)
+    layers:
+      - { Ref: Lib64LambdaLayer }
+      - { Ref: NodeLambdaLayer }
   mensaApi:
     handler: handler.mensaFormatter
     events:
       - schedule: cron(0 0 * * ? *)
+    layers:
+      - { Ref: Lib64LambdaLayer }
+      - { Ref: NodeLambdaLayer }
   bot:
     handler: handler.bot
     events:
