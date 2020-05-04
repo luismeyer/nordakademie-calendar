@@ -1,8 +1,7 @@
 const path = require("path");
 const slsw = require("serverless-webpack");
 const nodeExternals = require("webpack-node-externals");
-
-const { IS_OFFLINE } = process.env;
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   entry: slsw.lib.entries,
@@ -14,4 +13,5 @@ module.exports = {
     path: path.join(__dirname, ".webpack"),
     filename: "[name].js",
   },
+  plugins: [new CopyWebpackPlugin(["./resources"])],
 };
