@@ -31,10 +31,8 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Run app stetup
-        run: npm run setup
-        env:
-          PASSPHRASE: ${{ secrets.PASSPHRASE }}
+      - name: Run app setup
+        run: npm run setup -- --passphrase ${{ secrets.PASSPHRASE }}
 
       - name: Serverless create domain
         uses: serverless/github-action@master

@@ -1,13 +1,29 @@
-const fs = require("fs");
 const path = require("path");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
+const meow = require("meow");
 
 const bot = require("../bot");
 const secrets = require("../../secrets/secrets.json");
 
-const { PASSPHRASE } = process.env;
-if (!PASSPHRASE) throw new Error("Missing env variable: Passphrase");
+const cli = meow(
+  `
+    Usage
+      $ setup [options]
+    Options
+      --passphrase, -p  Passphrase to decode secret files
+`,
+  {
+    flags: {
+      passphrase: {
+        type: "string",
+        alias: "p",
+      },
+    },
+  }
+);
+
+const { passphrase } = cli.flags;
 
 const fetchSetWebhook = () => {
   const url = bot.requestUrl(secrets.token)("setWebhook");
@@ -26,7 +42,7 @@ const decryptMeetings = () => {
   const filepath = path.resolve(__dirname, "../../resources/meetings.json");
 
   return exec(
-    `gpg --quiet --batch --yes --decrypt --passphrase="${PASSPHRASE}" --output ${filepath} ${filepath}.gpg`
+    `gpg --quiet --batch --yes --decrypt --passphrase="${passphrase}" --output ${filepath} ${filepath}.gpg`
   );
 };
 
