@@ -8,7 +8,8 @@ const { Logger, isLocal } = require("./src/utils");
 
 const { CHAT_ID } = process.env;
 
-module.exports.timetableFormatter = async (event, context, callback) => {
+// TimeTable Api Handler
+module.exports.timetableFormatter = async (_event, _context, callback) => {
   const logger = new Logger(5);
   const filename = "NAK.ics";
 
@@ -42,7 +43,8 @@ module.exports.timetableFormatter = async (event, context, callback) => {
   await bot.sendMessage(CHAT_ID, "stundenplan fertig! lol 🥳");
 };
 
-module.exports.mensaFormatter = async (event, context, callback) => {
+// Mensa Api Handler
+module.exports.mensaFormatter = async (_event, _context, callback) => {
   const logger = new Logger(3);
 
   logger.print("Fetching mensa timetable");
@@ -54,6 +56,7 @@ module.exports.mensaFormatter = async (event, context, callback) => {
 
   const mensaTimetable = nak.formatMensaTimetable(mensaHtml);
   if (!mensaTimetable || !mensaTimetable.length) {
+    logger.print("No mensa timetable found. Exit function...");
     await bot.sendMessage(CHAT_ID, "kein Mensaplan gefunden");
     return;
   }
@@ -70,6 +73,7 @@ module.exports.mensaFormatter = async (event, context, callback) => {
   await bot.sendMessage(CHAT_ID, "mensa fertig! lol 🥳");
 };
 
+// Telegram Bot Handler
 module.exports.bot = async (event) => {
   const body = isLocal() ? event.body : JSON.parse(event.body);
   const { text, chat } = body.message;

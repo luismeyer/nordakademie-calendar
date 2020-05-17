@@ -81,6 +81,8 @@ module.exports.checkEventDifference = (oldCal, newCal) => {
   return newEvents
     .filter((newEvent, index) => {
       const oldEvent = oldEvents[index];
+      if (!oldEvent) return false;
+
       const { start: oldStart, end: oldEnd } = oldEvent;
       const { start: newStart, end: newEnd } = newEvent.toJSON();
 

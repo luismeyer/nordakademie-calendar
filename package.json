@@ -27,7 +27,7 @@
     "invoke:timetable": "serverless invoke local -f timetableApi",
     "invoke:mensa": "serverless invoke local -f mensaApi",
     "invoke:bot": "serverless invoke local -f bot -p ./resources/event.json",
-    "dev": "serverless offline",
+    "start": "serverless offline",
     "test": "jest",
     "coverage": "jest --coverage",
     "deploy": "serverless deploy",

@@ -1,4 +1,6 @@
 const calendar = require("../src/calendar");
+const generator = require("ical-generator");
+const { subDays, format, addDays } = require("date-fns");
 
 test("splits string at first and second comma", () => {
   expect(calendar.formatSummary("a,b,c")).toBe("b");
@@ -59,4 +61,40 @@ test("formats meetings", () => {
   const formatted = calendar.formatMeeting({ url: "test", password: "test" });
   expect(formatted.includes("Url: test")).toBe(true);
   expect(formatted.includes("Password: test")).toBe(true);
+});
+
+test("checks event difference", () => {
+  const oldCal = {
+    1: {
+      start: new Date(),
+      summary: "summary",
+      end: new Date(),
+    },
+  };
+
+  const newCal = generator();
+  newCal.createEvent({
+    start: new Date(),
+    summary: "summary",
+    end: new Date(),
+  });
+
+  expect(calendar.checkEventDifference(oldCal, newCal)).toStrictEqual([]);
+
+  oldCal[1].end = subDays(new Date(), 3);
+  expect(calendar.checkEventDifference(oldCal, newCal)).toStrictEqual([
+    format(new Date(), "dd.MM.yyyy"),
+  ]);
+
+  const newerCal = generator();
+  newerCal.createEvent({
+    start: addDays(new Date(), 3),
+    summary: "summary",
+  });
+
+  expect(calendar.checkEventDifference(oldCal, newerCal)).toStrictEqual([
+    format(addDays(new Date(), 3), "dd.MM.yyyy"),
+  ]);
+
+  expect(calendar.checkEventDifference(undefined, undefined)).toStrictEqual([]);
 });

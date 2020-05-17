@@ -4,7 +4,7 @@ const { JSDOM } = require("jsdom");
 
 const utils = require("./utils");
 
-module.exports.calendarUrl = semester =>
+module.exports.calendarUrl = (semester) =>
   `https://cis.nordakademie.de/fileadmin/Infos/Stundenplaene/A18b_${semester}.ics`;
 
 module.exports.fetchCalendar = async () => {
@@ -14,15 +14,15 @@ module.exports.fetchCalendar = async () => {
   }
 };
 
-const formatDescription = description =>
+const formatDescription = (description) =>
   utils.formatInnerHtml(description.replace(/ \(.*\)/, ""));
 
 module.exports.fetchMensaTimetable = async () =>
-  fetch("https://cis.nordakademie.de/mensa/speiseplan.cmd").then(res =>
+  fetch("https://cis.nordakademie.de/mensa/speiseplan.cmd").then((res) =>
     res.text()
   );
 
-module.exports.formatMensaTimetable = mensaHtml => {
+module.exports.formatMensaTimetable = (mensaHtml) => {
   if (!mensaHtml) return [];
 
   const { document } = new JSDOM(mensaHtml).window;
@@ -45,7 +45,7 @@ module.exports.formatMensaTimetable = mensaHtml => {
           ),
           price: utils.formatInnerHtml(
             mainDish.querySelector(".speiseplan-preis").textContent
-          )
+          ),
         },
         second: {
           description: formatDescription(
@@ -53,9 +53,9 @@ module.exports.formatMensaTimetable = mensaHtml => {
           ),
           price: utils.formatInnerHtml(
             secondDish.querySelector(".speiseplan-preis").textContent
-          )
-        }
+          ),
+        },
       };
     })
-    .filter(value => value !== undefined);
+    .filter((value) => value !== undefined);
 };
