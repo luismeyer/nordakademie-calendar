@@ -17,15 +17,34 @@ module.exports.formatSummary = (summary) => {
     .replace(/([A-Z] [A-Z]\d{3} )|[A-Z] /, "");
 };
 
-module.exports.formatMeeting = (meeting) =>
-  `Url: ${meeting.url} \nPassword: ${meeting.password}`;
+module.exports.formatMeeting = (meeting) => {
+  let result = "";
 
-const meetingInformation = (moduleId, date, meetings) => {
-  if (!moduleId || !meetings) return;
+  if (meeting.url) {
+    result += `Url: ${meeting.url}`;
+  }
 
-  const meeting = meetings[moduleId];
+  if (meeting.password) {
+    result += `\nPassword: ${meeting.password}`;
+  }
+
+  return `${result}\n`;
+};
+
+module.exports.meetingInformation = ({ date, meeting, description }) => {
   if (!meeting) return;
-  return this.formatMeeting(meeting.url ? meeting : meeting[date.getDay()]);
+
+  if (meeting.url) {
+    return meeting;
+  }
+
+  if (Array.isArray(meeting)) {
+    return meeting.find((m) => description.match(m.regex));
+  }
+
+  if (meeting[date.getDay()]) {
+    return meeting[date.getDay()];
+  }
 };
 
 module.exports.format = (calendar) => {
@@ -37,16 +56,17 @@ module.exports.format = (calendar) => {
     if (!summary) return;
 
     const [moduleId] = summary.match(/\w\d{3}/);
-    const meeting = meetingInformation(
-      moduleId,
-      new Date(rest.start),
-      meetingsData
-    );
+    const meetingData = this.meetingInformation({
+      meeting: meetingsData[moduleId],
+      date: new Date(rest.start),
+      description,
+    });
+    const meeting = meetingData ? this.formatMeeting(meetingData) : "";
 
     calendarGenerator.createEvent({
       ...rest,
       location: `${location}, Nordakademie Elmshorn, 25337`,
-      description: `${meeting ? `${meeting}\n` : ""}${description}`,
+      description: `${meeting}${description}`,
       summary: this.formatSummary(summary),
     });
   });

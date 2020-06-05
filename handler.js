@@ -83,7 +83,6 @@ module.exports.bot = async (event) => {
     case "/synctimetable":
       await bot.sendMessage(chat.id, "starte kalendar-api 📆");
       await lambda.callTimetableApi();
-      console.log("finfihsew");
       break;
     case "/syncmensa":
       await bot.sendMessage(chat.id, "starte mensa-api 🍔");

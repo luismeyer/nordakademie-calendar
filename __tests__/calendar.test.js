@@ -61,6 +61,14 @@ test("formats meetings", () => {
   const formatted = calendar.formatMeeting({ url: "test", password: "test" });
   expect(formatted.includes("Url: test")).toBe(true);
   expect(formatted.includes("Password: test")).toBe(true);
+
+  const formatted2 = calendar.formatMeeting({ url: "test" });
+  expect(formatted2.includes("Url: test")).toBe(true);
+  expect(formatted2.includes("Password: test")).toBe(false);
+
+  const formatted3 = calendar.formatMeeting({ password: "test" });
+  expect(formatted3.includes("Url: test")).toBe(false);
+  expect(formatted3.includes("Password: test")).toBe(true);
 });
 
 test("checks event difference", () => {
@@ -97,4 +105,26 @@ test("checks event difference", () => {
   ]);
 
   expect(calendar.checkEventDifference(undefined, undefined)).toStrictEqual([]);
+});
+
+test("Handles meeting information", () => {
+  const meeting = { url: "url", password: "pass" };
+
+  let result;
+  result = calendar.meetingInformation({
+    meeting,
+  });
+  expect(result).toEqual(meeting);
+
+  result = calendar.meetingInformation({
+    meeting: { [new Date().getDay()]: meeting },
+    date: new Date(),
+  });
+  expect(result).toEqual(meeting);
+
+  result = calendar.meetingInformation({
+    meeting: [{ regex: "bla" }, { regex: "blub", ...meeting }],
+    description: "dededede blub",
+  });
+  expect(result).toEqual({ regex: "blub", ...meeting });
 });
