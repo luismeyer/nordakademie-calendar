@@ -4,14 +4,28 @@ const { JSDOM } = require("jsdom");
 
 const utils = require("./utils");
 
-module.exports.calendarUrl = (semester) =>
-  `https://cis.nordakademie.de/fileadmin/Infos/Stundenplaene/A18b_${semester}.ics`;
+module.exports.calendarUrl = (semester, centuria) => {
+  if (!centuria) {
+    const { CENTURIA } = process.env;
 
-module.exports.fetchCalendar = async () => {
-  for (let i = 1; i < 10; i++) {
-    const url = this.calendarUrl(i);
-    if (await utils.isValidUrl(url)) return ical.fromURL(url);
+    if (!CENTURIA) throw new Error("Missing Environment Variable: CENTURIA");
+    centuria = CENTURIA;
   }
+
+  return `https://cis.nordakademie.de/fileadmin/Infos/Stundenplaene/${centuria}_${semester}.ics`;
+};
+
+module.exports.fetchCalendar = async (centuria) => {
+  for (let i = 1; i < 10; i++) {
+    const url = this.calendarUrl(i, centuria);
+    const isValid = await utils.isValidUrl(url);
+
+    if (isValid) {
+      return ical.fromURL(url);
+    }
+  }
+
+  return false;
 };
 
 const formatDescription = (description) =>

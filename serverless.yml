@@ -16,6 +16,7 @@ provider:
     BUCKET: ${self:custom.bucket}
     BOT_TOKEN: ${file(./secrets/secrets.json):token}
     CHAT_ID: ${file(./secrets/secrets.json):chatId}
+    CENTURIA: ${file(./secrets/secrets.json):centuria}
 
 layers:
   lib64:

@@ -1,12 +1,16 @@
 const nak = require("../src/nak");
 
 test("calendar url ends with filename ", () => {
-  expect(nak.calendarUrl(3).endsWith("A18b_3.ics")).toBe(true);
+  expect(nak.calendarUrl(3, "A18b").endsWith("A18b_3.ics")).toBe(true);
 });
 
 test("fetches calendar", async () => {
-  const nakCal = await nak.fetchCalendar();
-  expect(typeof nakCal).toBe("object");
+  const nakCal = await nak.fetchCalendar("A18b");
+  if (!nakCal) {
+    expect(nakCal).toBe(false);
+  } else {
+    expect(typeof nakCal).toBe("object");
+  }
 });
 
 test("catches missing mensa html", () => {
