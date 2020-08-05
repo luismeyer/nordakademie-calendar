@@ -16,7 +16,7 @@ module.exports.timetableFormatter = async (_event, _context, callback) => {
   logger.print("Fetching timetable");
   const nakCal = await nak.fetchCalendar();
   if (!nakCal) {
-    bot.sendMessage(`kein aktuellen kalendar gefunden`);
+    await bot.sendMessage(CHAT_ID, `kein aktuellen kalendar gefunden`);
     return;
   }
 
@@ -31,7 +31,7 @@ module.exports.timetableFormatter = async (_event, _context, callback) => {
   );
 
   if (calendarDiff.length) {
-    bot.sendMessage(`veränderung hier: ${calendarDiff.join()}`);
+    bot.sendMessage(CHAT_ID, `veränderung hier: ${calendarDiff.join()}`);
   }
 
   logger.print("Uploading file to S3");
