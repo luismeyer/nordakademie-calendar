@@ -42,7 +42,7 @@ module.exports.meetingInformation = ({ date, meeting, description }) => {
     return meeting.find((m) => description.match(m.regex));
   }
 
-  if (meeting[date.getDay()]) {
+  if (date && meeting[date.getDay()]) {
     return meeting[date.getDay()];
   }
 };
