@@ -48,7 +48,7 @@ functions:
   timetableApi:
     handler: handler.timetableFormatter
     events:
-      - schedule: cron(0 */6 * * ? *)
+      - schedule: cron(0 */12 * * ? *)
     layers:
       - { Ref: Lib64LambdaLayer }
       - { Ref: NodeLambdaLayer }
