@@ -3,7 +3,7 @@ app: calendar-formatter
 
 provider:
   name: aws
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   stage: dev
   region: eu-central-1
   iamRoleStatements:
