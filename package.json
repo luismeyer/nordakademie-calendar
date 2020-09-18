@@ -15,7 +15,6 @@
   "devDependencies": {
     "copy-webpack-plugin": "^6.1.0",
     "jest": "^26.4.2",
-    "serverless": "^2.1.1",
     "serverless-domain-manager": "^4.2.2",
     "serverless-offline": "^6.7.0",
     "serverless-s3-local": "^0.6.5",
