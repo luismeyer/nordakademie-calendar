@@ -41,7 +41,6 @@ custom:
 plugins:
   - serverless-s3-local
   - serverless-offline
-  - serverless-offline-lambda
   - serverless-domain-manager
   - serverless-webpack
 
