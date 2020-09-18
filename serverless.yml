@@ -1,3 +1,4 @@
+org: luismeyer
 service: calendar-formatter
 app: calendar-formatter
 
@@ -21,8 +22,10 @@ provider:
 layers:
   lib64:
     path: layers/lib64-canvas-layer
-  node:
+  canvas:
     path: layers/node-canvas-layer
+  request:
+    path: layers/node-request-layer
 
 custom:
   bucket: ${file(./secrets/secrets.json):bucket}
@@ -51,14 +54,16 @@ functions:
       - schedule: cron(0 */12 * * ? *)
     layers:
       - { Ref: Lib64LambdaLayer }
-      - { Ref: NodeLambdaLayer }
+      - { Ref: CanvasLambdaLayer }
+      - { Ref: RequestLambdaLayer }
   mensaApi:
     handler: handler.mensaFormatter
     events:
       - schedule: cron(0 0 * * ? *)
     layers:
       - { Ref: Lib64LambdaLayer }
-      - { Ref: NodeLambdaLayer }
+      - { Ref: CanvasLambdaLayer }
+      - { Ref: RequestLambdaLayer }
   bot:
     handler: handler.bot
     events:
@@ -68,7 +73,8 @@ functions:
           cors: true
     layers:
       - { Ref: Lib64LambdaLayer }
-      - { Ref: NodeLambdaLayer }
+      - { Ref: CanvasLambdaLayer }
+      - { Ref: RequestLambdaLayer }
 
 resources:
   Resources:

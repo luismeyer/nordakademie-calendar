@@ -10,8 +10,7 @@
     "jsdom": "^16.2.2",
     "meow": "^7.0.1",
     "node-fetch": "^2.6.0",
-    "node-ical": "^0.11.4",
-    "request": "^2.88.2"
+    "node-ical": "^0.11.4"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^6.1.0",
