@@ -9,19 +9,20 @@
     "ical-generator": "^1.10.0",
     "jsdom": "^16.2.2",
     "meow": "^7.0.1",
-    "node-fetch": "^2.6.1",
-    "node-ical": "^0.10.0"
+    "node-fetch": "^2.6.0",
+    "node-ical": "^0.11.4"
   },
   "devDependencies": {
-    "copy-webpack-plugin": "^5.1.1",
-    "jest": "^25.5.2",
-    "serverless": "^1.69.0",
-    "serverless-domain-manager": "^3.3.2",
-    "serverless-offline": "^6.1.4",
-    "serverless-s3-local": "^0.6.0",
-    "serverless-webpack": "^5.3.1",
-    "webpack": "^4.43.0",
-    "webpack-node-externals": "^1.7.2"
+    "copy-webpack-plugin": "^6.1.0",
+    "jest": "^26.4.2",
+    "serverless": "^2.1.1",
+    "serverless-domain-manager": "^4.2.2",
+    "serverless-offline": "^6.7.0",
+    "serverless-s3-local": "^0.6.5",
+    "serverless-webpack": "^5.3.5",
+    "webpack": "^4.44.2",
+    "webpack-node-externals": "^2.5.2",
+    "serverless-offline-lambda": "^1.0.6"
   },
   "scripts": {
     "invoke:timetable": "serverless invoke local -f timetableApi",

@@ -13,5 +13,9 @@ module.exports = {
     path: path.join(__dirname, ".webpack"),
     filename: "[name].js",
   },
-  plugins: [new CopyWebpackPlugin(["./resources"])],
+  plugins: [
+    new CopyWebpackPlugin({
+      patterns: [{ from: "./resources/meetings.json", to: "./resources" }],
+    }),
+  ],
 };

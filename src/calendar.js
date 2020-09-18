@@ -1,5 +1,6 @@
 const generator = require("ical-generator");
 const { subDays, parseISO, isEqual, format } = require("date-fns");
+const { de } = require("date-fns/locale");
 
 const meetings = () => {
   try {
@@ -9,15 +10,22 @@ const meetings = () => {
   }
 };
 
-module.exports.formatSummary = (summary) => {
-  const firstComma = summary.indexOf(",") + 1;
-  const secondComma = summary.indexOf(",", firstComma + 1);
-  return summary
-    .substr(firstComma, secondComma - firstComma)
-    .replace(/([A-Z] [A-Z]\d{3} )|[A-Z] /, "");
+module.exports.formatSummary = (summary) =>
+  summary.replace(/([A-Z] [A-Z]\d{3} )|[A-Z] /, "");
+
+module.exports.getSummary = (description) => {
+  if (!description) return;
+
+  const startString = "Veranstaltung: ";
+  const endString = "\nDozent:";
+
+  const startIndex = description.indexOf(startString) + startString.length;
+  const endIndex = description.indexOf(endString);
+  return description.substring(startIndex, endIndex);
 };
 
 module.exports.formatMeeting = (meeting) => {
+  if (!meeting) return "";
   let result = "";
 
   if (meeting.url) {
@@ -52,20 +60,27 @@ module.exports.format = (calendar) => {
   const events = Object.values(calendar);
   const meetingsData = meetings();
 
-  events.forEach(({ summary, location, description, ...rest }) => {
-    if (!summary) return;
+  events.forEach(({ location, description, start, ...rest }) => {
+    if (!description) return;
 
-    const [moduleId] = summary.match(/\w\d{3}/);
-    const meetingData = this.meetingInformation({
-      meeting: meetingsData[moduleId],
-      date: new Date(rest.start),
-      description,
-    });
-    const meeting = meetingData ? this.formatMeeting(meetingData) : "";
+    const summary = this.getSummary(description);
+    const meetingsMatch = summary.match(/\w\d{3}/);
+    let meeting = "";
+
+    if (meetingsMatch && meetingsMatch.length) {
+      const meetingData = this.meetingInformation({
+        meeting: meetingsData[meetingsMatch[0]],
+        date: new Date(start),
+        description,
+      });
+
+      meeting = this.formatMeeting(meetingData);
+    }
 
     calendarGenerator.createEvent({
       ...rest,
-      location: `${location}, Nordakademie Elmshorn, 25337`,
+      start,
+      location: (location && `${location}, `) + "Nordakademie Elmshorn, 25337",
       description: `${meeting}${description}`,
       summary: this.formatSummary(summary),
     });

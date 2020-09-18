@@ -4,7 +4,7 @@ const { isLocal } = require("./utils");
 
 const lambda = new aws.Lambda({
   region: "eu-central-1",
-  endpoint: isLocal() ? "http://localhost:3000" : undefined,
+  endpoint: isLocal() ? "http://localhost:3002" : undefined,
 });
 
 module.exports.callTimetableApi = () =>
