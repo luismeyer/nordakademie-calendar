@@ -31,7 +31,7 @@ module.exports.timetableFormatter = async (_event, _context, callback) => {
   );
 
   if (calendarDiff.length) {
-    bot.sendMessage(CHAT_ID, `veränderung hier: ${calendarDiff.join()}`);
+    bot.sendMessage(CHAT_ID, `veränderung hier: ${calendarDiff.join(" , ")}`);
   }
 
   logger.print("Uploading file to S3");
