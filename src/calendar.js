@@ -95,11 +95,19 @@ module.exports.createMensaEvents = (mensaTimetable) => {
   mensaTimetable.forEach(({ main, second, date }) => {
     const day = parseISO(date);
 
+    const mainDescription = main ? `🥩  ${main.description} ${main.price}` : "";
+    const secondDescription = second
+      ? `🥦  ${second.description} ${second.price}`
+      : "";
+
     calendar.createEvent({
-      summary: main.description,
+      summary: main ? main.description : second.description,
       start: subDays(day, 1),
       end: day,
-      description: `🥩 ${main.description} (${main.price}) \n\n🥦 ${second.description} (${second.price})`,
+      description:
+        mainDescription +
+        (mainDescription && secondDescription ? "\n\n" : "") +
+        secondDescription,
       location: "Mensa",
     });
   });

@@ -36,6 +36,8 @@ module.exports.fetchMensaTimetable = async () =>
     res.text()
   );
 
+const formatMensaPrice = (priceString) => priceString.replace("Eur", "€");
+
 module.exports.formatMensaTimetable = (mensaHtml) => {
   if (!mensaHtml) return [];
 
@@ -46,29 +48,38 @@ module.exports.formatMensaTimetable = (mensaHtml) => {
   return [...days]
     .map((column, index) => {
       const [mainDish, secondDish] = column.querySelectorAll(".gericht");
-      if (!mainDish || !secondDish) return;
+
+      if (!mainDish && !secondDish) return;
 
       const date = utils.formatInnerHtml(dates[index].textContent);
       const [day, month] = date.match(/\d{1,2}/g);
 
-      return {
-        date: `${new Date().getFullYear()}-${month}-${day}T23:00:00.000Z`,
-        main: {
-          description: formatDescription(
-            mainDish.querySelector(".speiseplan-kurzbeschreibung").textContent
-          ),
-          price: utils.formatInnerHtml(
+      const main = mainDish && {
+        description: formatDescription(
+          mainDish.querySelector(".speiseplan-kurzbeschreibung").textContent
+        ),
+        price: formatMensaPrice(
+          utils.formatInnerHtml(
             mainDish.querySelector(".speiseplan-preis").textContent
-          ),
-        },
-        second: {
-          description: formatDescription(
-            secondDish.querySelector(".speiseplan-kurzbeschreibung").textContent
-          ),
-          price: utils.formatInnerHtml(
+          )
+        ),
+      };
+
+      const second = secondDish && {
+        description: formatDescription(
+          secondDish.querySelector(".speiseplan-kurzbeschreibung").textContent
+        ),
+        price: formatMensaPrice(
+          utils.formatInnerHtml(
             secondDish.querySelector(".speiseplan-preis").textContent
-          ),
-        },
+          )
+        ),
+      };
+
+      return {
+        date: `${new Date().getFullYear()}-${month}-${day}T22:00:00.000Z`,
+        main,
+        second,
       };
     })
     .filter((value) => value !== undefined);

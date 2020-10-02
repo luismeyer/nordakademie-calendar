@@ -44,8 +44,8 @@ module.exports.timetableFormatter = async (_event, _context, callback) => {
 };
 
 // Mensa Api Handler
-module.exports.mensaFormatter = async (_event, _context, callback) => {
-  const logger = new Logger(3);
+module.exports.mensaFormatter = async () => {
+  const logger = new Logger(4);
 
   logger.print("Fetching mensa timetable");
   const mensaHtml = await nak.fetchMensaTimetable();
@@ -65,12 +65,10 @@ module.exports.mensaFormatter = async (_event, _context, callback) => {
   const mensaCalendar = calendar.createMensaEvents(mensaTimetable);
 
   logger.print("Uploading file to S3");
-  await bucket
-    .uploadToS3(mensaCalendar.toString(), "Mensa.ics")
-    .then((res) => callback(null, res), callback);
+  await bucket.uploadToS3(mensaCalendar.toString(), "Mensa.ics");
 
   logger.print("Sending notification");
-  await bot.sendMessage(CHAT_ID, "mensa fertig! lol 🥳");
+  return await bot.sendMessage(CHAT_ID, "mensa fertig! lol 🥳");
 };
 
 // Telegram Bot Handler
