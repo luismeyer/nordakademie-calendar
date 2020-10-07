@@ -4,7 +4,6 @@ const exec = util.promisify(require("child_process").exec);
 const meow = require("meow");
 
 const telegram = require("../telegram");
-const secrets = require("../../secrets/secrets.json");
 
 const cli = meow(
   `
@@ -24,32 +23,43 @@ const cli = meow(
 );
 
 const { passphrase } = cli.flags;
+if (!passphrase) throw new Error("Missing flag: PASSPHRASE");
 
-const fetchSetWebhook = () => {
-  const url = telegram.requestUrl(secrets.token)("setWebhook");
-  return telegram.fetch(url, {
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      url: `https://${secrets.domain}/bot`,
-    }),
-  });
+const start = () => {
+  console.log("Setup app 🚀 \n");
+  return Promise.resolve();
 };
 
-const decryptMeetings = () => {
-  const filepath = path.resolve(__dirname, "../../resources/meetings.json");
+const decryptFilePath = (filepath) => () => {
+  console.log(`Decrypting ${filepath}...`);
+  const file = path.resolve(__dirname, filepath);
 
   return exec(
-    `gpg --quiet --batch --yes --decrypt --passphrase="${passphrase}" --output ${filepath} ${filepath}.gpg`
-  );
+    `gpg --quiet --batch --yes --decrypt --passphrase="${passphrase}" --output ${file} ${file}.gpg`
+  ).then((result) => console.log("Result: ", result));
 };
 
-(async () => {
-  const res = await fetchSetWebhook();
-  console.info(res);
+const fetchSetWebhook = () => {
+  console.log("Setting webhook...");
 
-  await decryptMeetings();
-  console.info("Finished decrypting Meetings");
-})();
+  const secrets = require("../../secrets/secrets.json");
+  if (!secrets.token) throw new Error("Missing secret: TOKEN");
+
+  const url = telegram.requestUrl(secrets.token)("setWebhook");
+  return telegram
+    .fetch(url, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        url: `https://${secrets.domain}/bot`,
+      }),
+    })
+    .then((res) => console.log("Result: ", res));
+};
+
+start()
+  .then(decryptFilePath("../../resources/meetings.json"))
+  .then(decryptFilePath("../../secrets/secrets.json"))
+  .then(fetchSetWebhook);
