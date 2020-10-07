@@ -3,7 +3,7 @@ const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 const meow = require("meow");
 
-const bot = require("../bot");
+const telegram = require("../telegram");
 const secrets = require("../../secrets/secrets.json");
 
 const cli = meow(
@@ -26,8 +26,8 @@ const cli = meow(
 const { passphrase } = cli.flags;
 
 const fetchSetWebhook = () => {
-  const url = bot.requestUrl(secrets.token)("setWebhook");
-  return bot.fetch(url, {
+  const url = telegram.requestUrl(secrets.token)("setWebhook");
+  return telegram.fetch(url, {
     method: "post",
     headers: {
       "Content-Type": "application/json",

@@ -1,0 +1,91 @@
+{
+  "modules": [{
+      "filter": "Marktpsychologie und Onlinemarketing",
+      "filename": "marktpsychologie-und-onlinemarketing.ics"
+    },
+    {
+      "filter": "Supply Chain Management",
+      "filename": "supply-chain-management.ics"
+    },
+    {
+      "filter": "Psychologie im Unternehmen",
+      "filename": "psychologie-im-unternehmen.ics"
+    },
+    {
+      "filter": "New Leadership",
+      "filename": "new-leadership.ics"
+    },
+    {
+      "filter": "Online-Marktforschung",
+      "filename": "online-marktforschung.ics"
+    },
+    {
+      "filter": "Omni-Channel-Retail",
+      "filename": "omni-channel-retail.ics"
+    },
+    {
+      "filter": "Risikomanagement",
+      "filename": "risikomanagement"
+    },
+    {
+      "filter": "Controlling 40",
+      "filename": "controlling-40.ics"
+    },
+    {
+      "filter": "Key Account Management und Digitalisierung",
+      "filename": "key-account-management-und-digitalisierung.ics"
+    },
+    {
+      "filter": "Business Process Management",
+      "filename": "business-process-management.ics"
+    },
+    {
+      "filter": "Forschungsprojekt Text Analytics",
+      "filename": "forschungsprojekt-text-analytics.ics"
+    },
+    {
+      "filter": "Softwareentwicklung in der Cloud",
+      "filename": "softwareentwicklung-in-der-cloud.ics"
+    },
+    {
+      "filter": "Moderne Webentwicklung in SAP-Systemen",
+      "filename": "moderne-webentwicklung-in-sap-systemen.ics"
+    },
+    {
+      "filter": "Cloud-Grundlagen und Praxis",
+      "filename": "cloud-grundlagen-und-praxis.ics"
+    },
+    {
+      "filter": "Einf�hrung in die KI",
+      "filename": "einfuehrung-in-die-ki.ics"
+    },
+    {
+      "filter": "IT Recht",
+      "filename": "it-recht.ics"
+    },
+    {
+      "filter": "Maritime Technologien",
+      "filename": "maritime-technologien.ics"
+    },
+    {
+      "filter": "Innovations- und Technologiemanagement",
+      "filename": "innovations-und-technologiemanagement.ics"
+    },
+    {
+      "filter": "Karakuri",
+      "filename": "karakuri.ics"
+    },
+    {
+      "filter": "Geb�udeautomation",
+      "filename": "gebaeudeautomation.ics"
+    },
+    {
+      "filter": "Parallelrechnersysteme",
+      "filename": "parallelrechnersysteme.ics"
+    },
+    {
+      "filter": "Internationales Vertriebsmanagement",
+      "filename": "internationales-vertriebsmanagement.ics"
+    }
+  ]
+}

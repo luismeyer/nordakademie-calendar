@@ -21,7 +21,9 @@ module.exports.fetchCalendar = async (centuria) => {
     const isValid = await utils.isValidUrl(url);
 
     if (isValid) {
-      return ical.fromURL(url);
+      return ical
+        .fromURL(url)
+        .catch((err) => `From url Error (${url}): ${err}`);
     }
   }
 

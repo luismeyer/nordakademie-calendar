@@ -1,6 +1,6 @@
 const aws = require("aws-sdk");
 
-const { isLocal } = require("./utils");
+const { isLocal } = require("../utils");
 
 const lambda = new aws.Lambda({
   region: "eu-central-1",

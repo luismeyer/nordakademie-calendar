@@ -12,8 +12,12 @@ module.exports.Logger = class Logger {
   }
 
   print(message) {
-    console.info(`${this.progress}/${this.max}: ${message}`);
+    console.info(`${this.progress}/${this.max}: ${message}\n`);
     this.progress += 1;
+  }
+
+  static print(message) {
+    console.info(message, "\n");
   }
 };
 
