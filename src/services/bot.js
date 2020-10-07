@@ -1,9 +1,9 @@
-const bot = require("../telegram");
-const { isLocal } = require("../utils");
+import bot from "../telegram";
+import { isLocal } from "../utils";
 
-const lambda = require("../aws/lambda");
+import lambda from "../aws/lambda";
 
-module.exports.handle = async (event) => {
+export const handle = async (event) => {
   const body = isLocal() ? event.body : JSON.parse(event.body);
   const { text, chat } = body.message;
   console.log("Received Message: ", text);

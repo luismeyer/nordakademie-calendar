@@ -1,5 +1,5 @@
-const generator = require("ical-generator");
-const { subDays, parseISO, isEqual, format } = require("date-fns");
+import generator from "ical-generator";
+import { subDays, parseISO, isEqual, format } from "date-fns";
 
 const meetings = () => {
   try {
@@ -13,10 +13,10 @@ const meetings = () => {
   }
 };
 
-module.exports.formatSummary = (summary) =>
+export const formatSummary = (summary) =>
   summary.replace(/([A-Z] [A-Z]\d{3} )|WP /, "");
 
-module.exports.getSummary = (description) => {
+export const getSummary = (description) => {
   if (!description) return;
 
   const startString = "Veranstaltung: ";
@@ -27,7 +27,7 @@ module.exports.getSummary = (description) => {
   return description.substring(startIndex, endIndex);
 };
 
-module.exports.formatMeeting = (meeting) => {
+export const formatMeeting = (meeting) => {
   if (!meeting) return "";
   let result = "";
 
@@ -42,7 +42,7 @@ module.exports.formatMeeting = (meeting) => {
   return `${result}\n`;
 };
 
-module.exports.meetingInformation = (start, description, summary) => {
+export const meetingInformation = (start, description, summary) => {
   const moduleNumberMatches = summary.match(/\w\d{3}/);
   if (!moduleNumberMatches || !moduleNumberMatches.length) return;
 
@@ -69,7 +69,7 @@ module.exports.meetingInformation = (start, description, summary) => {
   return meeting;
 };
 
-module.exports.format = (calendar, filter) => {
+export const format = (calendar, filter) => {
   const calendarGenerator = generator();
   const events = Object.values(calendar);
 
@@ -96,7 +96,7 @@ module.exports.format = (calendar, filter) => {
   return calendarGenerator;
 };
 
-module.exports.createMensaEvents = (mensaTimetable) => {
+export const createMensaEvents = (mensaTimetable) => {
   const calendar = generator();
 
   mensaTimetable.forEach(({ main, second, date }) => {
@@ -122,7 +122,7 @@ module.exports.createMensaEvents = (mensaTimetable) => {
   return calendar;
 };
 
-module.exports.checkEventDifference = (oldCal, newCal) => {
+export const checkEventDifference = (oldCal, newCal) => {
   if (!oldCal) return [];
 
   const oldEvents = Object.values(oldCal);

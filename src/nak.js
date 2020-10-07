@@ -1,10 +1,10 @@
-const ical = require("node-ical");
-const fetch = require("node-fetch");
-const { JSDOM } = require("jsdom");
+import ical from "node-ical";
+import fetch from "node-fetch";
+import { JSDOM } from "jsdom";
 
-const utils = require("./utils");
+import utils from "./utils";
 
-module.exports.calendarUrl = (semester, centuria) => {
+export const calendarUrl = (semester, centuria) => {
   if (!centuria) {
     const { CENTURIA } = process.env;
 
@@ -15,7 +15,7 @@ module.exports.calendarUrl = (semester, centuria) => {
   return `https://cis.nordakademie.de/fileadmin/Infos/Stundenplaene/${centuria}_${semester}.ics`;
 };
 
-module.exports.fetchCalendar = async (centuria) => {
+export const fetchCalendar = async (centuria) => {
   for (let i = 1; i < 10; i++) {
     const url = this.calendarUrl(i, centuria);
     const isValid = await utils.isValidUrl(url);
@@ -33,14 +33,14 @@ module.exports.fetchCalendar = async (centuria) => {
 const formatDescription = (description) =>
   utils.formatInnerHtml(description.replace(/ \(.*\)/, ""));
 
-module.exports.fetchMensaTimetable = async () =>
+export const fetchMensaTimetable = async () =>
   fetch("https://cis.nordakademie.de/mensa/speiseplan.cmd").then((res) =>
     res.text()
   );
 
 const formatMensaPrice = (priceString) => priceString.replace("Eur", "€");
 
-module.exports.formatMensaTimetable = (mensaHtml) => {
+export const formatMensaTimetable = (mensaHtml) => {
   if (!mensaHtml) return [];
 
   const { document } = new JSDOM(mensaHtml).window;

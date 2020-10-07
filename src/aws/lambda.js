@@ -1,13 +1,13 @@
-const aws = require("aws-sdk");
+import aws from "aws-sdk";
 
-const { isLocal } = require("../utils");
+import { isLocal } from "../utils";
 
 const lambda = new aws.Lambda({
   region: "eu-central-1",
   endpoint: isLocal() ? "http://localhost:3002" : undefined,
 });
 
-module.exports.callTimetableApi = () =>
+export const callTimetableApi = () =>
   lambda
     .invoke({
       FunctionName: "calendar-formatter-dev-timetableApi",
@@ -15,7 +15,7 @@ module.exports.callTimetableApi = () =>
     })
     .promise();
 
-module.exports.callMensaApi = () =>
+export const callMensaApi = () =>
   lambda
     .invoke({
       FunctionName: "calendar-formatter-dev-mensaApi",

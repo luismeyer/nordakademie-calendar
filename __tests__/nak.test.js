@@ -1,4 +1,4 @@
-const nak = require("../src/nak");
+import nak from "../src/nak";
 
 test("calendar url ends with filename ", () => {
   expect(nak.calendarUrl(3, "A18b").endsWith("A18b_3.ics")).toBe(true);

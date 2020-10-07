@@ -1,9 +1,9 @@
-const path = require("path");
-const slsw = require("serverless-webpack");
-const nodeExternals = require("webpack-node-externals");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
+import path from "path";
+import slsw from "serverless-webpack";
+import nodeExternals from "webpack-node-externals";
+import CopyWebpackPlugin from "copy-webpack-plugin";
 
-module.exports = {
+export const = {
   entry: slsw.lib.entries,
   target: "node",
   externals: [nodeExternals()],

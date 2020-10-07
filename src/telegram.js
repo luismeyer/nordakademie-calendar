@@ -1,11 +1,11 @@
-const nodeFetch = require("node-fetch");
+import nodeFetch from "node-fetch";
 
 const { BOT_TOKEN, IS_LOCAL } = process.env;
 
-module.exports.requestUrl = (token) => (method) =>
+export const requestUrl = (token) => (method) =>
   `https://api.telegram.org/bot${token}/${method}`;
 
-module.exports.fetch = (url, params) =>
+export const fetch = (url, params) =>
   nodeFetch(url, params).then((res) => res.json());
 
 const telegramUrl = this.requestUrl(BOT_TOKEN);
@@ -16,7 +16,7 @@ const telegramFetch = (method, params) =>
       )
     : this.fetch(telegramUrl(method), params);
 
-module.exports.sendMessage = (chat, message) => {
+export const sendMessage = (chat, message) => {
   if (!chat || !BOT_TOKEN) return;
 
   return telegramFetch("sendMessage", {

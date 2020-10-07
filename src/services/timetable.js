@@ -1,9 +1,9 @@
-const nak = require("../nak");
-const calendar = require("../calendar");
-const telegram = require("../telegram");
-const { Logger } = require("../utils");
+import nak from "../nak";
+import calendar from "../calendar";
+import telegram from "../telegram";
+import { Logger } from "../utils";
 
-const bucket = require("../aws/bucket");
+import bucket from "../aws/bucket";
 
 const { CHAT_ID } = process.env;
 
@@ -35,7 +35,7 @@ const format = async (nakCal, filename, filter) => {
   return await sendMessage(`${filename}: stundenplan fertig! lol 🥳`);
 };
 
-module.exports.formatBatch = async (batch) => {
+export const formatBatch = async (batch) => {
   Logger.print(`BATCH: Fetching timetable`);
   const nakCal = await nak.fetchCalendar();
 
@@ -44,7 +44,7 @@ module.exports.formatBatch = async (batch) => {
   );
 };
 
-module.exports.formatSingle = async (filename) => {
+export const formatSingle = async (filename) => {
   Logger.print(`${filename}: Fetching timetable`);
   const nakCal = await nak.fetchCalendar();
 

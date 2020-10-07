@@ -1,11 +1,11 @@
-const fetch = require("node-fetch");
+import fetch from "node-fetch";
 
-module.exports.isValidUrl = (url) =>
+export const isValidUrl = (url) =>
   fetch(url).then((res) => Math.floor(res.status / 100) === 2);
 
-module.exports.formatInnerHtml = (text) => text.replace(/\s+/g, " ").trim();
+export const formatInnerHtml = (text) => text.replace(/\s+/g, " ").trim();
 
-module.exports.Logger = class Logger {
+export const Logger = class Logger {
   constructor(max) {
     this.max = max;
     this.progress = 1;
@@ -23,4 +23,4 @@ module.exports.Logger = class Logger {
 
 const { IS_LOCAL, IS_OFFLINE } = process.env;
 
-module.exports.isLocal = () => IS_LOCAL || IS_OFFLINE;
+export const isLocal = () => IS_LOCAL || IS_OFFLINE;

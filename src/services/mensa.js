@@ -1,13 +1,13 @@
-const nak = require("../nak");
-const calendar = require("../calendar");
-const telegram = require("../telegram");
-const { Logger } = require("../utils");
+import nak from "../nak";
+import calendar from "../calendar";
+import telegram from "../telegram";
+import { Logger } from "../utils";
 
-const bucket = require("../aws/bucket");
+import bucket from "../aws/bucket";
 
 const { CHAT_ID } = process.env;
 
-module.exports.format = async () => {
+export const format = async () => {
   const logger = new Logger(4);
 
   logger.print("Fetching mensa timetable");

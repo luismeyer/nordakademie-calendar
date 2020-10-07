@@ -1,5 +1,5 @@
-const bot = require("../bot");
-const secrets = require("../../secrets/secrets.json");
+import bot from "../bot";
+import secrets from "../../secrets/secrets.json";
 
 (async () => {
   const url = bot.requestUrl(secrets.token)("getWebhookInfo");

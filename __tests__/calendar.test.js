@@ -1,6 +1,6 @@
-const calendar = require("../src/calendar");
-const generator = require("ical-generator");
-const { subDays, format, addDays, startOfWeek } = require("date-fns");
+import calendar from "../src/calendar";
+import generator from "ical-generator";
+import { subDays, format, addDays, startOfWeek } from "date-fns";
 
 test("finds veranstaltung", () => {
   expect(calendar.getSummary("Veranstaltung: NAMENAME\nDozent:")).toBe(

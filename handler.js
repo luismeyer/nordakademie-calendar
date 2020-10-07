@@ -1,18 +1,18 @@
 "use strict";
-const { modules } = require("./resources/modules.json");
+import { modules } from "./resources/modules.json";
 
-const timetable = require("./src/services/timetable");
-const mensa = require("./src/services/mensa");
-const bot = require("./src/services/bot");
+import timetable from "./src/services/timetable";
+import mensa from "./src/services/mensa";
+import bot from "./src/services/bot";
 
 // TimeTable Api Handler
-module.exports.timetableFormatter = async () => {
+export const timetableFormatter = async () => {
   await timetable.formatBatch(modules);
   return await timetable.formatSingle("NAK.ics");
 };
 
 // Mensa Api Handler
-module.exports.mensaFormatter = mensa.format;
+export const mensaFormatter = mensa.format;
 
 // Telegram Bot Handler
-module.exports.bot = bot.handle;
+export const bot = bot.handle;

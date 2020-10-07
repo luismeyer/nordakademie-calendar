@@ -1,9 +1,9 @@
-const path = require("path");
-const util = require("util");
+import path from "path";
+import util from "util";
 const exec = util.promisify(require("child_process").exec);
-const meow = require("meow");
+import meow from "meow";
 
-const telegram = require("../telegram");
+import telegram from "../telegram";
 
 const cli = meow(
   `
@@ -42,7 +42,7 @@ const decryptFilePath = (filepath) => () => {
 const fetchSetWebhook = () => {
   console.log("Setting webhook...");
 
-  const secrets = require("../../secrets/secrets.json");
+  import secrets from "../../secrets/secrets.json";
   if (!secrets.token) throw new Error("Missing secret: TOKEN");
 
   const url = telegram.requestUrl(secrets.token)("setWebhook");
