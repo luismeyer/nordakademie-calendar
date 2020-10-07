@@ -19,15 +19,15 @@ jobs:
           node-version: 10.x
 
       - name: Install
-        run: npm i
+        run: yarn
         env:
           CI: true
 
       - name: Run app setup
-        run: npm run setup -- --passphrase ${{ secrets.PASSPHRASE }}
+        run: yarn setup --passphrase ${{ secrets.PASSPHRASE }}
 
       - name: Run tests
-        run: npm test
+        run: yarn test
 
       - name: Serverless create domain
         uses: serverless/github-action@master

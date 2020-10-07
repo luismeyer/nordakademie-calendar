@@ -16,9 +16,9 @@ jobs:
           node-version: 10.x
 
       - name: Install
-        run: npm i
+        run: yarn
         env:
           CI: true
 
       - name: Run tests
-        run: npm test
+        run: yarn test

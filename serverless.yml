@@ -39,7 +39,7 @@ custom:
   webpack:
     webpackConfig: "./webpack.config.js"
     includeModules: true
-    packager: "npm"
+    packager: "yarn"
 
 plugins:
   - serverless-s3-local

@@ -29,7 +29,6 @@
     "start": "serverless offline",
     "test": "jest",
     "coverage": "jest --coverage",
-    "deploy": "serverless deploy",
     "setup": "node src/scripts/setup.js",
     "secrets": "gpg --symmetric --cipher-algo AES256 ./secrets/secrets.json",
     "secrets:decrypt": "gpg --decrypt --output ./secrets/secrets.json ./secrets/secrets.json.gpg",

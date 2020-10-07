@@ -9,10 +9,10 @@ The calendar files can be accessed over the AWS S3 Url which looks like this: ht
 ## Installation and Setup
 
 Install [serverless](https://serverless.com) to manage the AWS deployments
-and the package manager npm to install all dependencies.
+and the package manager yarn.
 
 ```bash
-npm install
+yarn
 ```
 
 Rename the secrets.example.json file to secrets.json and put in the real credentials.
@@ -20,7 +20,7 @@ Rename the secrets.example.json file to secrets.json and put in the real credent
 If you want to use the bot notification and the meeting feature you have to run the setup script with your AWS Lambda Url set in the secrets file.
 
 ```bash
-npm run setup
+yarn setup
 ```
 
 ## Usage
@@ -28,13 +28,13 @@ npm run setup
 The handler.js file is the entry point of the AWS Lambda. To invoke the function use:
 
 ```bash
-npm run invoke:timetable
+yarn invoke:timetable
 ```
 
 or
 
 ```bash
-npm run invoke:mensa
+yarn invoke:mensa
 ```
 
 ## Deployment
@@ -43,7 +43,7 @@ All Code will be automatically deployed if a github release is created.
 If you want to deploy from your local machine and if you configured serverless correctly run:
 
 ```bash
-npm run deploy
+serverless deploy
 ```
 
 ## License
