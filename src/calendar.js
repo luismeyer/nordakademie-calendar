@@ -1,9 +1,12 @@
 const generator = require("ical-generator");
 const { subDays, parseISO, isEqual, format } = require("date-fns");
-const { de } = require("date-fns/locale");
 
 const meetings = () => {
   try {
+    if (process.env.NODE_ENV === "test") {
+      return require("../__tests__/mockdata/meetings.json");
+    }
+
     return require("../resources/meetings.json");
   } catch (ex) {
     console.log("No Meeting file found: ", ex);
@@ -11,7 +14,7 @@ const meetings = () => {
 };
 
 module.exports.formatSummary = (summary) =>
-  summary.replace(/([A-Z] [A-Z]\d{3} )|[A-Z] /, "");
+  summary.replace(/([A-Z] [A-Z]\d{3} )|WP /, "");
 
 module.exports.getSummary = (description) => {
   if (!description) return;
@@ -39,43 +42,47 @@ module.exports.formatMeeting = (meeting) => {
   return `${result}\n`;
 };
 
-module.exports.meetingInformation = ({ date, meeting, description }) => {
-  if (!meeting) return;
+module.exports.meetingInformation = (start, description, summary) => {
+  const moduleNumberMatches = summary.match(/\w\d{3}/);
+  if (!moduleNumberMatches || !moduleNumberMatches.length) return;
 
-  if (meeting.url) {
-    return meeting;
+  const meetingsData = meetings();
+  const moduleNumber = moduleNumberMatches[0];
+  const rawMeeting = meetingsData[moduleNumber];
+
+  let meeting;
+  if (!rawMeeting) return;
+
+  if (rawMeeting.url) {
+    meeting = rawMeeting;
   }
 
-  if (Array.isArray(meeting)) {
-    return meeting.find((m) => description.match(m.regex));
+  if (Array.isArray(rawMeeting)) {
+    meeting = rawMeeting.find((m) => description.match(m.regex));
   }
 
-  if (date && meeting[date.getDay()]) {
-    return meeting[date.getDay()];
+  const date = new Date(start);
+  if (date && rawMeeting[date.getDay()]) {
+    meeting = rawMeeting[date.getDay()];
   }
+
+  return meeting;
 };
 
-module.exports.format = (calendar) => {
+module.exports.format = (calendar, filter) => {
   const calendarGenerator = generator();
   const events = Object.values(calendar);
-  const meetingsData = meetings();
 
   events.forEach(({ location, description, start, ...rest }) => {
     if (!description) return;
 
     const summary = this.getSummary(description);
-    const meetingsMatch = summary.match(/\w\d{3}/);
-    let meeting = "";
-
-    if (meetingsMatch && meetingsMatch.length) {
-      const meetingData = this.meetingInformation({
-        meeting: meetingsData[meetingsMatch[0]],
-        date: new Date(start),
-        description,
-      });
-
-      meeting = this.formatMeeting(meetingData);
+    if (summary.startsWith("WP") && filter && !summary.includes(filter)) {
+      return;
     }
+
+    const rawMeeting = this.meetingInformation(start, description, summary);
+    const meeting = this.formatMeeting(rawMeeting);
 
     calendarGenerator.createEvent({
       ...rest,

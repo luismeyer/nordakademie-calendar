@@ -1,6 +1,6 @@
 const calendar = require("../src/calendar");
 const generator = require("ical-generator");
-const { subDays, format, addDays } = require("date-fns");
+const { subDays, format, addDays, startOfWeek } = require("date-fns");
 
 test("finds veranstaltung", () => {
   expect(calendar.getSummary("Veranstaltung: NAMENAME\nDozent:")).toBe(
@@ -110,23 +110,25 @@ test("checks event difference", () => {
 });
 
 test("Handles meeting information", () => {
-  const meeting = { url: "url", password: "pass" };
-
-  let result;
-  result = calendar.meetingInformation({
-    meeting,
+  let result = calendar.meetingInformation(undefined, undefined, "A123");
+  expect(result).toEqual({
+    url: "SIMPLE_URL",
+    password: "SIMPLE_PASSWORD",
   });
-  expect(result).toEqual(meeting);
 
-  result = calendar.meetingInformation({
-    meeting: { [new Date().getDay()]: meeting },
-    date: new Date(),
+  result = calendar.meetingInformation(
+    startOfWeek(new Date()),
+    undefined,
+    "B123"
+  );
+  expect(result).toEqual({
+    url: "RIGHT_URL",
+    password: "RIGHT_PASS",
   });
-  expect(result).toEqual(meeting);
 
-  result = calendar.meetingInformation({
-    meeting: [{ regex: "bla" }, { regex: "blub", ...meeting }],
-    description: "dededede blub",
+  result = calendar.meetingInformation(undefined, "REGEX", "C123");
+  expect(result).toEqual({
+    regex: "REGEX",
+    url: "RIGHT URL",
   });
-  expect(result).toEqual({ regex: "blub", ...meeting });
 });

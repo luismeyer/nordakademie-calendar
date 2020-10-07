@@ -1,3 +1,4 @@
+const { StringDecoder } = require("string_decoder");
 const ical = require("node-ical");
 const fetch = require("node-fetch");
 const { JSDOM } = require("jsdom");
@@ -21,7 +22,9 @@ module.exports.fetchCalendar = async (centuria) => {
     const isValid = await utils.isValidUrl(url);
 
     if (isValid) {
-      return ical.fromURL(url);
+      return ical
+        .fromURL(url)
+        .catch((err) => `From url Error (${url}): ${err}`);
     }
   }
 

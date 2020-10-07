@@ -32,7 +32,10 @@
     "deploy": "serverless deploy",
     "setup": "node src/scripts/setup.js",
     "secrets": "gpg --symmetric --cipher-algo AES256 ./secrets/secrets.json",
-    "meetings": "gpg --symmetric --cipher-algo AES256 ./resources/meetings.json"
+    "secrets:decrypt": "gpg --decrypt --output ./secrets/secrets.json ./secrets/secrets.json.gpg",
+    "meetings": "gpg --symmetric --cipher-algo AES256 ./resources/meetings.json",
+    "meetings:decrypt": "gpg --decrypt --output ./resources/meetings.json ./resources/meetings.json.gpg",
+    "remove:bucket": "rm -rf /tmp/nak-calendar-bucket"
   },
   "repository": {
     "type": "git",
