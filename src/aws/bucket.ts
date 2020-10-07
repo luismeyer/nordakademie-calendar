@@ -10,9 +10,10 @@ const localS3Params = {
   secretAccessKey: "S3RVER",
   endpoint: IS_LOCAL && new AWS.Endpoint("http://localhost:8000"),
 };
+// @ts-expect-error ts-migrate(2345) FIXME: Type '""' is not assignable to type 'ClientConfigu... Remove this comment to see the full error message
 const s3 = new AWS.S3(IS_LOCAL && localS3Params);
 
-export const uploadToS3 = (data, filename, bucket = BUCKET) =>
+export const uploadToS3 = (data: any, filename: any, bucket = BUCKET) =>
   s3
     .putObject({
       Bucket: bucket,
@@ -22,7 +23,7 @@ export const uploadToS3 = (data, filename, bucket = BUCKET) =>
     })
     .promise();
 
-export const fetchCalendarFile = async (filename, bucket = BUCKET) => {
+export const fetchCalendarFile = async (filename: any, bucket = BUCKET) => {
   const headData = await s3
     .headObject({
       Bucket: bucket,
@@ -41,6 +42,7 @@ export const fetchCalendarFile = async (filename, bucket = BUCKET) => {
       })
       .promise();
 
+    // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
     return ical.async.parseICS(ics.Body.toString());
   }
 };

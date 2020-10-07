@@ -1,9 +1,11 @@
+// @ts-expect-error ts-migrate(1192) FIXME: Module '"/Users/luis.meyer/Projects/nak-calendar/s... Remove this comment to see the full error message
 import bot from "../telegram";
 import { isLocal } from "../utils";
 
+// @ts-expect-error ts-migrate(1192) FIXME: Module '"/Users/luis.meyer/Projects/nak-calendar/s... Remove this comment to see the full error message
 import lambda from "../aws/lambda";
 
-export const handle = async (event) => {
+export const handle = async (event: any) => {
   const body = isLocal() ? event.body : JSON.parse(event.body);
   const { text, chat } = body.message;
   console.log("Received Message: ", text);

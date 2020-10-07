@@ -1,10 +1,13 @@
 import ical from "node-ical";
+// @ts-expect-error ts-migrate(7016) FIXME: Try `npm install @types/node-fetch` if it exists o... Remove this comment to see the full error message
 import fetch from "node-fetch";
+// @ts-expect-error ts-migrate(7016) FIXME: Try `npm install @types/jsdom` if it exists or add... Remove this comment to see the full error message
 import { JSDOM } from "jsdom";
 
+// @ts-expect-error ts-migrate(1192) FIXME: Module '"/Users/luis.meyer/Projects/nak-calendar/s... Remove this comment to see the full error message
 import utils from "./utils";
 
-export const calendarUrl = (semester, centuria) => {
+export const calendarUrl = (semester: any, centuria: any) => {
   if (!centuria) {
     const { CENTURIA } = process.env;
 
@@ -15,8 +18,9 @@ export const calendarUrl = (semester, centuria) => {
   return `https://cis.nordakademie.de/fileadmin/Infos/Stundenplaene/${centuria}_${semester}.ics`;
 };
 
-export const fetchCalendar = async (centuria) => {
+export const fetchCalendar = async (centuria: any) => {
   for (let i = 1; i < 10; i++) {
+    // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
     const url = this.calendarUrl(i, centuria);
     const isValid = await utils.isValidUrl(url);
 
@@ -30,17 +34,15 @@ export const fetchCalendar = async (centuria) => {
   return false;
 };
 
-const formatDescription = (description) =>
-  utils.formatInnerHtml(description.replace(/ \(.*\)/, ""));
+const formatDescription = (description: any) => utils.formatInnerHtml(description.replace(/ \(.*\)/, ""));
 
 export const fetchMensaTimetable = async () =>
-  fetch("https://cis.nordakademie.de/mensa/speiseplan.cmd").then((res) =>
-    res.text()
+  fetch("https://cis.nordakademie.de/mensa/speiseplan.cmd").then((res: any) => res.text()
   );
 
-const formatMensaPrice = (priceString) => priceString.replace("Eur", "€");
+const formatMensaPrice = (priceString: any) => priceString.replace("Eur", "€");
 
-export const formatMensaTimetable = (mensaHtml) => {
+export const formatMensaTimetable = (mensaHtml: any) => {
   if (!mensaHtml) return [];
 
   const { document } = new JSDOM(mensaHtml).window;

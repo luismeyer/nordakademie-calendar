@@ -1,4 +1,5 @@
 import generator from "ical-generator";
+// @ts-expect-error ts-migrate(2395) FIXME: Individual declarations in merged declaration 'for... Remove this comment to see the full error message
 import { subDays, parseISO, isEqual, format } from "date-fns";
 
 const meetings = () => {
@@ -13,9 +14,11 @@ const meetings = () => {
   }
 };
 
+// @ts-expect-error ts-migrate(7006) FIXME: Parameter 'summary' implicitly has an 'any' type.
 export const formatSummary = (summary) =>
   summary.replace(/([A-Z] [A-Z]\d{3} )|WP /, "");
 
+// @ts-expect-error ts-migrate(7006) FIXME: Parameter 'description' implicitly has an 'any' ty... Remove this comment to see the full error message
 export const getSummary = (description) => {
   if (!description) return;
 
@@ -27,6 +30,7 @@ export const getSummary = (description) => {
   return description.substring(startIndex, endIndex);
 };
 
+// @ts-expect-error ts-migrate(7006) FIXME: Parameter 'meeting' implicitly has an 'any' type.
 export const formatMeeting = (meeting) => {
   if (!meeting) return "";
   let result = "";
@@ -42,6 +46,7 @@ export const formatMeeting = (meeting) => {
   return `${result}\n`;
 };
 
+// @ts-expect-error ts-migrate(7006) FIXME: Parameter 'start' implicitly has an 'any' type.
 export const meetingInformation = (start, description, summary) => {
   const moduleNumberMatches = summary.match(/\w\d{3}/);
   if (!moduleNumberMatches || !moduleNumberMatches.length) return;
@@ -69,19 +74,24 @@ export const meetingInformation = (start, description, summary) => {
   return meeting;
 };
 
+// @ts-expect-error ts-migrate(2395) FIXME: Individual declarations in merged declaration 'for... Remove this comment to see the full error message
 export const format = (calendar, filter) => {
   const calendarGenerator = generator();
   const events = Object.values(calendar);
 
+  // @ts-expect-error ts-migrate(2345) FIXME: Type 'unknown' is not assignable to type '{ [x: st... Remove this comment to see the full error message
   events.forEach(({ location, description, start, ...rest }) => {
     if (!description) return;
 
+    // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
     const summary = this.getSummary(description);
     if (summary.startsWith("WP") && filter && !summary.includes(filter)) {
       return;
     }
 
+    // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
     const rawMeeting = this.meetingInformation(start, description, summary);
+    // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
     const meeting = this.formatMeeting(rawMeeting);
 
     calendarGenerator.createEvent({
@@ -89,6 +99,7 @@ export const format = (calendar, filter) => {
       start,
       location: (location && `${location}, `) + "Nordakademie Elmshorn, 25337",
       description: `${meeting}${description}`,
+      // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
       summary: this.formatSummary(summary),
     });
   });
@@ -96,9 +107,11 @@ export const format = (calendar, filter) => {
   return calendarGenerator;
 };
 
+// @ts-expect-error ts-migrate(7006) FIXME: Parameter 'mensaTimetable' implicitly has an 'any'... Remove this comment to see the full error message
 export const createMensaEvents = (mensaTimetable) => {
   const calendar = generator();
 
+  // @ts-expect-error ts-migrate(7031) FIXME: Binding element 'main' implicitly has an 'any' typ... Remove this comment to see the full error message
   mensaTimetable.forEach(({ main, second, date }) => {
     const day = parseISO(date);
 
@@ -122,6 +135,7 @@ export const createMensaEvents = (mensaTimetable) => {
   return calendar;
 };
 
+// @ts-expect-error ts-migrate(7006) FIXME: Parameter 'oldCal' implicitly has an 'any' type.
 export const checkEventDifference = (oldCal, newCal) => {
   if (!oldCal) return [];
 
@@ -129,10 +143,12 @@ export const checkEventDifference = (oldCal, newCal) => {
   const newEvents = newCal.events();
 
   return newEvents
+    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'newEvent' implicitly has an 'any' type.
     .filter((newEvent, index) => {
       const oldEvent = oldEvents[index];
       if (!oldEvent) return false;
 
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'start' does not exist on type 'unknown'.
       const { start: oldStart, end: oldEnd } = oldEvent;
       const { start: newStart, end: newEnd } = newEvent.toJSON();
 
@@ -141,5 +157,6 @@ export const checkEventDifference = (oldCal, newCal) => {
         !isEqual(new Date(oldEnd), new Date(newEnd))
       );
     })
+    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'event' implicitly has an 'any' type.
     .map((event) => format(new Date(event.start()), "dd.MM.yyyy"));
 };

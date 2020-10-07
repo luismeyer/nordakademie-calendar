@@ -1,4 +1,6 @@
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '../bot' or its corresponding t... Remove this comment to see the full error message
 import bot from "../bot";
+// @ts-expect-error ts-migrate(2732) FIXME: Cannot find module '../../secrets/secrets.json'. C... Remove this comment to see the full error message
 import secrets from "../../secrets/secrets.json";
 
 (async () => {
