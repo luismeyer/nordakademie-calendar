@@ -1,6 +1,10 @@
-# NAK-Calendar
+# NAK-Calendar 📆
 
 NAK-Calendar is an AWS Lambda that downloads the current Nordakademie timetable and formates the calendar entries every 6 hours.
+
+## Usage
+
+The calendar files can be accessed over the AWS S3 Url which looks like this: https://<BUCKET_NAME>.s3.eu-central-1.amazonaws.com/<FILE_NAME>. You can either download the file from there or subscribe to the Url using for example [Outlook](https://support.microsoft.com/en-us/office/import-or-subscribe-to-a-calendar-in-outlook-on-the-web-503ffaf6-7b86-44fe-8dd6-8099d95f38df) or [Google](https://support.google.com/calendar/answer/37100).
 
 ## Installation and Setup
 
@@ -13,7 +17,7 @@ npm install
 
 Rename the secrets.example.json file to secrets.json and put in the real credentials.
 
-If you want to use the bot notification functionality you have to run the setup script with your AWS Lambda Url set in the secrets file.
+If you want to use the bot notification and the meeting feature you have to run the setup script with your AWS Lambda Url set in the secrets file.
 
 ```bash
 npm run setup
