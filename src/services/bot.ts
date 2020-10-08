@@ -1,30 +1,30 @@
-const bot = require("../telegram");
-const { isLocal } = require("../utils");
+import { sendMessage } from "../telegram";
+import { isLocal } from "../utils";
 
-const lambda = require("../aws/lambda");
+import { callTimetableApi, callMensaApi } from "../aws/lambda";
 
-module.exports.handle = async (event) => {
+export const handleTelegramRequest = async (event: any) => {
   const body = isLocal() ? event.body : JSON.parse(event.body);
   const { text, chat } = body.message;
   console.log("Received Message: ", text);
 
   switch (text.toLowerCase()) {
     case "/synctimetable":
-      await bot.sendMessage(chat.id, "starte kalendar-api 📆");
-      await lambda.callTimetableApi();
+      await sendMessage(chat.id, "starte kalendar-api 📆");
+      await callTimetableApi();
       break;
     case "/syncmensa":
-      await bot.sendMessage(chat.id, "starte mensa-api 🍔");
-      await lambda.callMensaApi();
+      await sendMessage(chat.id, "starte mensa-api 🍔");
+      await callMensaApi();
       break;
     case "/help":
-      await bot.sendMessage(chat.id, "Nö 😋");
+      await sendMessage(chat.id, "Nö 😋");
       break;
     case "/start":
-      await bot.sendMessage(chat.id, "heyyyyyy 🤗👋");
+      await sendMessage(chat.id, "heyyyyyy 🤗👋");
       break;
     default:
-      await bot.sendMessage(chat.id, "Will nicht mit dir reden 🤐 ");
+      await sendMessage(chat.id, "Will nicht mit dir reden 🤐 ");
       break;
   }
 

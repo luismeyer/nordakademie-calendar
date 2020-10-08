@@ -1,5 +1,8 @@
-const generator = require("ical-generator");
-const { subDays, parseISO, isEqual, format } = require("date-fns");
+import generator, { ICalCalendar } from "ical-generator";
+import { subDays, parseISO, isEqual, format } from "date-fns";
+import { CalendarResponse, DateWithTimeZone } from "node-ical";
+
+import { MensaWeek } from "./typings";
 
 const meetings = () => {
   try {
@@ -13,12 +16,10 @@ const meetings = () => {
   }
 };
 
-module.exports.formatSummary = (summary) =>
+export const formatSummary = (summary: string) =>
   summary.replace(/([A-Z] [A-Z]\d{3} )|WP /, "");
 
-module.exports.getSummary = (description) => {
-  if (!description) return;
-
+export const getSummary = (description: string) => {
   const startString = "Veranstaltung: ";
   const endString = "\nDozent:";
 
@@ -27,7 +28,7 @@ module.exports.getSummary = (description) => {
   return description.substring(startIndex, endIndex);
 };
 
-module.exports.formatMeeting = (meeting) => {
+export const formatMeeting = (meeting?: { url: string; password?: string }) => {
   if (!meeting) return "";
   let result = "";
 
@@ -42,7 +43,13 @@ module.exports.formatMeeting = (meeting) => {
   return `${result}\n`;
 };
 
-module.exports.meetingInformation = (start, description, summary) => {
+export const meetingInformation = (params: {
+  start?: Date;
+  description?: string;
+  summary: string;
+}) => {
+  const { description, start, summary } = params;
+
   const moduleNumberMatches = summary.match(/\w\d{3}/);
   if (!moduleNumberMatches || !moduleNumberMatches.length) return;
 
@@ -57,46 +64,51 @@ module.exports.meetingInformation = (start, description, summary) => {
     meeting = rawMeeting;
   }
 
-  if (Array.isArray(rawMeeting)) {
+  if (Array.isArray(rawMeeting) && description) {
     meeting = rawMeeting.find((m) => description.match(m.regex));
   }
 
-  const date = new Date(start);
-  if (date && rawMeeting[date.getDay()]) {
-    meeting = rawMeeting[date.getDay()];
+  if (start && rawMeeting[start.getDay()]) {
+    meeting = rawMeeting[start.getDay()];
   }
 
   return meeting;
 };
 
-module.exports.format = (calendar, filter) => {
+export const formatCalendar = (calendar: CalendarResponse, filter?: string) => {
   const calendarGenerator = generator();
   const events = Object.values(calendar);
 
   events.forEach(({ location, description, start, ...rest }) => {
     if (!description) return;
 
-    const summary = this.getSummary(description);
+    const summary = getSummary(description as string);
     if (summary.startsWith("WP") && filter && !summary.includes(filter)) {
       return;
     }
 
-    const rawMeeting = this.meetingInformation(start, description, summary);
-    const meeting = this.formatMeeting(rawMeeting);
+    const parsedStart = new Date(start as DateWithTimeZone);
+    const rawMeeting = meetingInformation({
+      start: parsedStart,
+      description: description as string,
+      summary,
+    });
+    const meeting = formatMeeting(rawMeeting);
 
     calendarGenerator.createEvent({
       ...rest,
-      start,
+      sequence: 0,
+      start: parsedStart,
       location: (location && `${location}, `) + "Nordakademie Elmshorn, 25337",
       description: `${meeting}${description}`,
-      summary: this.formatSummary(summary),
+      summary: formatSummary(summary),
     });
   });
 
   return calendarGenerator;
 };
 
-module.exports.createMensaEvents = (mensaTimetable) => {
+export const createMensaEvents = (mensaTimetable: MensaWeek) => {
   const calendar = generator();
 
   mensaTimetable.forEach(({ main, second, date }) => {
@@ -122,7 +134,10 @@ module.exports.createMensaEvents = (mensaTimetable) => {
   return calendar;
 };
 
-module.exports.checkEventDifference = (oldCal, newCal) => {
+export const checkEventDifference = (
+  newCal: ICalCalendar,
+  oldCal?: CalendarResponse
+) => {
   if (!oldCal) return [];
 
   const oldEvents = Object.values(oldCal);
@@ -137,9 +152,16 @@ module.exports.checkEventDifference = (oldCal, newCal) => {
       const { start: newStart, end: newEnd } = newEvent.toJSON();
 
       return (
-        !isEqual(new Date(oldStart), new Date(newStart)) ||
-        !isEqual(new Date(oldEnd), new Date(newEnd))
+        !isEqual(
+          new Date(oldStart as DateWithTimeZone),
+          new Date(newStart as DateWithTimeZone)
+        ) ||
+        !isEqual(
+          new Date(oldEnd as DateWithTimeZone),
+          new Date(newEnd as DateWithTimeZone)
+        )
       );
     })
-    .map((event) => format(new Date(event.start()), "dd.MM.yyyy"));
+
+    .map((event) => format(event.start().toDate(), "dd.MM.yyyy"));
 };

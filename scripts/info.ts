@@ -1,9 +1,10 @@
-const bot = require("../bot");
-const secrets = require("../../secrets/secrets.json");
+import { fetch, requestUrl } from "../src/telegram";
+import secrets from "../secrets/secrets.json";
 
 (async () => {
-  const url = bot.requestUrl(secrets.token)("getWebhookInfo");
-  const res = await bot.fetch(url, {
+  const url = requestUrl(secrets.token, "getWebhookInfo");
+
+  const res = await fetch(url, {
     method: "post",
     headers: {
       "Content-Type": "application/json",
