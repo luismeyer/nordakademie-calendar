@@ -1,65 +1,68 @@
-// @ts-expect-error ts-migrate(1192) FIXME: Module '"/Users/luis.meyer/Projects/nak-calendar/s... Remove this comment to see the full error message
-import nak from "../nak";
-// @ts-expect-error ts-migrate(1192) FIXME: Module '"/Users/luis.meyer/Projects/nak-calendar/s... Remove this comment to see the full error message
-import calendar from "../calendar";
-// @ts-expect-error ts-migrate(1192) FIXME: Module '"/Users/luis.meyer/Projects/nak-calendar/s... Remove this comment to see the full error message
-import telegram from "../telegram";
+import path from "path";
+import fs from "fs";
+import { CalendarResponse } from "node-ical";
+
+import { fetchCalendar } from "../nak";
+import { formatCalendar, checkEventDifference } from "../calendar";
+import { sendMessage } from "../telegram";
 import { Logger } from "../utils";
 
-// @ts-expect-error ts-migrate(1192) FIXME: Module '"/Users/luis.meyer/Projects/nak-calendar/s... Remove this comment to see the full error message
-import bucket from "../aws/bucket";
+import { fetchCalendarFile, uploadToS3 } from "../aws/bucket";
+import { Batch } from "../typings/index";
 
 const { CHAT_ID } = process.env;
+if (!CHAT_ID) throw new Error("Missing environment variable: CHAT_ID");
 
-const sendMessage = (msg: any) => telegram.sendMessage(CHAT_ID, msg);
+const send = (msg: string) => sendMessage(CHAT_ID, msg);
 
-const format = async (nakCal: any, filename: any, filter: any) => {
+const format = async (
+  nakCal: CalendarResponse,
+  filename: string,
+  filter?: string
+) => {
   const logger = new Logger(4);
 
   logger.print(`${filename}: Formatting timetable`);
-  const formattedCalendar = calendar.format(nakCal, filter);
+  const formattedCalendar = formatCalendar(nakCal, filter);
 
   logger.print(`${filename}: Fetching old timetable and compares calendars`);
-  const oldTimetable = await bucket.fetchCalendarFile(filename);
-  const calendarDiff = await calendar.checkEventDifference(
-    oldTimetable,
-    formattedCalendar
+  const oldTimetable = await fetchCalendarFile(filename);
+  const calendarDiff = await checkEventDifference(
+    formattedCalendar,
+    oldTimetable
   );
 
   if (calendarDiff.length) {
-    await sendMessage(
-      `${filename}: veränderung hier: ${calendarDiff.join(" , ")}`
-    );
+    await send(`${filename}: veränderung hier: ${calendarDiff.join(" , ")}`);
   }
 
   logger.print(`${filename}: Uploading file to S3`);
-  await bucket.uploadToS3(formattedCalendar.toString(), filename);
+  await uploadToS3(formattedCalendar.toString(), filename);
 
   logger.print(`${filename}: Sending notification`);
-  return await sendMessage(`${filename}: stundenplan fertig! lol 🥳`);
+  return send(`${filename}: stundenplan fertig! lol 🥳`);
 };
 
-export const formatBatch = async (batch: any) => {
+export const formatBatchCalendar = async (batch: Batch) => {
   Logger.print(`BATCH: Fetching timetable`);
-  const nakCal = await nak.fetchCalendar();
+  const nakCal = await fetchCalendar();
+
+  if (!nakCal) {
+    return await send(`BATCH: kein aktuellen kalendar gefunden`);
+  }
 
   return Promise.all(
-    batch.map(({
-      filename,
-      filter
-    }: any) => format(nakCal, filename, filter))
+    batch.map(({ filename, filter }) => format(nakCal, filename, filter))
   );
 };
 
-export const formatSingle = async (filename: any) => {
+export const formatSingleCalendar = async (filename: string) => {
   Logger.print(`${filename}: Fetching timetable`);
-  const nakCal = await nak.fetchCalendar();
+  const nakCal = await fetchCalendar();
 
   if (!nakCal) {
-    await sendMessage(`${filename}: kein aktuellen kalendar gefunden`);
-    return;
+    return await send(`${filename}: kein aktuellen kalendar gefunden`);
   }
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   return format(nakCal, filename);
 };

@@ -49,7 +49,7 @@ plugins:
 
 functions:
   timetableApi:
-    handler: handler.timetableFormatter
+    handler: src/handler.timetableFormatter
     events:
       - schedule: cron(0 */12 * * ? *)
     layers:
@@ -57,7 +57,7 @@ functions:
       - { Ref: CanvasLambdaLayer }
       - { Ref: RequestLambdaLayer }
   mensaApi:
-    handler: handler.mensaFormatter
+    handler: src/handler.mensaFormatter
     events:
       - schedule: cron(0 0 * * ? *)
     layers:
@@ -65,7 +65,7 @@ functions:
       - { Ref: CanvasLambdaLayer }
       - { Ref: RequestLambdaLayer }
   bot:
-    handler: handler.bot
+    handler: src/handler.bot
     events:
       - http:
           path: bot

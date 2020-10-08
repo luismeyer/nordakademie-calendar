@@ -1,11 +1,9 @@
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '../bot' or its corresponding t... Remove this comment to see the full error message
-import bot from "../bot";
-// @ts-expect-error ts-migrate(2732) FIXME: Cannot find module '../../secrets/secrets.json'. C... Remove this comment to see the full error message
+import { fetch, requestUrl } from "../telegram";
 import secrets from "../../secrets/secrets.json";
 
 (async () => {
-  const url = bot.requestUrl(secrets.token)("getWebhookInfo");
-  const res = await bot.fetch(url, {
+  const url = requestUrl(secrets.token)("getWebhookInfo");
+  const res = await fetch(url, {
     method: "post",
     headers: {
       "Content-Type": "application/json",

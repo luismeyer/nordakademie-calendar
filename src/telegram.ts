@@ -1,24 +1,25 @@
-// @ts-expect-error ts-migrate(7016) FIXME: Try `npm install @types/node-fetch` if it exists o... Remove this comment to see the full error message
-import nodeFetch from "node-fetch";
+import nodeFetch, { RequestInit } from "node-fetch";
 
 const { BOT_TOKEN, IS_LOCAL } = process.env;
+if (!BOT_TOKEN) throw new Error("Missing Environment variable: BOT_TOKEN");
 
-export const requestUrl = (token: any) => (method: any) => `https://api.telegram.org/bot${token}/${method}`;
+export const requestUrl = (token: string) => (method: string) =>
+  `https://api.telegram.org/bot${token}/${method}`;
 
-export const fetch = (url: any, params: any) =>
-  nodeFetch(url, params).then((res: any) => res.json());
+export const fetch = (url: string, params: RequestInit) =>
+  nodeFetch(url, params).then((res) => res.json());
 
-// @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
-const telegramUrl = this.requestUrl(BOT_TOKEN);
-const telegramFetch = (method: any, params: any) =>
-  IS_LOCAL
-    ? console.info(
-        `Calling telegram "${method}" with params: ${JSON.stringify(params)}`
-      )
-    : // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
-      this.fetch(telegramUrl(method), params);
+const telegramFetch = (method: string, params: RequestInit) => {
+  if (IS_LOCAL) {
+    const msg = `Calling telegram "${method}" with params: }`;
+    console.info(msg, JSON.stringify(params));
+    return;
+  }
 
-export const sendMessage = (chat: any, message: any) => {
+  return fetch(requestUrl(BOT_TOKEN)(method), params);
+};
+
+export const sendMessage = (chat: string, message: string) => {
   if (!chat || !BOT_TOKEN) return;
 
   return telegramFetch("sendMessage", {

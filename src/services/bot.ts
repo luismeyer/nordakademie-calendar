@@ -1,32 +1,30 @@
-// @ts-expect-error ts-migrate(1192) FIXME: Module '"/Users/luis.meyer/Projects/nak-calendar/s... Remove this comment to see the full error message
-import bot from "../telegram";
+import { sendMessage } from "../telegram";
 import { isLocal } from "../utils";
 
-// @ts-expect-error ts-migrate(1192) FIXME: Module '"/Users/luis.meyer/Projects/nak-calendar/s... Remove this comment to see the full error message
-import lambda from "../aws/lambda";
+import { callTimetableApi, callMensaApi } from "../aws/lambda";
 
-export const handle = async (event: any) => {
+export const handleTelegramRequest = async (event: any) => {
   const body = isLocal() ? event.body : JSON.parse(event.body);
   const { text, chat } = body.message;
   console.log("Received Message: ", text);
 
   switch (text.toLowerCase()) {
     case "/synctimetable":
-      await bot.sendMessage(chat.id, "starte kalendar-api 📆");
-      await lambda.callTimetableApi();
+      await sendMessage(chat.id, "starte kalendar-api 📆");
+      await callTimetableApi();
       break;
     case "/syncmensa":
-      await bot.sendMessage(chat.id, "starte mensa-api 🍔");
-      await lambda.callMensaApi();
+      await sendMessage(chat.id, "starte mensa-api 🍔");
+      await callMensaApi();
       break;
     case "/help":
-      await bot.sendMessage(chat.id, "Nö 😋");
+      await sendMessage(chat.id, "Nö 😋");
       break;
     case "/start":
-      await bot.sendMessage(chat.id, "heyyyyyy 🤗👋");
+      await sendMessage(chat.id, "heyyyyyy 🤗👋");
       break;
     default:
-      await bot.sendMessage(chat.id, "Will nicht mit dir reden 🤐 ");
+      await sendMessage(chat.id, "Will nicht mit dir reden 🤐 ");
       break;
   }
 

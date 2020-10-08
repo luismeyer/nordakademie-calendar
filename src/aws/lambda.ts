@@ -1,8 +1,8 @@
-import aws from "aws-sdk";
+import { Lambda } from "aws-sdk";
 
 import { isLocal } from "../utils";
 
-const lambda = new aws.Lambda({
+const lambda = new Lambda({
   region: "eu-central-1",
   endpoint: isLocal() ? "http://localhost:3002" : undefined,
 });
