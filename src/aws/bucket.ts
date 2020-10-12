@@ -1,10 +1,13 @@
-import { S3, Endpoint } from "aws-sdk";
+import { S3 } from "aws-sdk";
 import ical from "node-ical";
 
 import { isLocal } from "../utils";
 
 const { BUCKET } = process.env;
 if (!BUCKET) throw new Error("Missing Environment Variable: BUCKET");
+
+const { REGION } = process.env;
+if (!REGION) throw new Error("Missing Environment Variable: REGION");
 
 const localS3Params = {
   s3ForcePathStyle: true,
@@ -49,3 +52,17 @@ export const fetchCalendarFile = async (filename: string, bucket = BUCKET) => {
     }
   }
 };
+
+export const calendarFileNames = async (bucket = BUCKET) => {
+  const objects = await s3.listObjectsV2({ Bucket: bucket }).promise();
+  if (objects.$response.error || !objects.Contents) {
+    return [];
+  }
+
+  return objects.Contents.map(({ Key }) => Key).filter(
+    (name) => name && name.includes(".ics")
+  );
+};
+
+export const toBucketUrl = (item?: string) =>
+  `https://${BUCKET}.s3.${REGION}.amazonaws.com/${item}`;

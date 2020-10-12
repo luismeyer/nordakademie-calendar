@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <title>Nordakademie Kalendar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <h1>Nordakademie Kalendar Dateien</h1>
+    <ul>
+      {{#each files}}
+        <li><a href="{{ this.url }}">{{ this.name }}</a></li>
+      {{/each}}
+    </ul>
+    <style>
+      body {
+        font-family: 'Roboto', sans-serif;
+      }
+      li {
+        list-style: none;
+        padding: 8px;
+        border-top: 1px solid darkgray;
+      }
+      li:last-child {
+        border-bottom: 1px solid darkgray;
+      }
+      ul {
+        padding: 0;
+      }
+    </style>
+  </body>
+</html>

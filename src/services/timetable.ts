@@ -9,6 +9,7 @@ import { Logger } from "../utils";
 
 import { fetchCalendarFile, uploadToS3 } from "../aws/bucket";
 import { Batch } from "../typings/index";
+import { renderPage } from "../frontend/render";
 
 const { CHAT_ID } = process.env;
 if (!CHAT_ID) throw new Error("Missing environment variable: CHAT_ID");
@@ -20,27 +21,27 @@ const format = async (
   filename: string,
   filter?: string
 ) => {
-  const logger = new Logger(4);
+  const logger = new Logger(5, filename);
 
-  logger.print(`${filename}: Formatting timetable`);
+  logger.print(`Formatting timetable`);
   const formattedCalendar = formatCalendar(nakCal, filter);
 
-  logger.print(`${filename}: Fetching old timetable and compares calendars`);
+  logger.print(`Fetching old timetable and compares calendars`);
   const oldTimetable = await fetchCalendarFile(filename);
-  const calendarDiff = await checkEventDifference(
-    formattedCalendar,
-    oldTimetable
-  );
+  const calendarDiff = checkEventDifference(formattedCalendar, oldTimetable);
 
   if (calendarDiff.length) {
-    await send(`${filename}: veränderung hier: ${calendarDiff.join(" , ")}`);
+    await send(`veränderung hier: ${calendarDiff.join(" , ")}`);
   }
 
-  logger.print(`${filename}: Uploading file to S3`);
+  logger.print(`Uploading file to S3`);
   await uploadToS3(formattedCalendar.toString(), filename);
 
-  logger.print(`${filename}: Sending notification`);
-  return send(`${filename}: stundenplan fertig! lol 🥳`);
+  logger.print(`Sending notification`);
+  await send(`${filename}: stundenplan fertig! lol 🥳`);
+
+  logger.print(`Rendering Page`);
+  return renderPage();
 };
 
 export const formatBatchCalendar = async (batch: Batch) => {

@@ -8,7 +8,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.ts$/,
         use: "ts-loader",
         exclude: [/node_modules/, /.test.ts/],
       },
@@ -28,7 +28,10 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin({
-      patterns: [{ from: "./resources/**.json", to: "./resources" }],
+      patterns: [
+        { from: "./resources/*.json" },
+        { from: "./resources/*.html" },
+      ],
     }),
   ],
 };
