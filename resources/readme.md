@@ -35,11 +35,13 @@ yarn meetings
 
 There are different ways to structure meeting data:
 
+(Notice that \<MODULE\> is a unique string identifying the timetable entry. It is matched against the event description or event summary.)
+
 1. If a module has always the same meeting
 
    ```json
    {
-     "<MODUL_NUMBER>": {
+     "<MODULE>": {
        "url": "<MEETING_URL>",
        "password": "<MEETING_PASSWORD>"
      }
@@ -50,7 +52,7 @@ There are different ways to structure meeting data:
 
    ```json
    {
-     "<MODULE_NUMBER>": [
+     "<MODULE>": [
        {
          "regex": "REGEX_1",
          "url": "MEETING_URL_1"
@@ -68,7 +70,7 @@ There are different ways to structure meeting data:
 
    ```json
    {
-     "<MODULE_NUMBER>": {
+     "<MODULE>": {
        "<DAY_NUMBER>": {
          "url": "<MEETING_URL_1",
          "password": "MEETING_PASSWORD_1"

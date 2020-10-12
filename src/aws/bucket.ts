@@ -72,4 +72,6 @@ export const calendarFileNames = async (bucket = BUCKET) => {
 };
 
 export const toBucketUrl = (item?: string) =>
-  `https://${BUCKET}.s3.${REGION}.amazonaws.com/${item}`;
+  isLocal()
+    ? `/${BUCKET}/${item}`
+    : `https://${BUCKET}.s3.${REGION}.amazonaws.com/${item}`;

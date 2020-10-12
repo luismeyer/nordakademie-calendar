@@ -3,6 +3,7 @@ import { subDays, parseISO, isEqual, format } from "date-fns";
 import { CalendarResponse, DateWithTimeZone } from "node-ical";
 
 import { MensaWeek } from "./typings";
+import { resourcesDir } from "./utils";
 
 const meetings = () => {
   try {
@@ -28,7 +29,10 @@ export const getSummary = (description: string) => {
   return description.substring(startIndex, endIndex);
 };
 
-export const formatMeeting = (meeting?: { url: string; password?: string }) => {
+export const formatMeeting = (meeting?: {
+  url: string;
+  password?: string;
+}): string => {
   if (!meeting) return "";
   let result = "";
 
@@ -50,15 +54,16 @@ export const meetingInformation = (params: {
 }) => {
   const { description, start, summary } = params;
 
-  const moduleNumberMatches = summary.match(/\w\d{3}/);
-  if (!moduleNumberMatches || !moduleNumberMatches.length) return;
-
   const meetingsData = meetings();
-  const moduleNumber = moduleNumberMatches[0];
-  const rawMeeting = meetingsData[moduleNumber];
+  const meetingKeys = Object.keys(meetingsData);
 
+  const key = meetingKeys.find(
+    (key) => description?.includes(key) || summary.includes(key)
+  );
+  if (!key) return;
+
+  const rawMeeting = meetingsData[key];
   let meeting;
-  if (!rawMeeting) return;
 
   if (rawMeeting.url) {
     meeting = rawMeeting;
