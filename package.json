@@ -9,6 +9,7 @@
     "@types/node-fetch": "^2.5.7",
     "aws-sdk": "^2.666.0",
     "date-fns": "^2.12.0",
+    "handlebars": "^4.7.6",
     "ical-generator": "^1.10.0",
     "jsdom": "^16.2.2",
     "meow": "^7.0.1",
@@ -41,8 +42,8 @@
     "telegram:info": "ts-node scripts/info.ts",
     "secrets": "gpg --symmetric --cipher-algo AES256 ./secrets/secrets.json",
     "secrets:decrypt": "gpg --decrypt --output ./secrets/secrets.json ./secrets/secrets.json.gpg",
-    "meetings": "gpg --symmetric --cipher-algo AES256 ./resources/meetings.json",
-    "meetings:decrypt": "gpg --decrypt --output ./resources/meetings.json ./resources/meetings.json.gpg",
+    "meetings": "gpg --symmetric --cipher-algo AES256 --output ./secrets/meetings.json.gpg ./resources/meetings.json",
+    "meetings:decrypt": "gpg --decrypt --output ./resources/meetings.json ./secrets/meetings.json.gpg",
     "remove:bucket": "rm -rf /tmp/nak-calendar-bucket"
   },
   "repository": {

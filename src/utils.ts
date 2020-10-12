@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import path from "path";
 
 export const isValidUrl = (url: string) =>
   fetch(url).then((res) => Math.floor(res.status / 100) === 2);
@@ -9,14 +10,18 @@ export const formatInnerHtml = (text: string) =>
 export const Logger = class Logger {
   max: number;
   progress: number;
+  filename: string;
 
-  constructor(max: number) {
+  constructor(max: number, filename: string) {
     this.max = max;
     this.progress = 1;
+    this.filename = filename;
   }
 
   print(message: string) {
-    console.info(`${this.progress}/${this.max}: ${message}\n`);
+    console.info(
+      `${this.progress}/${this.max}: ${this.filename} | ${message}\n`
+    );
     this.progress += 1;
   }
 
@@ -28,3 +33,5 @@ export const Logger = class Logger {
 const { IS_LOCAL, IS_OFFLINE } = process.env;
 
 export const isLocal = () => IS_LOCAL || IS_OFFLINE;
+
+export const resourcesDir = () => path.resolve(__dirname, "../resources");

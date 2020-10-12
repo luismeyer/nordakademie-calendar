@@ -9,8 +9,9 @@ import { Secrets } from "../src/typings";
 import { requestUrl, fetch } from "../src/telegram";
 
 const exec = promisify(defaultExec);
-const SECRETS_PATH = path.resolve(__dirname, "../secrets/secrets.json");
-const MEETINGS_PATH = path.resolve(__dirname, "../resources/meetings.json");
+const SECRETS_PATH = path.resolve(__dirname, "../secrets/secrets.json.gpg");
+const MEETINGS_PATH = path.resolve(__dirname, "../secrets/meetings.json.gpg");
+const MEETINGS_OUTPUT = path.resolve(__dirname, "../resources/meetings.json");
 
 const cli = meow(
   `
@@ -37,11 +38,13 @@ const start = () => {
   return Promise.resolve();
 };
 
-const decryptFilePath = (filepath: string) => () => {
+const decryptFilePath = (filepath: string, outputPath?: string) => () => {
   console.log(`Decrypting ${filepath}...`);
 
   return exec(
-    `gpg --quiet --batch --yes --decrypt --passphrase="${passphrase}" --output ${filepath} ${filepath}.gpg`
+    `gpg --quiet --batch --yes --decrypt --passphrase="${passphrase}" --output ${
+      outputPath || filepath
+    } ${filepath}`
   ).then((result) => console.log("Result: ", result));
 };
 
@@ -69,6 +72,6 @@ const fetchSetWebhook = () => {
 };
 
 start()
-  .then(decryptFilePath(MEETINGS_PATH))
+  .then(decryptFilePath(MEETINGS_PATH, MEETINGS_OUTPUT))
   .then(decryptFilePath(SECRETS_PATH))
   .then(fetchSetWebhook);

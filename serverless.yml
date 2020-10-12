@@ -14,6 +14,7 @@ provider:
         - lambda:InvokeFunction
       Resource: "*"
   environment:
+    REGION: ${opt:region, self:provider.region}
     BUCKET: ${self:custom.bucket}
     BOT_TOKEN: ${file(./secrets/secrets.json):token}
     CHAT_ID: ${file(./secrets/secrets.json):chatId}
@@ -81,4 +82,7 @@ resources:
     S3CalendarBucket:
       Type: AWS::S3::Bucket
       Properties:
+        AccessControl: PublicRead
         BucketName: ${self:custom.bucket}
+        WebsiteConfiguration:
+          IndexDocument: index.html
