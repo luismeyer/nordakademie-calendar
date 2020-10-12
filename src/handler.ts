@@ -9,7 +9,7 @@ import { handleTelegramRequest } from "./services/bot";
 
 // TimeTable Api Handler
 export const timetableFormatter = async () => {
-  // await formatBatchCalendar(modules);
+  await formatBatchCalendar(modules);
   return await formatSingleCalendar("NAK.ics");
 };
 

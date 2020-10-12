@@ -1,4 +1,5 @@
 import { S3 } from "aws-sdk";
+
 import ical from "node-ical";
 
 import { isLocal } from "../utils";
@@ -18,13 +19,19 @@ const localS3Params = {
 
 const s3 = isLocal() ? new S3(localS3Params) : new S3();
 
-export const uploadToS3 = (data: string, filename: string, bucket = BUCKET) =>
+export const uploadToS3 = (
+  data: string,
+  filename: string,
+  contentType?: string,
+  bucket = BUCKET
+) =>
   s3
     .putObject({
       Bucket: bucket,
       Key: filename,
       Body: data,
       ACL: "public-read",
+      ContentType: contentType,
     })
     .promise();
 

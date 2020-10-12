@@ -15,5 +15,5 @@ export const renderPage = async () => {
   const template = Handlebars.compile(templateString);
   const page = template({ files });
 
-  return uploadToS3(page, "index.html");
+  return uploadToS3(page, "index.html", "text/html");
 };
