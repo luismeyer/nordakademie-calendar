@@ -3,7 +3,6 @@ import { subDays, parseISO, isEqual, format } from "date-fns";
 import { CalendarResponse, DateWithTimeZone } from "node-ical";
 
 import { MensaWeek } from "./typings";
-import { resourcesDir } from "./utils";
 
 const meetings = () => {
   try {

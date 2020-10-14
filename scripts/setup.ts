@@ -42,6 +42,7 @@ const start = () => {
 
 const decryptFilePath = (filepath: string, outputPath: string) => () => {
   console.log(`Decrypting ${filepath}...`);
+  if (!fs.existsSync(filepath)) return Promise.resolve();
 
   return exec(
     `gpg --quiet --batch --yes --decrypt --passphrase="${passphrase}" --output ${outputPath} ${filepath}`

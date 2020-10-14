@@ -24,7 +24,7 @@ yarn setup
 (Note that this will also decrypt the encrypted secrets file. If you dont have an encrypted secrets file yet, you have to manually create a secrets file and run this afterwards)
 
 ```bash
-yarn secrets
+yarn encrypt
 ```
 
 ## Development 🛠

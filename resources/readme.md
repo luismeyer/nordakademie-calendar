@@ -30,7 +30,7 @@ By putting together the filename and the S3 Bucket basepath you get the calendar
 You can add meetings to this folder which will be injected into the event description. Since the meeting data is confidential you have to encrypt the meetings file.
 
 ```bash
-yarn meetings
+yarn encrypt
 ```
 
 There are different ways to structure meeting data:

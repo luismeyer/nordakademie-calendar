@@ -41,10 +41,7 @@
     "coverage": "jest --coverage",
     "setup": "ts-node scripts/setup.ts",
     "telegram:info": "ts-node scripts/info.ts",
-    "secrets": "gpg --symmetric --cipher-algo AES256 ./secrets/secrets.json",
-    "secrets:decrypt": "gpg --decrypt --output ./secrets/secrets.json ./secrets/secrets.json.gpg",
-    "meetings": "gpg --symmetric --cipher-algo AES256 --output ./secrets/meetings.json.gpg ./resources/meetings.json",
-    "meetings:decrypt": "gpg --decrypt --output ./resources/meetings.json ./secrets/meetings.json.gpg",
+    "encrypt": "ts-node scripts/encrypt.ts",
     "remove:bucket": "rm -rf /tmp/nak-calendar-bucket"
   },
   "repository": {
