@@ -1,6 +1,10 @@
-# NAK-Calendar 📆
+# Nordakademie-Calendar 📆
 
-NAK-Calendar is an AWS Lambda that downloads the current Nordakademie timetable and formates the calendar entries every 6 hours.
+[![build shield](https://img.shields.io/github/workflow/status/luismeyer/nordakademie-calendar/Deploy%20master/master)](https://github.com/luismeyer/nordakademie-calendar/actions)
+[![issues shield](https://img.shields.io/github/issues/luismeyer/nordakademie-calendar)](https://github.com/luismeyer/nordakademie-calendar/issues)
+![repo size shield](https://img.shields.io/github/repo-size/luismeyer/nordakademie-calendar)
+
+Nordakademie-Calendar is an AWS Lambda that downloads the current Nordakademie timetable and formates the calendar entries every 6 hours.
 
 ## Usage 📄
 
