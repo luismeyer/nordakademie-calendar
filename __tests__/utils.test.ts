@@ -4,7 +4,7 @@ test("validates url", async () => {
   expect(await isValidUrl("https://google.com")).toBe(true);
   expect(
     await isValidUrl(
-      "https://cis.nordakademie.de/fileadmin/Infos/Stundenplaene/A18b_-1.ics"
+      "https://cis.nordakademie.de/fileadmin/Infos/Stundenplaene/A18b_1.ics"
     )
   ).toBe(false);
 });

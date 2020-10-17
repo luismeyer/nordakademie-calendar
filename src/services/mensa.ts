@@ -1,5 +1,5 @@
-import { fetchMensaTimetable, formatMensaTimetable } from "../nak";
-import { createMensaEvents } from "../calendar";
+import { fetchMensaTimetable } from "../nak";
+import { createMensaEvents, formatMensaTimetable } from "../calendar";
 import { sendMessage } from "../telegram";
 import { Logger } from "../utils";
 

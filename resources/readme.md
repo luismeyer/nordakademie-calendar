@@ -42,6 +42,7 @@ There are different ways to structure meeting data:
    ```json
    {
      "<MODULE>": {
+       "type": "BASIC",
        "url": "<MEETING_URL>",
        "password": "<MEETING_PASSWORD>"
      }
@@ -52,17 +53,20 @@ There are different ways to structure meeting data:
 
    ```json
    {
-     "<MODULE>": [
-       {
-         "regex": "REGEX_1",
-         "url": "MEETING_URL_1"
-       },
-       {
-         "regex": "REGEX_2",
-         "url": "MEETING_URL_2",
-         "password": "MEETING_PASSWORD_2"
-       }
-     ]
+     "<MODULE>": {
+       "type": "REGEX",
+       "values": [
+         {
+           "regex": "REGEX_1",
+           "url": "MEETING_URL_1"
+         },
+         {
+           "regex": "REGEX_2",
+           "url": "MEETING_URL_2",
+           "password": "MEETING_PASSWORD_2"
+         }
+       ]
+     }
    }
    ```
 
@@ -71,6 +75,7 @@ There are different ways to structure meeting data:
    ```json
    {
      "<MODULE>": {
+       "type": "DAY",
        "<DAY_NUMBER>": {
          "url": "<MEETING_URL_1",
          "password": "MEETING_PASSWORD_1"

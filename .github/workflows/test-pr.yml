@@ -20,5 +20,8 @@ jobs:
         env:
           CI: true
 
+      - name: Run app setup
+        run: yarn setup --passphrase ${{ secrets.PASSPHRASE }}
+        
       - name: Run tests
         run: yarn test

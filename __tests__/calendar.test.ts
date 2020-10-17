@@ -3,20 +3,16 @@ import path from "path";
 import { addDays, format, startOfWeek } from "date-fns";
 
 import * as calendar from "../src/calendar";
+import { formatMensaTimetable } from "../src/calendar";
+import { fetchMensaTimetable } from "../src/nak";
 
 const mockCalendar = parseFile(
   path.resolve(__dirname, "mockdata/mock-calendar.ics")
 );
 
 test("finds veranstaltung", () => {
-  expect(calendar.getSummary("Veranstaltung: NAMENAME\nDozent:")).toBe(
+  expect(calendar.findSummary("Veranstaltung: NAMENAME\nDozent:")).toBe(
     "NAMENAME"
-  );
-});
-
-test("removes module id", () => {
-  expect(calendar.formatSummary("V A112 Algorithmen&Datenstrukturen")).toBe(
-    "Algorithmen&Datenstrukturen"
   );
 });
 
@@ -55,16 +51,6 @@ test("creates calendar events", () => {
   expect(cal.events()[0].summary()).toBe("Description 1");
 });
 
-test("formats meetings", () => {
-  const formatted = calendar.formatMeeting({ url: "test", password: "test" });
-  expect(formatted.includes("Url: test")).toBe(true);
-  expect(formatted.includes("Password: test")).toBe(true);
-
-  const formatted2 = calendar.formatMeeting({ url: "test" });
-  expect(formatted2.includes("Url: test")).toBe(true);
-  expect(formatted2.includes("Password: test")).toBe(false);
-});
-
 test("checks event difference", () => {
   const newCal = calendar.formatCalendar(mockCalendar);
   const oldCal = parseICS(newCal.toString());
@@ -83,27 +69,33 @@ test("checks event difference", () => {
 });
 
 test("Handles meeting information", () => {
-  let result = calendar.meetingInformation({ summary: "A123" });
-  expect(result).toEqual({
-    url: "SIMPLE_URL",
-    password: "SIMPLE_PASSWORD",
-  });
+  let result = calendar.findMeeting({ summary: "A123" });
+  expect(result).toContain("Url: SIMPLE_URL");
+  expect(result).toContain("Password: SIMPLE_PASSWORD");
 
-  result = calendar.meetingInformation({
+  result = calendar.findMeeting({
     start: startOfWeek(new Date()),
     summary: "B123",
   });
-  expect(result).toEqual({
-    url: "RIGHT_URL",
-    password: "RIGHT_PASS",
-  });
+  expect(result).toContain("Url: RIGHT_URL");
+  expect(result).toContain("Password: RIGHT_PASS");
 
-  result = calendar.meetingInformation({
-    description: "REGEX",
-    summary: "C123",
-  });
-  expect(result).toEqual({
-    regex: "REGEX",
-    url: "RIGHT URL",
-  });
+  result = calendar.findMeeting({ description: "REGEX", summary: "C123" });
+  expect(result).toContain("Url: RIGHT_URL");
+});
+
+test("formatMensaTimetable: catches missing mensa html", () => {
+  const formattedTimetable = formatMensaTimetable("");
+  expect(typeof formattedTimetable).toBe("object");
+  expect(formattedTimetable.length).toBe(0);
+});
+
+test("formatMensaTimetable: formats mensa html string", async () => {
+  const html = await fetchMensaTimetable();
+  const mensa = formatMensaTimetable(html);
+  if (!mensa.length) return;
+
+  expect(Array.isArray(mensa)).toBe(true);
+  expect(typeof mensa[0].main.description).toBeDefined();
+  expect(mensa[0].date).toBeDefined();
 });
