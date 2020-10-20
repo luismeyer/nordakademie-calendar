@@ -7,6 +7,7 @@ provider:
   runtime: nodejs12.x
   stage: dev
   region: eu-central-1
+  timeout: 20
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -14,6 +15,7 @@ provider:
         - lambda:InvokeFunction
       Resource: "*"
   environment:
+    REGION: ${opt:region, self:provider.region}
     BUCKET: ${self:custom.bucket}
     BOT_TOKEN: ${file(./secrets/secrets.json):token}
     CHAT_ID: ${file(./secrets/secrets.json):chatId}
@@ -39,7 +41,7 @@ custom:
   webpack:
     webpackConfig: "./webpack.config.js"
     includeModules: true
-    packager: "npm"
+    packager: "yarn"
 
 plugins:
   - serverless-s3-local
@@ -49,7 +51,7 @@ plugins:
 
 functions:
   timetableApi:
-    handler: handler.timetableFormatter
+    handler: src/handler.timetableFormatter
     events:
       - schedule: cron(0 */12 * * ? *)
     layers:
@@ -57,7 +59,7 @@ functions:
       - { Ref: CanvasLambdaLayer }
       - { Ref: RequestLambdaLayer }
   mensaApi:
-    handler: handler.mensaFormatter
+    handler: src/handler.mensaFormatter
     events:
       - schedule: cron(0 0 * * ? *)
     layers:
@@ -65,7 +67,7 @@ functions:
       - { Ref: CanvasLambdaLayer }
       - { Ref: RequestLambdaLayer }
   bot:
-    handler: handler.bot
+    handler: src/handler.bot
     events:
       - http:
           path: bot
@@ -82,3 +84,5 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:custom.bucket}
+        WebsiteConfiguration:
+          IndexDocument: index.html

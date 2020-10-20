@@ -4,35 +4,44 @@
   "description": "",
   "main": "handler.js",
   "dependencies": {
+    "@types/aws-sdk": "^2.7.0",
+    "@types/jsdom": "^16.2.4",
+    "@types/node": "^14.11.5",
+    "@types/node-fetch": "^2.5.7",
     "aws-sdk": "^2.666.0",
     "date-fns": "^2.12.0",
+    "handlebars": "^4.7.6",
     "ical-generator": "^1.10.0",
     "jsdom": "^16.2.2",
     "meow": "^7.0.1",
     "node-fetch": "^2.6.0",
-    "node-ical": "^0.11.4"
+    "node-ical": "^0.11.4",
+    "ts-loader": "^8.0.4",
+    "typescript": "^4.0.3"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.14",
     "copy-webpack-plugin": "^6.1.0",
-    "jest": "^26.4.2",
+    "jest": "^26.5.2",
     "serverless-domain-manager": "^4.2.2",
     "serverless-offline": "^6.7.0",
     "serverless-s3-local": "^0.6.5",
     "serverless-webpack": "^5.3.5",
+    "ts-jest": "^26.4.1",
+    "ts-node": "^9.0.0",
     "webpack": "^4.44.2",
     "webpack-node-externals": "^2.5.2"
   },
   "scripts": {
     "invoke:timetable": "serverless invoke local -f timetableApi",
     "invoke:mensa": "serverless invoke local -f mensaApi",
-    "invoke:bot": "serverless invoke local -f bot -p ./resources/event.json",
+    "invoke:bot": "serverless invoke local -f bot -p ./__tests__/mockdata/mock-bot-event.json",
     "start": "serverless offline",
     "test": "jest",
     "coverage": "jest --coverage",
-    "deploy": "serverless deploy",
-    "setup": "node src/scripts/setup.js",
-    "secrets": "gpg --symmetric --cipher-algo AES256 ./secrets/secrets.json",
-    "meetings": "gpg --symmetric --cipher-algo AES256 ./resources/meetings.json"
+    "setup": "ts-node scripts/setup.ts",
+    "telegram:info": "ts-node scripts/info.ts",
+    "encrypt": "ts-node scripts/encrypt.ts"
   },
   "repository": {
     "type": "git",
@@ -44,5 +53,8 @@
   "bugs": {
     "url": "https://github.com/luismeyer/CalendarFormatter/issues"
   },
-  "homepage": "https://github.com/luismeyer/CalendarFormatter#readme"
+  "homepage": "https://github.com/luismeyer/CalendarFormatter#readme",
+  "jest": {
+    "preset": "ts-jest"
+  }
 }

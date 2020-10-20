@@ -1,0 +1,32 @@
+{
+    "A123": {
+        "url": "SIMPLE_URL",
+        "password": "SIMPLE_PASSWORD",
+        "type": "BASIC"
+    },
+    "B123": {
+        "type": "DAY",
+        "0": {
+            "url": "RIGHT_URL",
+            "password": "RIGHT_PASS"
+        },
+        "5": {
+            "url": "WRONG_URL",
+            "password": "WRONG_PASS"
+        }
+    },
+    "C123": {
+      "type": "REGEX",
+      "values":[
+        {
+            "regex": "REGEX",
+            "url": "RIGHT_URL"
+        },
+        {
+            "regex": "WRONG",
+            "url": "WRONG_URL",
+            "password": "WRONG_PASS"
+        }
+    ]
+  }
+}

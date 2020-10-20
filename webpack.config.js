@@ -5,9 +5,22 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   entry: slsw.lib.entries,
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        use: "ts-loader",
+        exclude: [/node_modules/, /.test.ts/],
+      },
+    ],
+  },
+  resolve: {
+    extensions: [".ts", ".js"],
+  },
   target: "node",
   externals: [nodeExternals()],
   mode: "development",
+  devtool: "inline-source-map",
   output: {
     libraryTarget: "commonjs",
     path: path.join(__dirname, ".webpack"),
@@ -15,7 +28,10 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin({
-      patterns: [{ from: "./resources/meetings.json", to: "./resources" }],
+      patterns: [
+        { from: "./resources/*.json" },
+        { from: "./resources/*.html" },
+      ],
     }),
   ],
 };
