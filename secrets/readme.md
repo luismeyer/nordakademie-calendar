@@ -11,3 +11,9 @@ The secret.json file should look like this.
   "centuria": "A18b"
 }
 ```
+
+You can encrypt them running this command.
+
+```bash
+yarn encrypt --passphrase "<your passphrase>"
+```
