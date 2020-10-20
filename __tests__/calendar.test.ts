@@ -2,8 +2,13 @@ import { parseFile, parseICS } from "node-ical";
 import path from "path";
 import { addDays, format, startOfWeek } from "date-fns";
 
-import * as calendar from "../src/calendar";
-import { formatMensaTimetable } from "../src/calendar";
+import {
+  findSummary,
+  checkEventDifference,
+  formatCalendar,
+} from "../src/calendar/format";
+import { formatMensaTimetable, createMensaEvents } from "../src/calendar/mensa";
+import { findMeeting } from "../src/calendar/meeting";
 import { fetchMensaTimetable } from "../src/nak";
 
 const mockCalendar = parseFile(
@@ -11,22 +16,20 @@ const mockCalendar = parseFile(
 );
 
 test("finds veranstaltung", () => {
-  expect(calendar.findSummary("Veranstaltung: NAMENAME\nDozent:")).toBe(
-    "NAMENAME"
-  );
+  expect(findSummary("Veranstaltung: NAMENAME\nDozent:")).toBe("NAMENAME");
 });
 
 test("skips missing summarys", () => {
   Object.values(mockCalendar)[1].description = undefined;
 
-  expect(calendar.formatCalendar(mockCalendar)).toBeDefined();
+  expect(formatCalendar(mockCalendar)).toBeDefined();
 });
 
 test("formats calendar object", () => {
   Object.values(mockCalendar)[1].description =
     "Studiengruppe: A17a\nVeranstaltung: V A107 Programmierparadigmen\nDozent: Prof. Dr.-Ing. Brauer\nRaum: EDV-A101\nUhrzeit-Dauer: 9:15 - 12:30 Uhr (4:00 UE)\nAnmerkung: -";
 
-  const formattedCalendar = calendar.formatCalendar(mockCalendar);
+  const formattedCalendar = formatCalendar(mockCalendar);
   expect(formattedCalendar.events().length).toEqual(2);
   expect(formattedCalendar.events()[0].summary()).toBe("Programmierparadigmen");
 });
@@ -46,16 +49,16 @@ test("creates calendar events", () => {
     },
   ];
 
-  const cal = calendar.createMensaEvents(mockMensa);
+  const cal = createMensaEvents(mockMensa);
   expect(cal.events()[0]).toBeDefined();
   expect(cal.events()[0].summary()).toBe("Description 1");
 });
 
 test("checks event difference", () => {
-  const newCal = calendar.formatCalendar(mockCalendar);
+  const newCal = formatCalendar(mockCalendar);
   const oldCal = parseICS(newCal.toString());
 
-  expect(calendar.checkEventDifference(newCal, oldCal)).toStrictEqual([]);
+  expect(checkEventDifference(newCal, oldCal)).toStrictEqual([]);
   const [_, diffEvent] = Object.values(oldCal);
 
   diffEvent.end = {
@@ -63,24 +66,24 @@ test("checks event difference", () => {
     tz: "",
   };
 
-  expect(calendar.checkEventDifference(newCal, oldCal)).toStrictEqual([
+  expect(checkEventDifference(newCal, oldCal)).toStrictEqual([
     format(new Date(diffEvent.start as Date), "dd.MM.yyyy"),
   ]);
 });
 
 test("Handles meeting information", () => {
-  let result = calendar.findMeeting({ summary: "A123" });
+  let result = findMeeting({ summary: "A123" });
   expect(result).toContain("Url: SIMPLE_URL");
   expect(result).toContain("Password: SIMPLE_PASSWORD");
 
-  result = calendar.findMeeting({
+  result = findMeeting({
     start: startOfWeek(new Date()),
     summary: "B123",
   });
   expect(result).toContain("Url: RIGHT_URL");
   expect(result).toContain("Password: RIGHT_PASS");
 
-  result = calendar.findMeeting({ description: "REGEX", summary: "C123" });
+  result = findMeeting({ description: "REGEX", summary: "C123" });
   expect(result).toContain("Url: RIGHT_URL");
 });
 

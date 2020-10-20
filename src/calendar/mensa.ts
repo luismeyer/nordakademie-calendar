@@ -3,7 +3,7 @@ import generator from "ical-generator";
 import { JSDOM } from "jsdom";
 
 import { MensaWeek } from "../typings";
-import { formatInnerHtml } from "../utils";
+import { formatInnerHtml } from "../utils/html";
 
 export const createMensaEvents = (mensaTimetable: MensaWeek) => {
   const calendar = generator();
