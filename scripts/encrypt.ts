@@ -1,16 +1,16 @@
 import fs from "fs";
-import path from "path";
 import { exec as defaultExec } from "child_process";
 import meow from "meow";
 import { promisify } from "util";
 
+import {
+  MEETINGS,
+  SECRETS,
+  SECRETS_ENCRYPTED,
+  MEETINGS_ENCRYPTED,
+} from "../src/utils/constants";
+
 const exec = promisify(defaultExec);
-
-const SECRETS_INPUT = path.resolve(__dirname, "../secrets/secrets.json");
-const SECRETS_OUTPUT = path.resolve(__dirname, "../secrets/secrets.json.gpg");
-
-const MEETINGS_INPUT = path.resolve(__dirname, "../resources/meetings.json");
-const MEETINGS_OUTPUT = path.resolve(__dirname, "../secrets/meetings.json.gpg");
 
 const cli = meow(
   `
@@ -41,6 +41,6 @@ const enccryptFilePath = (filepath: string, outputPath: string) => {
   ).then((result) => console.log("Result: ", result));
 };
 
-enccryptFilePath(SECRETS_INPUT, SECRETS_OUTPUT).then(() =>
-  enccryptFilePath(MEETINGS_INPUT, MEETINGS_OUTPUT)
+enccryptFilePath(SECRETS, SECRETS_ENCRYPTED).then(() =>
+  enccryptFilePath(MEETINGS, MEETINGS_ENCRYPTED)
 );

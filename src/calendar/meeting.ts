@@ -1,19 +1,20 @@
 import fs from "fs";
+import path from "path";
 
 import { MeetingData } from "../typings";
+import { MEETINGS_PATH, MOCK_MEETINGS_PATH } from "../utils/constants";
 
 const meetings = (): MeetingData | undefined => {
   let data = "";
 
-  if (process.env.NODE_ENV === "test") {
-    data = fs
-      .readFileSync("../../__tests__/mockdata/mock-meetings.json")
-      .toString();
-  }
-
-  const meetingsPath = "../../resources/meetings.json";
+  const meetingsPath = path.resolve(MEETINGS_PATH);
   if (fs.existsSync(meetingsPath)) {
     data = fs.readFileSync(meetingsPath).toString();
+  }
+
+  if (process.env.NODE_ENV === "test") {
+    const filePath = MOCK_MEETINGS_PATH;
+    data = fs.readFileSync(filePath).toString();
   }
 
   return JSON.parse(data);
@@ -45,7 +46,7 @@ export const findMeeting = (params: {
 
   const meetingKeys = Object.keys(meetingsData);
   const key = meetingKeys.find(
-    (key) => summary.includes(key) || description?.includes(key)
+    (k) => summary.includes(k) || description?.includes(k)
   );
   if (!key) return;
 

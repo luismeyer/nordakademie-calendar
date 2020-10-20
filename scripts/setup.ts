@@ -5,15 +5,15 @@ import meow from "meow";
 import fs from "fs";
 
 import { Secrets } from "../src/typings";
-
 import { requestUrl, fetch } from "../src/telegram";
+import {
+  MEETINGS,
+  SECRETS,
+  SECRETS_ENCRYPTED,
+  MEETINGS_ENCRYPTED,
+} from "../src/utils/constants";
 
 const exec = promisify(defaultExec);
-const SECRETS_INPUT = path.resolve(__dirname, "../secrets/secrets.json.gpg");
-const SECRETS_OUTPUT = path.resolve(__dirname, "../secrets/secrets.json");
-
-const MEETINGS_INPUT = path.resolve(__dirname, "../secrets/meetings.json.gpg");
-const MEETINGS_OUTPUT = path.resolve(__dirname, "../resources/meetings.json");
 
 const cli = meow(
   `
@@ -50,7 +50,7 @@ const decryptFilePath = (filepath: string, outputPath: string) => () => {
 };
 
 const readSecrets = () => {
-  const secrets = fs.readFileSync(SECRETS_OUTPUT);
+  const secrets = fs.readFileSync(SECRETS);
   return JSON.parse(secrets.toString()) as Secrets;
 };
 
@@ -73,6 +73,6 @@ const fetchSetWebhook = () => {
 };
 
 start()
-  .then(decryptFilePath(MEETINGS_INPUT, MEETINGS_OUTPUT))
-  .then(decryptFilePath(SECRETS_INPUT, SECRETS_OUTPUT))
+  .then(decryptFilePath(MEETINGS_ENCRYPTED, MEETINGS))
+  .then(decryptFilePath(SECRETS_ENCRYPTED, SECRETS))
   .then(fetchSetWebhook);
