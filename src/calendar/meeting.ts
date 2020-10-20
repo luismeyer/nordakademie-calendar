@@ -1,15 +1,22 @@
+import fs from "fs";
+
 import { MeetingData } from "../typings";
 
 const meetings = (): MeetingData | undefined => {
-  try {
-    if (process.env.NODE_ENV === "test") {
-      return require("../../__tests__/mockdata/mock-meetings.json");
-    }
+  let data = "";
 
-    return require("../resources/meetings.json");
-  } catch (ex) {
-    console.log("No Meeting file found: ", ex);
+  if (process.env.NODE_ENV === "test") {
+    data = fs
+      .readFileSync("../../__tests__/mockdata/mock-meetings.json")
+      .toString();
   }
+
+  const meetingsPath = "../../resources/meetings.json";
+  if (fs.existsSync(meetingsPath)) {
+    data = fs.readFileSync(meetingsPath).toString();
+  }
+
+  return JSON.parse(data);
 };
 
 const formatMeeting = (url?: string, password?: string): string => {

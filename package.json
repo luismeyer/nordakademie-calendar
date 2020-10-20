@@ -35,14 +35,13 @@
   "scripts": {
     "invoke:timetable": "serverless invoke local -f timetableApi",
     "invoke:mensa": "serverless invoke local -f mensaApi",
-    "invoke:bot": "serverless invoke local -f bot -p ./resources/event.json",
+    "invoke:bot": "serverless invoke local -f bot -p ./__tests__/mockdata/mock-bot-event.json",
     "start": "serverless offline",
     "test": "jest",
     "coverage": "jest --coverage",
     "setup": "ts-node scripts/setup.ts",
     "telegram:info": "ts-node scripts/info.ts",
-    "encrypt": "ts-node scripts/encrypt.ts",
-    "remove:bucket": "rm -rf /tmp/nak-calendar-bucket"
+    "encrypt": "ts-node scripts/encrypt.ts"
   },
   "repository": {
     "type": "git",

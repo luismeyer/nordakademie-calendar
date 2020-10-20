@@ -1,10 +1,10 @@
 import { sendMessage } from "../telegram";
-import { isLocal } from "../utils";
+import { IS_LOCAL } from "../utils/constants";
 
 import { callTimetableApi, callMensaApi } from "../aws/lambda";
 
 export const handleTelegramRequest = async (event: any) => {
-  const body = isLocal() ? event.body : JSON.parse(event.body);
+  const body = IS_LOCAL ? event.body : JSON.parse(event.body);
   const { text, chat } = body.message;
   console.log("Received Message: ", text);
 

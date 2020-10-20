@@ -1,10 +1,10 @@
 import { Lambda } from "aws-sdk";
 
-import { isLocal } from "../utils";
+import { IS_LOCAL } from "../utils/constants";
 
 const lambda = new Lambda({
   region: "eu-central-1",
-  endpoint: isLocal() ? "http://localhost:3002" : undefined,
+  endpoint: IS_LOCAL ? "http://localhost:3002" : undefined,
 });
 
 export const callTimetableApi = () =>

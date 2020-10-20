@@ -1,10 +1,10 @@
 import { fetchMensaTimetable } from "../nak";
-import { createMensaEvents, formatMensaTimetable } from "../calendar";
 import { sendMessage } from "../telegram";
-import { Logger } from "../utils";
+import { renderPage } from "../render";
 
+import { createMensaEvents, formatMensaTimetable } from "../calendar/mensa";
+import { Logger } from "../utils/logger";
 import { uploadToS3 } from "../aws/bucket";
-import { renderPage } from "../frontend/render";
 
 const { CHAT_ID } = process.env;
 if (!CHAT_ID) throw new Error("Missing environment variable: CHAT_ID");

@@ -1,15 +1,13 @@
-import path from "path";
-import fs from "fs";
 import { CalendarResponse } from "node-ical";
 
 import { fetchCalendar } from "../nak";
-import { formatCalendar, checkEventDifference } from "../calendar";
+import { renderPage } from "../render";
 import { sendMessage } from "../telegram";
-import { Logger } from "../utils";
 
-import { fetchCalendarFile, uploadToS3 } from "../aws/bucket";
+import { Logger } from "../utils/logger";
 import { Batch } from "../typings/index";
-import { renderPage } from "../frontend/render";
+import { fetchCalendarFile, uploadToS3 } from "../aws/bucket";
+import { formatCalendar, checkEventDifference } from "../calendar/format";
 
 const { CHAT_ID } = process.env;
 if (!CHAT_ID) throw new Error("Missing environment variable: CHAT_ID");

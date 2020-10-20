@@ -2,7 +2,7 @@ import { S3 } from "aws-sdk";
 
 import ical from "node-ical";
 
-import { isLocal } from "../utils";
+import { IS_LOCAL } from "../utils/constants";
 
 const { BUCKET } = process.env;
 if (!BUCKET) throw new Error("Missing Environment Variable: BUCKET");
@@ -17,7 +17,7 @@ const localS3Params = {
   endpoint: "http://localhost:8000",
 };
 
-const s3 = isLocal() ? new S3(localS3Params) : new S3();
+const s3 = IS_LOCAL ? new S3(localS3Params) : new S3();
 
 export const uploadToS3 = (
   data: string,
@@ -72,6 +72,6 @@ export const calendarFileNames = async (bucket = BUCKET) => {
 };
 
 export const toBucketUrl = (item?: string) =>
-  isLocal()
+  IS_LOCAL
     ? `/${BUCKET}/${item}`
     : `https://${BUCKET}.s3.${REGION}.amazonaws.com/${item}`;
