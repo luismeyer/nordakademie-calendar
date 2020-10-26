@@ -1,4 +1,5 @@
-import { parseISO, subDays } from "date-fns";
+import { endOfDay, parse } from "date-fns";
+import { da, de } from "date-fns/locale";
 import generator from "ical-generator";
 import { JSDOM } from "jsdom";
 
@@ -9,7 +10,7 @@ export const createMensaEvents = (mensaTimetable: MensaWeek) => {
   const calendar = generator();
 
   mensaTimetable.forEach(({ main, second, date }) => {
-    const day = parseISO(date);
+    const start = endOfDay(date);
 
     const mainDescription = main ? `🥩  ${main.description} ${main.price}` : "";
     const secondDescription = second
@@ -18,8 +19,8 @@ export const createMensaEvents = (mensaTimetable: MensaWeek) => {
 
     calendar.createEvent({
       summary: main ? main.description : second.description,
-      start: subDays(day, 1),
-      end: day,
+      start,
+      allDay: true,
       description:
         mainDescription +
         (mainDescription && secondDescription ? "\n\n" : "") +
@@ -53,7 +54,10 @@ export const formatMensaTimetable = (mensaHtml: string) => {
       const unformattedDate = dates[index].textContent;
       if (!unformattedDate) return;
       const date = formatInnerHtml(unformattedDate);
-      const [day, month] = date.match(/\d{1,2}/g);
+
+      const parsedDate = parse(date, "EEEE, d.M.", new Date(), {
+        locale: de,
+      });
 
       const mainDish = main && {
         description: formatDescription(
@@ -74,7 +78,7 @@ export const formatMensaTimetable = (mensaHtml: string) => {
       };
 
       return {
-        date: `${new Date().getFullYear()}-${month}-${day}T22:00:00.000Z`,
+        date: parsedDate,
         main: mainDish,
         second: secondDish,
       };
