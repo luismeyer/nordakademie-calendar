@@ -45,7 +45,7 @@ test("creates calendar events", () => {
         description: "Description 2",
         price: "100",
       },
-      date: "2020-01-27",
+      date: new Date(),
     },
   ];
 

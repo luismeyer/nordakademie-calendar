@@ -1,7 +1,7 @@
 export type MensaWeek = MensaDay[];
 
 export type MensaDay = {
-  date: string;
+  date: Date;
   main: {
     description: string;
     price: string;
