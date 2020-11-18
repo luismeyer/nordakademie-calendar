@@ -4,7 +4,7 @@
 [![issues shield](https://img.shields.io/github/issues/luismeyer/nordakademie-calendar)](https://github.com/luismeyer/nordakademie-calendar/issues)
 ![repo size shield](https://img.shields.io/github/repo-size/luismeyer/nordakademie-calendar)
 
-Nordakademie-Calendar is an AWS Lambda that downloads the current Nordakademie timetable and formates the calendar entries every 6 hours.
+Nordakademie-Calendar is an AWS Lambda that downloads the current Nordakademie timetable and formates the calendar entries every day.
 
 ## Usage 📄
 

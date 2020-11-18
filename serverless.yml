@@ -53,7 +53,7 @@ functions:
   timetableApi:
     handler: src/handler.timetableFormatter
     events:
-      - schedule: cron(0 */12 * * ? *)
+      - schedule: cron(0 0 * * ? *)
     layers:
       - { Ref: Lib64LambdaLayer }
       - { Ref: CanvasLambdaLayer }
