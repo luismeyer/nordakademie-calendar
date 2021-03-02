@@ -1,4 +1,4 @@
-import { fetchCalendar, nakCalendarUrl, fetchMensaTimetable } from "../src/nak";
+import { fetchCalendar, fetchMensaTimetable, nakCalendarUrl } from "../src/nak";
 
 test("calendar url ends with filename ", () => {
   expect(nakCalendarUrl(3, "A18b").endsWith("A18b_3.ics")).toBe(true);
@@ -7,7 +7,7 @@ test("calendar url ends with filename ", () => {
 test("fetches calendar", async () => {
   const nakCal = await fetchCalendar("A18b");
   if (!nakCal) {
-    expect(nakCal).toBe(false);
+    expect(Boolean(nakCal)).toBe(false);
   } else {
     expect(typeof nakCal).toBe("object");
   }
