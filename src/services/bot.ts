@@ -1,5 +1,4 @@
 import { sendMessage } from "../telegram";
-import { IS_LOCAL } from "../utils/constants";
 
 import { callTimetableApi, callMensaApi } from "../aws/lambda";
 
@@ -19,13 +18,15 @@ export const handleTelegramRequest = async (event: any) => {
   console.log("Received Body: ", event.body);
 
   if (!event?.body) {
+    console.error("Missing Body");
     return response("Missing body", event?.body);
   }
 
   const body = JSON.parse(event.body);
 
-  if (!event.message || !event.message.text || !event.message.chat) {
-    return response("Missing telegram message", body);
+  if (!body.message || !body.message.text || !body.message.chat) {
+    console.error("Missing correct telegram message");
+    return response("Missing correct telegram message", body);
   }
 
   const { text, chat } = body.message;

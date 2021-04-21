@@ -1,6 +1,5 @@
-org: luismeyer
 service: calendar-formatter
-app: calendar-formatter
+frameworkVersion: '2'
 
 provider:
   name: aws
@@ -34,10 +33,6 @@ custom:
   s3:
     port: 8000
     directory: /tmp
-  customDomain:
-    domainName: ${file(./secrets/secrets.json):domain}
-    createRoute53Record: true
-    stage: ${self:provider.stage}
   webpack:
     webpackConfig: "./webpack.config.js"
     includeModules: true
@@ -46,7 +41,6 @@ custom:
 plugins:
   - serverless-s3-local
   - serverless-offline
-  - serverless-domain-manager
   - serverless-webpack
 
 functions:
