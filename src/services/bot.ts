@@ -3,8 +3,31 @@ import { IS_LOCAL } from "../utils/constants";
 
 import { callTimetableApi, callMensaApi } from "../aws/lambda";
 
+const response = (message: string, json: string) => ({
+  statusCode: 200,
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Credentials": true,
+  },
+  body: JSON.stringify({
+    message,
+    json,
+  }),
+});
+
 export const handleTelegramRequest = async (event: any) => {
-  const body = IS_LOCAL ? event.body : JSON.parse(event.body);
+  console.log("Received Body: ", event.body);
+
+  if (!event?.body) {
+    return response("Missing body", event?.body);
+  }
+
+  const body = JSON.parse(event.body);
+
+  if (!event.message || !event.message.text || !event.message.chat) {
+    return response("Missing telegram message", body);
+  }
+
   const { text, chat } = body.message;
   console.log("Received Message: ", text);
 
