@@ -3,8 +3,14 @@ import { da, de } from "date-fns/locale";
 import generator from "ical-generator";
 import { JSDOM } from "jsdom";
 
-import { MensaWeek } from "../typings";
+import { MensaDay, MensaWeek } from "../typings";
 import { formatInnerHtml } from "../utils/html";
+
+const DAY_CONTAINER_CLASS = ".speiseplan-tag-container";
+const DESCRIPTION_CLASS = ".speiseplan-kurzbeschreibung";
+const PRICE_CLASS = ".speiseplan-preis";
+const TABLE_HEAD_CLASS = "td.speiseplan-head";
+const MEAL_CLASS = ".gericht";
 
 export const createMensaEvents = (mensaTimetable: MensaWeek) => {
   const calendar = generator();
@@ -38,16 +44,18 @@ const formatDescription = (description: string) =>
 const formatMensaPrice = (priceString: string) =>
   priceString.replace("Eur", "€");
 
-export const formatMensaTimetable = (mensaHtml: string) => {
+export const formatMensaTimetable = (mensaHtml: string): MensaWeek => {
   if (!mensaHtml) return [];
 
   const { document } = new JSDOM(mensaHtml).window;
-  const days = document.querySelectorAll(".speiseplan-tag-container");
-  const dates = Array.from(document.querySelectorAll("td.speiseplan-head"));
+  const days = document.querySelectorAll(DAY_CONTAINER_CLASS);
+  const dates = Array.from(document.querySelectorAll(TABLE_HEAD_CLASS));
 
   return Array.from(days)
-    .map((column, index) => {
-      const [main, second] = Array.from(column.querySelectorAll(".gericht"));
+    .map((column, index): MensaDay | undefined => {
+      const [main, second] = Array.from(
+        column.querySelectorAll<HTMLTableRowElement>(MEAL_CLASS)
+      );
 
       if (!main && !second) return;
 
@@ -59,21 +67,21 @@ export const formatMensaTimetable = (mensaHtml: string) => {
         locale: de,
       });
 
-      const mainDish = main && {
+      const mainDish = {
         description: formatDescription(
-          main.querySelector(".speiseplan-kurzbeschreibung").textContent
+          main?.querySelector(DESCRIPTION_CLASS)?.textContent ?? ""
         ),
         price: formatMensaPrice(
-          formatInnerHtml(main.querySelector(".speiseplan-preis").textContent)
+          formatInnerHtml(main?.querySelector(PRICE_CLASS)?.textContent ?? "")
         ),
       };
 
-      const secondDish = second && {
+      const secondDish = {
         description: formatDescription(
-          second.querySelector(".speiseplan-kurzbeschreibung").textContent
+          second?.querySelector(DESCRIPTION_CLASS)?.textContent ?? ""
         ),
         price: formatMensaPrice(
-          formatInnerHtml(second.querySelector(".speiseplan-preis").textContent)
+          formatInnerHtml(second?.querySelector(PRICE_CLASS)?.textContent ?? "")
         ),
       };
 
@@ -83,5 +91,5 @@ export const formatMensaTimetable = (mensaHtml: string) => {
         second: secondDish,
       };
     })
-    .filter((value) => value !== undefined) as MensaWeek;
+    .filter((value): value is MensaDay => value !== undefined);
 };

@@ -20,14 +20,6 @@ provider:
     CHAT_ID: ${file(./secrets/secrets.json):chatId}
     CENTURIA: ${file(./secrets/secrets.json):centuria}
 
-layers:
-  lib64:
-    path: layers/lib64-canvas-layer
-  canvas:
-    path: layers/node-canvas-layer
-  request:
-    path: layers/node-request-layer
-
 custom:
   bucket: ${file(./secrets/secrets.json):bucket}
   s3:
@@ -48,18 +40,10 @@ functions:
     handler: src/handler.timetableFormatter
     events:
       - schedule: cron(0 0 * * ? *)
-    layers:
-      - { Ref: Lib64LambdaLayer }
-      - { Ref: CanvasLambdaLayer }
-      - { Ref: RequestLambdaLayer }
   mensaApi:
     handler: src/handler.mensaFormatter
     events:
       - schedule: cron(0 0 * * ? *)
-    layers:
-      - { Ref: Lib64LambdaLayer }
-      - { Ref: CanvasLambdaLayer }
-      - { Ref: RequestLambdaLayer }
   bot:
     handler: src/handler.bot
     events:
@@ -67,10 +51,6 @@ functions:
           path: bot
           method: ANY
           cors: true
-    layers:
-      - { Ref: Lib64LambdaLayer }
-      - { Ref: CanvasLambdaLayer }
-      - { Ref: RequestLambdaLayer }
 
 resources:
   Resources:
