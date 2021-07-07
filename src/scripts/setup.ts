@@ -1,17 +1,14 @@
-import { promisify } from "util";
-import { exec as defaultExec } from "child_process";
-import { Command } from "commander";
-import fs from "fs";
+import { exec as defaultExec } from 'child_process';
+import { Command } from 'commander';
+import fs from 'fs';
+import { promisify } from 'util';
 
-import { Secrets } from "../typings";
-import { requestUrl, fetch } from "../telegram";
+import { fetch, requestUrl } from '../telegram';
+import { Secrets } from '../typings';
 import {
-  MEETINGS_PATH,
-  SECRETS,
-  SECRETS_ENCRYPTED,
-  MEETINGS_PATH_ENCRYPTED,
-} from "../utils/constants";
-import { readJSON } from "src/utils/json";
+    MEETINGS_PATH, MEETINGS_PATH_ENCRYPTED, SECRETS, SECRETS_ENCRYPTED
+} from '../utils/constants';
+import { readJSON } from '../utils/json';
 
 const exec = promisify(defaultExec);
 

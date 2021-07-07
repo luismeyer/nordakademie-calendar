@@ -1,4 +1,4 @@
-import nodeFetch, { RequestInit } from "node-fetch";
+import nodeFetch, { RequestInit } from 'node-fetch';
 
 const { BOT_TOKEN, IS_LOCAL } = process.env;
 

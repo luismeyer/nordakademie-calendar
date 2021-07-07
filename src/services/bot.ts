@@ -1,6 +1,5 @@
-import { sendMessage } from "../telegram";
-
-import { callTimetableApi, callMensaApi } from "../aws/lambda";
+import { callMensaApi, callTimetableApi } from '../aws/lambda';
+import { sendMessage } from '../telegram';
 
 const { IS_OFFLINE, IS_LOCAL } = process.env;
 

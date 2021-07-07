@@ -1,8 +1,7 @@
-import { S3 } from "aws-sdk";
+import { S3 } from 'aws-sdk';
+import ical from 'node-ical';
 
-import ical from "node-ical";
-
-import { IS_LOCAL } from "../utils/constants";
+import { IS_LOCAL } from '../utils/constants';
 
 const { BUCKET } = process.env;
 if (!BUCKET) throw new Error("Missing Environment Variable: BUCKET");

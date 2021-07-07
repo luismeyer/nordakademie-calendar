@@ -1,15 +1,11 @@
-import { parseFile, parseICS } from "node-ical";
-import path from "path";
-import { addDays, format, startOfWeek } from "date-fns";
+import { addDays, format, startOfWeek } from 'date-fns';
+import { parseFile, parseICS } from 'node-ical';
+import path from 'path';
 
-import {
-  findSummary,
-  checkEventDifference,
-  formatCalendar,
-} from "../calendar/format";
-import { formatMensaTimetable, createMensaEvents } from "../calendar/mensa";
-import { findMeeting } from "../calendar/meeting";
-import { fetchMensaTimetable } from "../nak";
+import { checkEventDifference, findSummary, formatCalendar } from '../calendar/format';
+import { findMeeting } from '../calendar/meeting';
+import { createMensaEvents, formatMensaTimetable } from '../calendar/mensa';
+import { fetchMensaTimetable } from '../nak';
 
 const mockCalendar = parseFile(
   path.resolve(__dirname, "mockdata/mock-calendar.ics")

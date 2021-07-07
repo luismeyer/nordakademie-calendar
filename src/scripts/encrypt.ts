@@ -1,14 +1,11 @@
-import fs from "fs";
-import { exec as defaultExec } from "child_process";
-import { Command } from "commander";
-import { promisify } from "util";
+import { exec as defaultExec } from 'child_process';
+import { Command } from 'commander';
+import fs from 'fs';
+import { promisify } from 'util';
 
 import {
-  MEETINGS_PATH,
-  SECRETS,
-  SECRETS_ENCRYPTED,
-  MEETINGS_PATH_ENCRYPTED,
-} from "../utils/constants";
+    MEETINGS_PATH, MEETINGS_PATH_ENCRYPTED, SECRETS, SECRETS_ENCRYPTED
+} from '../utils/constants';
 
 const exec = promisify(defaultExec);
 

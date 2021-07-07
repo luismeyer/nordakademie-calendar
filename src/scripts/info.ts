@@ -1,6 +1,6 @@
-import { fetch, requestUrl } from "../telegram";
-import { SECRETS } from "../utils/constants";
-import { readJSON } from "../utils/json";
+import { fetch, requestUrl } from '../telegram';
+import { SECRETS } from '../utils/constants';
+import { readJSON } from '../utils/json';
 
 (async () => {
   const secrets = readJSON(SECRETS);

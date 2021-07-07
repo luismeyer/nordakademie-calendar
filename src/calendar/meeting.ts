@@ -1,8 +1,8 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
-import { MeetingData } from "../typings";
-import { MEETINGS_PATH, MOCK_MEETINGS_PATH } from "../utils/constants";
+import { MeetingData } from '../typings';
+import { MEETINGS_PATH, MOCK_MEETINGS_PATH } from '../utils/constants';
 
 const meetings = (): MeetingData | undefined => {
   let data = "";

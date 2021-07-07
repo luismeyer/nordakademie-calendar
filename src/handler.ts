@@ -1,11 +1,8 @@
-import { handleTelegramRequest } from "./services/bot";
-import { formatMensaCalendar } from "./services/mensa";
-import {
-  createBatchTimetable,
-  createSingleTimetable,
-} from "./services/timetable";
-import { MODULES_PATH } from "./utils/constants";
-import { readJSON } from "./utils/json";
+import { handleTelegramRequest } from './services/bot';
+import { formatMensaCalendar } from './services/mensa';
+import { createBatchTimetable, createSingleTimetable } from './services/timetable';
+import { MODULES_PATH } from './utils/constants';
+import { readJSON } from './utils/json';
 
 const { modules } = readJSON(MODULES_PATH);
 

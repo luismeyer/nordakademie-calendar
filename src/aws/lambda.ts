@@ -1,6 +1,6 @@
-import { Lambda } from "aws-sdk";
+import { Lambda } from 'aws-sdk';
 
-import { IS_LOCAL } from "../utils/constants";
+import { IS_LOCAL } from '../utils/constants';
 
 const lambda = new Lambda({
   region: "eu-central-1",

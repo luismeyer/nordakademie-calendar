@@ -1,4 +1,4 @@
-import { isValidUrl, formatInnerHtml } from "../utils/html";
+import { formatInnerHtml, isValidUrl } from '../utils/html';
 
 test("validates url", async () => {
   expect(await isValidUrl("https://google.com")).toBe(true);

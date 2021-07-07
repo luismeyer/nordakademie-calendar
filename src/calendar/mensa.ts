@@ -1,10 +1,10 @@
-import { endOfDay, parse } from "date-fns";
-import { da, de } from "date-fns/locale";
-import generator from "ical-generator";
-import { JSDOM } from "jsdom";
+import { endOfDay, parse } from 'date-fns';
+import { da, de } from 'date-fns/locale';
+import generator from 'ical-generator';
+import { JSDOM } from 'jsdom';
 
-import { MensaDay, MensaWeek } from "../typings";
-import { formatInnerHtml } from "../utils/html";
+import { MensaDay, MensaWeek } from '../typings';
+import { formatInnerHtml } from '../utils/html';
 
 const DAY_CONTAINER_CLASS = ".speiseplan-tag-container";
 const DESCRIPTION_CLASS = ".speiseplan-kurzbeschreibung";

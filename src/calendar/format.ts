@@ -1,8 +1,8 @@
-import { format, isEqual } from "date-fns";
-import generator, { ICalCalendar } from "ical-generator";
-import { CalendarResponse, DateWithTimeZone } from "node-ical";
+import { format, isEqual } from 'date-fns';
+import generator, { ICalCalendar } from 'ical-generator';
+import { CalendarResponse, DateWithTimeZone } from 'node-ical';
 
-import { findMeeting } from "./meeting";
+import { findMeeting } from './meeting';
 
 export const findSummary = (description: string) => {
   const startString = "Veranstaltung: ";

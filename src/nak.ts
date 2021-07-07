@@ -1,7 +1,7 @@
-import ical from "node-ical";
-import fetch from "node-fetch";
+import fetch from 'node-fetch';
+import ical from 'node-ical';
 
-import { isValidUrl } from "./utils/html";
+import { isValidUrl } from './utils/html';
 
 export const nakCalendarUrl = (semester: number, centuria?: string) => {
   if (!centuria) {

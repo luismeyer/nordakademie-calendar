@@ -1,4 +1,4 @@
-import path from "path";
+import path from 'path';
 
 const { IS_LOCAL: LOCAL, IS_OFFLINE } = process.env;
 

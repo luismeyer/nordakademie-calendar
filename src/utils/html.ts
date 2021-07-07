@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+import fetch from 'node-fetch';
 
 export const isValidUrl = (url: string) =>
   fetch(url).then((res) => Math.floor(res.status / 100) === 2);
