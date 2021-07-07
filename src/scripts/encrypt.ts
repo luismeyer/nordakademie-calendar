@@ -4,11 +4,11 @@ import { Command } from "commander";
 import { promisify } from "util";
 
 import {
-  MEETINGS,
+  MEETINGS_PATH,
   SECRETS,
   SECRETS_ENCRYPTED,
-  MEETINGS_ENCRYPTED,
-} from "../src/utils/constants";
+  MEETINGS_PATH_ENCRYPTED,
+} from "../utils/constants";
 
 const exec = promisify(defaultExec);
 
@@ -29,5 +29,5 @@ const enccryptFilePath = async (filepath: string, outputPath: string) => {
 };
 
 enccryptFilePath(SECRETS, SECRETS_ENCRYPTED).then(() =>
-  enccryptFilePath(MEETINGS, MEETINGS_ENCRYPTED)
+  enccryptFilePath(MEETINGS_PATH, MEETINGS_PATH_ENCRYPTED)
 );

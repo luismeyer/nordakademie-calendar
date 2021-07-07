@@ -29,13 +29,15 @@
   "scripts": {
     "invoke:timetable": "serverless invoke local -f timetableApi",
     "invoke:mensa": "serverless invoke local -f mensaApi",
-    "invoke:bot": "serverless invoke local -f bot -p ./__tests__/mockdata/mock-bot-event.json",
+    "invoke:bot": "serverless invoke local -f bot -p ./src/__tests__/mockdata/mock-bot-event.json",
     "start": "serverless offline",
-    "test": "jest",
-    "coverage": "jest --coverage",
-    "setup": "ts-node scripts/setup.ts",
-    "telegram:info": "ts-node scripts/info.ts",
-    "encrypt": "ts-node scripts/encrypt.ts"
+    "watch": "tsc -w",
+    "build": "tsc",
+    "test": "jest ./src",
+    "coverage": "jest ./src --coverage",
+    "setup": "ts-node src/scripts/setup.ts",
+    "telegram:info": "ts-node src/scripts/info.ts",
+    "encrypt": "ts-node src/scripts/encrypt.ts"
   },
   "repository": {
     "type": "git",

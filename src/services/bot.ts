@@ -2,6 +2,8 @@ import { sendMessage } from "../telegram";
 
 import { callTimetableApi, callMensaApi } from "../aws/lambda";
 
+const { IS_OFFLINE, IS_LOCAL } = process.env;
+
 const response = (message: string, json: string) => ({
   statusCode: 200,
   headers: {
@@ -22,7 +24,7 @@ export const handleTelegramRequest = async (event: any) => {
     return response("Missing body", event?.body);
   }
 
-  const body = JSON.parse(event.body);
+  const body = IS_OFFLINE || IS_LOCAL ? event.body : JSON.parse(event.body);
 
   if (!body.message || !body.message.text || !body.message.chat) {
     console.error("Missing correct telegram message");

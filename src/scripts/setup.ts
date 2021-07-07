@@ -1,17 +1,17 @@
-import path from "path";
 import { promisify } from "util";
 import { exec as defaultExec } from "child_process";
 import { Command } from "commander";
 import fs from "fs";
 
-import { Secrets } from "../src/typings";
-import { requestUrl, fetch } from "../src/telegram";
+import { Secrets } from "../typings";
+import { requestUrl, fetch } from "../telegram";
 import {
-  MEETINGS,
+  MEETINGS_PATH,
   SECRETS,
   SECRETS_ENCRYPTED,
-  MEETINGS_ENCRYPTED,
-} from "../src/utils/constants";
+  MEETINGS_PATH_ENCRYPTED,
+} from "../utils/constants";
+import { readJSON } from "src/utils/json";
 
 const exec = promisify(defaultExec);
 
@@ -36,9 +36,8 @@ const decryptFilePath = (filepath: string, outputPath: string) => () => {
   ).then((result) => console.log("Result: ", result));
 };
 
-const readSecrets = () => {
-  const secrets = fs.readFileSync(SECRETS);
-  return JSON.parse(secrets.toString()) as Secrets;
+const readSecrets = (): Secrets => {
+  return readJSON(SECRETS);
 };
 
 const fetchSetWebhook = () => {
@@ -60,6 +59,6 @@ const fetchSetWebhook = () => {
 };
 
 start()
-  .then(decryptFilePath(MEETINGS_ENCRYPTED, MEETINGS))
+  .then(decryptFilePath(MEETINGS_PATH_ENCRYPTED, MEETINGS_PATH))
   .then(decryptFilePath(SECRETS_ENCRYPTED, SECRETS))
   .then(fetchSetWebhook);

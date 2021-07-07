@@ -6,10 +6,10 @@ import {
   findSummary,
   checkEventDifference,
   formatCalendar,
-} from "../src/calendar/format";
-import { formatMensaTimetable, createMensaEvents } from "../src/calendar/mensa";
-import { findMeeting } from "../src/calendar/meeting";
-import { fetchMensaTimetable } from "../src/nak";
+} from "../calendar/format";
+import { formatMensaTimetable, createMensaEvents } from "../calendar/mensa";
+import { findMeeting } from "../calendar/meeting";
+import { fetchMensaTimetable } from "../nak";
 
 const mockCalendar = parseFile(
   path.resolve(__dirname, "mockdata/mock-calendar.ics")

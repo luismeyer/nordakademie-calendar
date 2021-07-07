@@ -1,11 +1,13 @@
-import { modules } from "../resources/modules.json";
-
+import { handleTelegramRequest } from "./services/bot";
+import { formatMensaCalendar } from "./services/mensa";
 import {
   createBatchTimetable,
   createSingleTimetable,
 } from "./services/timetable";
-import { formatMensaCalendar } from "./services/mensa";
-import { handleTelegramRequest } from "./services/bot";
+import { MODULES_PATH } from "./utils/constants";
+import { readJSON } from "./utils/json";
+
+const { modules } = readJSON(MODULES_PATH);
 
 // TimeTable Api Handler
 export const timetableFormatter = async () => {

@@ -1,7 +1,10 @@
-import { fetch, requestUrl } from "../src/telegram";
-import secrets from "../secrets/secrets.json";
+import { fetch, requestUrl } from "../telegram";
+import { SECRETS } from "../utils/constants";
+import { readJSON } from "../utils/json";
 
 (async () => {
+  const secrets = readJSON(SECRETS);
+
   const url = requestUrl(secrets.token, "getWebhookInfo");
 
   const res = await fetch(url, {

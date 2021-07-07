@@ -3,6 +3,7 @@ frameworkVersion: '2'
 
 provider:
   name: aws
+  lambdaHashingVersion: 20201221
   runtime: nodejs14.x
   stage: dev
   region: eu-central-1
@@ -27,10 +28,6 @@ custom:
   s3:
     port: 8000
     directory: /tmp
-  webpack:
-    webpackConfig: "./webpack.config.js"
-    includeModules: true
-    packager: "yarn"
 
 plugins:
   - serverless-s3-local
@@ -38,15 +35,15 @@ plugins:
 
 functions:
   timetableApi:
-    handler: src/handler.timetableFormatter
+    handler: lib/handler.timetableFormatter
     events:
       - schedule: cron(0 0 * * ? *)
   mensaApi:
-    handler: src/handler.mensaFormatter
+    handler: lib/handler.mensaFormatter
     events:
       - schedule: cron(0 0 * * ? *)
   bot:
-    handler: src/handler.bot
+    handler: lib/handler.bot
     events:
       - http:
           path: bot

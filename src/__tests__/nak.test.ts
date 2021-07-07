@@ -1,4 +1,4 @@
-import { fetchCalendar, fetchMensaTimetable, nakCalendarUrl } from "../src/nak";
+import { fetchCalendar, fetchMensaTimetable, nakCalendarUrl } from "../nak";
 
 test("calendar url ends with filename ", () => {
   expect(nakCalendarUrl(3, "A18b").endsWith("A18b_3.ics")).toBe(true);
