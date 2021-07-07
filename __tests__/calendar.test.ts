@@ -93,13 +93,15 @@ test("formatMensaTimetable: catches missing mensa html", () => {
   expect(formattedTimetable.length).toBe(0);
 });
 
-test("formatMensaTimetable: formats mensa html string", async (cb) => {
+test("formatMensaTimetable: formats mensa html string", async () => {
   const html = await fetchMensaTimetable();
   const mensa = formatMensaTimetable(html);
-  if (!mensa.length) return;
+  if (!mensa.length) {
+    return;
+  }
 
   expect(Array.isArray(mensa)).toBe(true);
   expect(typeof mensa[0].main.description).toBeDefined();
   expect(mensa[0].date).toBeDefined();
-  cb();
+  return;
 });

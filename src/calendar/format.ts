@@ -90,5 +90,5 @@ export const checkEventDifference = (
       );
     })
 
-    .map((event) => format(event.start().toDate(), "dd.MM.yyyy"));
+    .map((event) => format(event.start(), "dd.MM.yyyy"));
 };
