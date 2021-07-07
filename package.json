@@ -19,17 +19,12 @@
     "@types/node-fetch": "^2.5.11",
     "aws-sdk": "^2.941.0",
     "commander": "^8.0.0",
-    "copy-webpack-plugin": "^9.0.1",
     "jest": "^27.0.6",
     "serverless-offline": "^7.0.0",
     "serverless-s3-local": "^0.6.18",
-    "serverless-webpack": "^5.5.1",
     "ts-jest": "^27.0.3",
-    "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
-    "typescript": "^4.3.5",
-    "webpack": "^5.43.0",
-    "webpack-node-externals": "^3.0.0"
+    "typescript": "^4.3.5"
   },
   "scripts": {
     "invoke:timetable": "serverless invoke local -f timetableApi",

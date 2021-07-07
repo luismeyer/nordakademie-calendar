@@ -3,7 +3,7 @@ frameworkVersion: '2'
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   stage: dev
   region: eu-central-1
   timeout: 20
@@ -35,7 +35,6 @@ custom:
 plugins:
   - serverless-s3-local
   - serverless-offline
-  - serverless-webpack
 
 functions:
   timetableApi:

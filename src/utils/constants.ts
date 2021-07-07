@@ -6,7 +6,6 @@ export const IS_LOCAL = LOCAL || IS_OFFLINE;
 
 export const RESOURCES_DIR = path.resolve(__dirname, "../resources");
 
-// Path during runtime in the .webpack folder
 export const MEETINGS_PATH = path.resolve(RESOURCES_DIR, "meetings.json");
 export const MOCK_MEETINGS_PATH = path.resolve(
   __dirname,
