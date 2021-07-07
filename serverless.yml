@@ -7,12 +7,14 @@ provider:
   stage: dev
   region: eu-central-1
   timeout: 20
-  iamRoleStatements:
-    - Effect: "Allow"
-      Action:
-        - s3:*
-        - lambda:InvokeFunction
-      Resource: "*"
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - s3:*
+            - lambda:InvokeFunction
+          Resource: "*"
   environment:
     REGION: ${opt:region, self:provider.region}
     BUCKET: ${self:custom.bucket}

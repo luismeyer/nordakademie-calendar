@@ -1,7 +1,7 @@
 import path from "path";
 import { promisify } from "util";
 import { exec as defaultExec } from "child_process";
-import meow from "meow";
+import { Command } from "commander";
 import fs from "fs";
 
 import { Secrets } from "../src/typings";
@@ -15,24 +15,11 @@ import {
 
 const exec = promisify(defaultExec);
 
-const cli = meow(
-  `
-    Usage
-      $ setup [options]
-    Options
-      --passphrase, -p  Passphrase to decode secret files
-`,
-  {
-    flags: {
-      passphrase: {
-        type: "string",
-        alias: "p",
-      },
-    },
-  }
-);
+const program = new Command();
+program.option("-p, --passphrase", "Passphrase to encrypt secret files");
+program.parse(process.argv);
 
-const { passphrase } = cli.flags;
+const { passphrase } = program.opts();
 if (!passphrase) throw new Error("Missing flag: PASSPHRASE");
 
 const start = () => {

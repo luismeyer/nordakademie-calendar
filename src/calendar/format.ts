@@ -24,7 +24,7 @@ export const formatCalendar = (calendar: CalendarResponse, filter?: string) => {
   const calendarGenerator = generator();
   const events = Object.values(calendar);
 
-  events.forEach(({ location, description, start, ...rest }) => {
+  events.forEach(({ location, description, start, end }) => {
     if (!description || typeof description !== "string") {
       return;
     }
@@ -49,9 +49,9 @@ export const formatCalendar = (calendar: CalendarResponse, filter?: string) => {
     const room = location ? `${location}, ` : "";
 
     calendarGenerator.createEvent({
-      ...rest,
       sequence: 0,
       start: parsedStart,
+      end,
       location: room + "Nordakademie Elmshorn, 25337",
       description: `${meeting ? meeting : ""}${description}`,
       summary: formatSummary(summary),
