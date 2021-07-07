@@ -5,7 +5,6 @@ import { renderPage } from "../render";
 import { sendMessage } from "../telegram";
 
 import { Logger } from "../utils/logger";
-import { Batch } from "../typings/index";
 import { fetchCalendarFile, uploadToS3 } from "../aws/bucket";
 import { formatCalendar, checkEventDifference } from "../calendar/format";
 
@@ -14,7 +13,7 @@ if (!CHAT_ID) throw new Error("Missing environment variable: CHAT_ID");
 
 const send = (msg: string) => sendMessage(CHAT_ID, msg);
 
-const format = async (
+const createTimetable = async (
   nakCal: CalendarResponse,
   filename: string,
   filter?: string
@@ -42,7 +41,12 @@ const format = async (
   return renderPage();
 };
 
-export const formatBatchCalendar = async (batch: Batch) => {
+const filenameForFilter = (filter: string) => {
+  const parsed = filter.replace(/�/g, "").replace(/\s+/g, "-");
+  return encodeURIComponent(parsed) + ".ics";
+};
+
+export const createBatchTimetable = async (batch: string[]) => {
   Logger.print(`BATCH: Fetching timetable`);
   const nakCal = await fetchCalendar();
 
@@ -51,11 +55,13 @@ export const formatBatchCalendar = async (batch: Batch) => {
   }
 
   return Promise.all(
-    batch.map(({ filename, filter }) => format(nakCal, filename, filter))
+    batch.map((filter) =>
+      createTimetable(nakCal, filenameForFilter(filter), filter)
+    )
   );
 };
 
-export const formatSingleCalendar = async (filename: string) => {
+export const createSingleTimetable = async (filename: string = "NAK.ics") => {
   Logger.print(`${filename}: Fetching timetable`);
   const nakCal = await fetchCalendar();
 
@@ -63,5 +69,5 @@ export const formatSingleCalendar = async (filename: string) => {
     return await send(`${filename}: kein aktuellen kalendar gefunden`);
   }
 
-  return format(nakCal, filename);
+  return createTimetable(nakCal, filename);
 };

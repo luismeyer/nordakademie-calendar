@@ -1,16 +1,17 @@
 import { modules } from "../resources/modules.json";
 
 import {
-  formatBatchCalendar,
-  formatSingleCalendar,
+  createBatchTimetable,
+  createSingleTimetable,
 } from "./services/timetable";
 import { formatMensaCalendar } from "./services/mensa";
 import { handleTelegramRequest } from "./services/bot";
 
 // TimeTable Api Handler
 export const timetableFormatter = async () => {
-  await formatBatchCalendar(modules);
-  return await formatSingleCalendar("NAK.ics");
+  await createBatchTimetable(modules);
+
+  return await createSingleTimetable();
 };
 
 // Mensa Api Handler

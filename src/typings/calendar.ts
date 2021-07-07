@@ -6,8 +6,3 @@ export type Secrets = {
   centuria: string;
   passphrase: string;
 };
-
-export type Batch = {
-  filter: string;
-  filename: string;
-}[];

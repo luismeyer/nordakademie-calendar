@@ -10,34 +10,51 @@ export const findSummary = (description: string) => {
 
   const startIndex = description.indexOf(startString) + startString.length;
   const endIndex = description.indexOf(endString);
-  return description
-    .substring(startIndex, endIndex)
-    .replace(/([A-Z] [A-Z]\d{3} )|WP /, "");
+  return description.substring(startIndex, endIndex);
+};
+
+const formatSummary = (summary: string) => {
+  return summary
+    .replace(/([A-Z] [A-Z]\d{3} )/, "")
+    .replace(/WP/g, "")
+    .trim();
 };
 
 export const formatCalendar = (calendar: CalendarResponse, filter?: string) => {
   const calendarGenerator = generator();
   const events = Object.values(calendar);
 
-  events.forEach(({ location, description: d, start: s, ...rest }) => {
-    if (!d) return;
-    const description = d as string;
-    const start = new Date(s as DateWithTimeZone);
+  events.forEach(({ location, description, start, ...rest }) => {
+    if (!description || typeof description !== "string") {
+      return;
+    }
 
-    const summary = findSummary(description as string);
+    if (!start) {
+      return;
+    }
+
+    const parsedStart = new Date(start as DateWithTimeZone);
+
+    const summary = findSummary(description);
     if (summary.startsWith("WP") && filter && !summary.includes(filter)) {
       return;
     }
 
-    const meeting = findMeeting({ start, description, summary });
+    const meeting = findMeeting({
+      start: parsedStart,
+      description,
+      summary,
+    });
+
+    const room = location ? `${location}, ` : "";
 
     calendarGenerator.createEvent({
       ...rest,
       sequence: 0,
-      start,
-      location: (location && `${location}, `) + "Nordakademie Elmshorn, 25337",
-      description: `${meeting}${description}`,
-      summary,
+      start: parsedStart,
+      location: room + "Nordakademie Elmshorn, 25337",
+      description: `${meeting ? meeting : ""}${description}`,
+      summary: formatSummary(summary),
     });
   });
 
