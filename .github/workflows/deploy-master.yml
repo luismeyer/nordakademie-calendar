@@ -25,6 +25,9 @@ jobs:
 
       - name: Run app setup
         run: yarn setup --passphrase ${{ secrets.PASSPHRASE }}
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          DOMAIN: ${{ secrets.DOMAIN }}
 
       - name: Run tests
         run: yarn test
@@ -39,3 +42,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          BUCKET: ${{ secrets.BUCKET }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          CENTURIA: ${{ secrets.CENTURIA }}

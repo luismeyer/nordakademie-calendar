@@ -1,11 +1,13 @@
-import { fetch, requestUrl } from '../telegram';
-import { SECRETS } from '../utils/constants';
-import { readJSON } from '../utils/json';
+import { fetch, requestUrl } from "../telegram";
 
 (async () => {
-  const secrets = readJSON(SECRETS);
+  const { BOT_TOKEN, DOMAIN } = process.env;
 
-  const url = requestUrl(secrets.token, "getWebhookInfo");
+  if (!BOT_TOKEN) {
+    throw new Error("Missing 'BOT_TOKEN'");
+  }
+
+  const url = requestUrl(BOT_TOKEN, "getWebhookInfo");
 
   const res = await fetch(url, {
     method: "post",
@@ -13,8 +15,9 @@ import { readJSON } from '../utils/json';
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      url: `https://${secrets.domain}/bot`,
+      url: `https://${DOMAIN}/bot`,
     }),
   });
+
   console.info(res);
 })();

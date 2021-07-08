@@ -19,12 +19,12 @@ provider:
   environment:
     REGION: ${opt:region, self:provider.region}
     BUCKET: ${self:custom.bucket}
-    BOT_TOKEN: ${file(./secrets/secrets.json):token}
-    CHAT_ID: ${file(./secrets/secrets.json):chatId}
-    CENTURIA: ${file(./secrets/secrets.json):centuria}
+    BOT_TOKEN: ${env:BOT_TOKEN, file(./secrets/secrets.json):BOT_TOKEN}
+    CHAT_ID: ${env:CHAT_ID, file(./secrets/secrets.json):CHAT_ID}
+    CENTURIA: ${env:CENTURIA, file(./secrets/secrets.json):CENTURIA}
 
 custom:
-  bucket: ${file(./secrets/secrets.json):bucket}
+  bucket: ${env:BUCKET, file(./secrets/secrets.json):BUCKET}
   s3:
     port: 8000
     directory: /tmp

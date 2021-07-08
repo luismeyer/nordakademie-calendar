@@ -1,14 +1,12 @@
-import { exec as defaultExec } from 'child_process';
-import { Command } from 'commander';
-import fs from 'fs';
-import { promisify } from 'util';
+import { exec as defaultExec } from "child_process";
+import { Command } from "commander";
+import fs from "fs";
+import { promisify } from "util";
 
-import { fetch, requestUrl } from '../telegram';
-import { Secrets } from '../typings';
-import {
-    MEETINGS_PATH, MEETINGS_PATH_ENCRYPTED, SECRETS, SECRETS_ENCRYPTED
-} from '../utils/constants';
-import { readJSON } from '../utils/json';
+import { fetch, requestUrl } from "../telegram";
+import { MEETINGS_PATH, MEETINGS_PATH_ENCRYPTED } from "../utils/constants";
+
+const { BOT_TOKEN, DOMAIN } = process.env;
 
 const exec = promisify(defaultExec);
 
@@ -24,7 +22,7 @@ const start = () => {
   return Promise.resolve();
 };
 
-const decryptFilePath = (filepath: string, outputPath: string) => () => {
+const decryptFile = (filepath: string, outputPath: string) => () => {
   console.log(`Decrypting ${filepath}...`);
   if (!fs.existsSync(filepath)) return Promise.resolve();
 
@@ -33,29 +31,25 @@ const decryptFilePath = (filepath: string, outputPath: string) => () => {
   ).then((result) => console.log("Result: ", result));
 };
 
-const readSecrets = (): Secrets => {
-  return readJSON(SECRETS);
-};
-
-const fetchSetWebhook = () => {
+const fetchSetWebhook = async () => {
   console.log("Setting webhook...");
 
-  const secrets = readSecrets();
-  if (!secrets.token) throw new Error("Missing secret: TOKEN");
+  if (!BOT_TOKEN) {
+    throw new Error("Missing secret: TOKEN");
+  }
 
-  const url = requestUrl(secrets.token, "setWebhook");
+  const url = requestUrl(BOT_TOKEN, "setWebhook");
   return fetch(url, {
     method: "post",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      url: `https://${secrets.domain}/bot`,
+      url: `https://${DOMAIN}/bot`,
     }),
   }).then((res) => console.log("Result: ", res));
 };
 
 start()
-  .then(decryptFilePath(MEETINGS_PATH_ENCRYPTED, MEETINGS_PATH))
-  .then(decryptFilePath(SECRETS_ENCRYPTED, SECRETS))
+  .then(decryptFile(MEETINGS_PATH_ENCRYPTED, MEETINGS_PATH))
   .then(fetchSetWebhook);
