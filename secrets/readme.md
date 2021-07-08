@@ -4,16 +4,9 @@ The secret.json file should look like this.
 
 ```json
 {
-  "bucket": "<Bucket name>",
-  "token": "<Telegram bot token>",
-  "chatId": "<Your telegram chat id>",
-  "domain": "<Webhook domain>",
-  "centuria": "A18b"
+  "BUCKET": "secret",
+  "BOT_TOKEN": "secret",
+  "CHAT_ID": 123,
+  "CENTURIA": "secret"
 }
-```
-
-You can encrypt them running this command.
-
-```bash
-yarn encrypt --passphrase "<your passphrase>"
 ```
