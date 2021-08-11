@@ -1,11 +1,15 @@
-import { addDays, format, startOfWeek } from 'date-fns';
-import { parseFile, parseICS } from 'node-ical';
-import path from 'path';
+import { addDays, format, startOfWeek } from "date-fns";
+import { parseFile, parseICS } from "node-ical";
+import path from "path";
 
-import { checkEventDifference, findSummary, formatCalendar } from '../calendar/format';
-import { findMeeting } from '../calendar/meeting';
-import { createMensaEvents, formatMensaTimetable } from '../calendar/mensa';
-import { fetchMensaTimetable } from '../nak';
+import {
+  checkEventDifference,
+  findSummary,
+  formatCalendar,
+} from "../calendar/format";
+import { findMeeting } from "../calendar/meeting";
+import { createMensaEvents, formatMensaTimetable } from "../calendar/mensa";
+import { fetchMensaTimetable } from "../nak";
 
 const mockCalendar = parseFile(
   path.resolve(__dirname, "mockdata/mock-calendar.ics")
@@ -91,6 +95,10 @@ test("formatMensaTimetable: catches missing mensa html", () => {
 
 test("formatMensaTimetable: formats mensa html string", async () => {
   const html = await fetchMensaTimetable();
+  if (!html) {
+    return;
+  }
+
   const mensa = formatMensaTimetable(html);
   if (!mensa.length) {
     return;

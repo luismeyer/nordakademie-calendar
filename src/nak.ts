@@ -1,7 +1,7 @@
-import fetch from 'node-fetch';
-import ical from 'node-ical';
+import fetch from "node-fetch";
+import ical from "node-ical";
 
-import { isValidUrl } from './utils/html';
+import { isValidUrl } from "./utils/html";
 
 export const nakCalendarUrl = (semester: number, centuria?: string) => {
   if (!centuria) {
@@ -29,7 +29,20 @@ export const fetchCalendar = async (centuria?: string) => {
   return;
 };
 
-export const fetchMensaTimetable = async () =>
-  fetch("https://cis.nordakademie.de/mensa/speiseplan.cmd").then(
-    (res) => res.text() as Promise<string>
-  );
+export const fetchMensaTimetable = async (): Promise<string | undefined> => {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      resolve(undefined);
+    }, 3000);
+
+    fetch("https://cis.nordakademie.de/mensa/speiseplan.cmd")
+      .then((res) => {
+        clearTimeout(timer);
+        resolve(res.text());
+      })
+      .catch((reason) => {
+        clearTimeout(timer);
+        reject(reason);
+      });
+  });
+};

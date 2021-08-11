@@ -25,10 +25,12 @@ type BasicMeeting = BaseMeeting & {
   type: "BASIC";
 };
 
+type RegexBaseMeeting = BaseMeeting & {
+  regex: string;
+};
+
 type RegexMeeting = {
-  values: (BaseMeeting & {
-    regex: string;
-  })[];
+  values: RegexBaseMeeting[];
   type: "REGEX";
 };
 
