@@ -1,5 +1,6 @@
 import fetch from "node-fetch";
 import ical from "node-ical";
+import { timeoutPromise } from "./utils/fetch";
 
 import { isValidUrl } from "./utils/html";
 
@@ -7,22 +8,28 @@ export const nakCalendarUrl = (semester: number, centuria?: string) => {
   if (!centuria) {
     const { CENTURIA } = process.env;
 
-    if (!CENTURIA) throw new Error("Missing Environment Variable: CENTURIA");
+    if (!CENTURIA) {
+      throw new Error("Missing Environment Variable: CENTURIA");
+    }
+
     centuria = CENTURIA;
   }
 
   return `https://cis.nordakademie.de/fileadmin/Infos/Stundenplaene/${centuria}_${semester}.ics`;
 };
 
-export const fetchCalendar = async (centuria?: string) => {
+export const fetchCalendar = async (
+  centuria?: string
+): Promise<undefined | ical.CalendarResponse> => {
   for (let i = 1; i < 10; i++) {
     const url = nakCalendarUrl(i, centuria);
     const isValid = await isValidUrl(url);
 
     if (isValid) {
-      return ical
-        .fromURL(url)
-        .catch((err) => console.error(`From url Error (${url}): ${err}`));
+      return timeoutPromise(ical.fromURL(url)).catch((err) => {
+        console.error(`From url Error (${url}): ${err}`);
+        return undefined;
+      });
     }
   }
 
@@ -30,19 +37,7 @@ export const fetchCalendar = async (centuria?: string) => {
 };
 
 export const fetchMensaTimetable = async (): Promise<string | undefined> => {
-  return new Promise((resolve, reject) => {
-    const timer = setTimeout(() => {
-      resolve(undefined);
-    }, 3000);
-
+  return timeoutPromise(
     fetch("https://cis.nordakademie.de/mensa/speiseplan.cmd")
-      .then((res) => {
-        clearTimeout(timer);
-        resolve(res.text());
-      })
-      .catch((reason) => {
-        clearTimeout(timer);
-        reject(reason);
-      });
-  });
+  ).then((res) => res?.text());
 };
