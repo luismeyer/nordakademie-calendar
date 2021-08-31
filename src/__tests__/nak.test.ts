@@ -1,5 +1,7 @@
 import { fetchCalendar, fetchMensaTimetable, nakCalendarUrl } from "../nak";
 
+jest.setTimeout(10000);
+
 test("calendar url ends with filename ", () => {
   expect(nakCalendarUrl(3, "A18b").endsWith("A18b_3.ics")).toBe(true);
 });

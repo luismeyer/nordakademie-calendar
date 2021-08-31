@@ -11,6 +11,8 @@ import { findMeeting } from "../calendar/meeting";
 import { createMensaEvents, formatMensaTimetable } from "../calendar/mensa";
 import { fetchMensaTimetable } from "../nak";
 
+jest.setTimeout(10000);
+
 const mockCalendar = parseFile(
   path.resolve(__dirname, "mockdata/mock-calendar.ics")
 );

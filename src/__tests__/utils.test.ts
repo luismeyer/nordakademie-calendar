@@ -1,4 +1,6 @@
-import { formatInnerHtml, isValidUrl } from '../utils/html';
+import { formatInnerHtml, isValidUrl } from "../utils/html";
+
+jest.setTimeout(10000);
 
 test("validates url", async () => {
   expect(await isValidUrl("https://google.com")).toBe(true);

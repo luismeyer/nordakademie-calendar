@@ -26,10 +26,12 @@ export const fetchCalendar = async (
     const isValid = await isValidUrl(url);
 
     if (isValid) {
-      return timeoutPromise(ical.fromURL(url)).catch((err) => {
+      const result = await timeoutPromise(ical.fromURL(url)).catch((err) => {
         console.error(`From url Error (${url}): ${err}`);
         return undefined;
       });
+
+      return result;
     }
   }
 
