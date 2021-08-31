@@ -1,11 +1,11 @@
-import { CalendarResponse } from 'node-ical';
+import { CalendarResponse } from "node-ical";
 
-import { fetchCalendarFile, uploadToS3 } from '../aws/bucket';
-import { checkEventDifference, formatCalendar } from '../calendar/format';
-import { fetchCalendar } from '../nak';
-import { renderPage } from '../render';
-import { sendMessage } from '../telegram';
-import { Logger } from '../utils/logger';
+import { fetchCalendarFile, uploadToS3 } from "../aws/bucket";
+import { checkEventDifference, formatCalendar } from "../calendar/format";
+import { fetchCalendar } from "../nak";
+import { renderPage } from "../render";
+import { sendMessage } from "../telegram";
+import { Logger } from "../utils/logger";
 
 const { CHAT_ID } = process.env;
 if (!CHAT_ID) throw new Error("Missing environment variable: CHAT_ID");
@@ -50,6 +50,7 @@ export const createBatchTimetable = async (batch: string[]) => {
   const nakCal = await fetchCalendar();
 
   if (!nakCal) {
+    console.log("No Batch calendar found");
     return await send(`BATCH: kein aktuellen kalendar gefunden`);
   }
 
@@ -65,6 +66,7 @@ export const createSingleTimetable = async (filename: string = "NAK.ics") => {
   const nakCal = await fetchCalendar();
 
   if (!nakCal) {
+    console.log("No Single calendar found");
     return await send(`${filename}: kein aktuellen kalendar gefunden`);
   }
 
